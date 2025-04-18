@@ -1,0 +1,156 @@
+#include <wiringPi.h>
+r#include <wiringPiI2C.h>
+#include <lccv.hpp>
+#include <libcamera_app.hpp>
+#include <opencv2/opencv.hpp>
+#include <iostream>
+#include <cmath>
+
+#define MOTOR_ADDR 0x0f // Change this if your motor driver uses a different I2C address
+
+// ======== Motor Control Setup ========
+int initMotorDriver() {
+    wiringPiSetup();
+    int fd = wiringPiI2CSetup(MOTOR_ADDR);
+    return fd;
+}
+
+void setMotors(int fd, int leftSpeed, int rightSpeed) {
+    // Clamp to safe limits
+    leftSpeed = std::max(-200, std::min(200, leftSpeed));
+    rightSpeed = std::max(-200, std::min(200, rightSpeed));
+
+    // Determine absolute values for speed
+    uint8_t l = std::abs(leftSpeed);
+    uint8_t r = std::abs(rightSpeed);
+
+    // Determine direction register value
+    uint8_t dir = 0x00;
+
+    if (leftSpeed < 0 && rightSpeed < 0) {
+        dir = 0x0A;  // both forward
+    } else if (leftSpeed > 0 && rightSpeed > 0) {
+        dir = 0x05;  // both reverse
+    } else if (leftSpeed < 0 && rightSpeed > 0) {
+        dir = 0x09;  // left forward, right reverse (spin left)
+    } else if (leftSpeed > 0 && rightSpeed < 0) {
+        dir = 0x06;  // left reverse, right forward (spin right)
+    } else if (leftSpeed == 0 && rightSpeed == 0) {
+        dir = 0x00;  // stop
+    } else if (leftSpeed == 0 && rightSpeed < 0) {
+        dir = 0x0A;  // only right forward
+    } else if (leftSpeed == 0 && rightSpeed > 0) {
+        dir = 0x05;  // only right reverse
+    } else if (leftSpeed < 0 && rightSpeed == 0) {
+        dir = 0x0A;  // only left forward
+    } else if (leftSpeed > 0 && rightSpeed == 0) {
+        dir = 0x05;  // only left reverse
+    }
+
+    // Write directi
+    wiringPiI2CWriteReg16(fd, 0xAA, dir);
+
+    // Combine speeds into 16-bit value (left in high byte, right in low byte)
+    uint16_t speedVal = (l << 8) | r;
+
+    // Write speed
+    wiringPiI2CWriteReg16(fd, 0x82, speedVal);
+}
+
+// ======== Vision: Red Line Detection ========
+cv::Mat extractRedMask(const cv::Mat& image) {
+    cv::Mat hsvImage, mask1, mask2, binaryMask;
+
+    cv::cvtColor(image, hsvImage, cv::COLOR_BGR2HSV);
+
+    // Red wraps around HSV, so two ranges
+    cv::inRange(hsvImage, cv::Scalar(0, 120, 70),  cv::Scalar(10, 255, 255), mask1);
+    cv::inRange(hsvImage, cv::Scalar(170, 120, 70), cv::Scalar(180, 255, 255), mask2);
+
+    binaryMask = mask1 | mask2;
+
+    return binaryMask;
+}
+
+int main() {
+    // ======== Motor Init ========
+    int fd = initMotorDriver();
+
+    // ======== Camera Init ========
+    lccv::PiCamera cam;
+    cam.options->video_width = 640;
+    cam.options->video_height = 480;
+    cam.options->framerate = 30;
+    cam.options->verbose = true;
+    cam.startVideo();  
+    
+    std::cout << "Red Line Following Bot Ready. Press ESC to stop. bro" << std::endl; 
+
+    cv::namedWindow("Video", cv::WINDOW_NORMAL);
+    cv::Mat image(480, 640, CV_8UC3);
+
+    int ch = 0;
+    while (ch != 27) {
+        
+        if (!cam.getVideoFrame(image, 1000)) {
+            std::cout << "Timeout error while grabbing frame." << std::endl;
+            continue;
+        }
+
+        // ======== Red Line Detection ========
+        cv::Mat redBinary = extractRedMask(image);
+        int height = redBinary.rows;
+        int width = redBinary.cols;
+
+        // Focus only on lower two horizontal strips of the image
+        cv::Mat roi_bottom = redBinary(cv::Rect(0, height * 5 / 6, width, height / 12));
+        cv::Mat roi_top    = redBinary(cv::Rect(0, height * 4 / 6, width, height / 12));
+
+        cv::Moments M_bot = cv::moments(roi_bottom, true);
+        cv::Moments M_top = cv::moments(roi_top, true);
+
+        if (M_bot.m00 > 0 && M_top.m00 > 0) {
+            // Line detected in both regions
+            cv::Point2f pt_bot(M_bot.m10 / M_bot.m00, height * 5 / 6 + height / 24);
+            cv::Point2f pt_top(M_top.m10 / M_top.m00, height * 4 / 6 + height / 24);
+
+            float dx = pt_bot.x - pt_top.x;
+            float dy = pt_bot.y - pt_top.y;
+            float angle = std::atan2(dy, dx) * 180.0 / CV_PI;
+
+            std::cout << "Line angle: " << angle << " degrees" << std::endl;
+
+            // ======== Motion Control Logic ========
+            float Kp = 0.6; // Try increasing Kp for tighter turns
+            float correction = Kp * angle;
+
+            int baseSpeed = 100; // Bump this up for stronger movement
+            int leftSpeed = baseSpeed + correction;
+            int rightSpeed = baseSpeed - correction;
+            
+            std::cout << "[main] Angle: " << angle << " | LeftSpeed: " << leftSpeed << " | RightSpeed: " << rightSpeed << std::endl;
+
+
+            setMotors(fd, leftSpeed, rightSpeed);
+
+            // ======== Visual Overlay ========
+            cv::line(image, pt_bot, pt_top, cv::Scalar(255, 255, 0), 2);
+            cv::circle(image, pt_bot, 5, cv::Scalar(0, 255, 0), -1);
+            cv::circle(image, pt_top, 5, cv::Scalar(0, 255, 0), -1);
+        } else {
+            std::cout << "Line not detected. Stopping motors." << std::endl;
+            setMotors(fd, 0, 0); // Stop if line is lost
+        }
+
+        cv::imshow("Red Mask", redBinary);
+        cv::imshow("Video", image);
+        ch = cv::waitKey(5);
+    }
+
+    // ======== Cleanup ========
+    setMotors(fd, 0, 0); // stop motors on exit
+    cam.stopVideo();
+    cv::destroyAllWindows();
+
+    return 0;
+}

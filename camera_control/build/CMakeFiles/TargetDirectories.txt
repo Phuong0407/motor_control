@@ -1,0 +1,3 @@
+/home/piandraspberry/Documents/camera_control/build/CMakeFiles/ball_detection.dir
+/home/piandraspberry/Documents/camera_control/build/CMakeFiles/edit_cache.dir
+/home/piandraspberry/Documents/camera_control/build/CMakeFiles/rebuild_cache.dir
