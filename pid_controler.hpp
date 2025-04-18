@@ -8,6 +8,7 @@
 #ifndef PID_CONTROLER_HPP
 #define PID_CONTROLER_HPP
 
+#include <algorithm>
 
 /**
  * @brief PIDController class for implementing a PID control algorithm.

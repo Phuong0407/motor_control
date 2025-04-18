@@ -104,6 +104,10 @@ public:
         return static_cast<double>(counter.load()) * ANGLE_PER_TICK;
     }
 
+    const int64_t getCounter() const {
+        return counter.load();
+    }
+
     static void globalISR() {
         std::lock_guard<std::mutex> lock(map_mutex);
         for (const auto& [pin, instance] : instance_map) {
