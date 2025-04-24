@@ -20,25 +20,12 @@
 static constexpr int COUNTER_PER_REV = 144;
 static constexpr double ANGLE_PER_TICK = 2.5;
 
-inline std::map<int, MotorEncoder*> MotorEncoderInstances;
-inline std::mutex MotorEncoderInstancesMutex;
-
-void handleEncoderInterrupt(int pin);
+std::map<int, MotorEncoder*> MotorEncoderInstances;
 
 class MotorEncoder {
 private:
     int H1_PIN, H2_PIN;
     std::atomic<int64_t> counter;
-
-    void updateCounter() {
-        if (digitalRead(H2_PIN)) {
-            ++counter;
-        } else {
-            --counter;
-        }
-    }
-
-    friend void handleEncoderInterrupt(int pin);
 
 public:
     MotorEncoder(int H1, int H2, int I2C_ADDRESS = 0x0f)
@@ -56,16 +43,18 @@ public:
         pullUpDnControl(H1_PIN, PUD_UP);
         pullUpDnControl(H2_PIN, PUD_UP);
 
-        {
-            std::lock_guard<std::mutex> lock(MotorEncoderInstancesMutex);
-            MotorEncoderInstances[H1_PIN] = this;
-        }
-
-        attachEncoderInterrupt(H1_PIN);
         printf("[INFO] Encoder ISR initialized on pins H1= %d, H2 = %d\n", H1_PIN, H2_PIN);
     }
 
     void resetCounter() { counter.store(0); }
+
+    void updateCounter() {
+        if (digitalRead(H2_PIN)) {
+            ++counter;
+        } else {
+            --counter;
+        }
+    }
 
     double measureShaftPosition() const {
         return static_cast<double>(counter.load()) * ANGLE_PER_TICK;
@@ -76,36 +65,15 @@ public:
     }
 };
 
+// add here function to call updateCounter() when interrupt occurs
+// TODO 
 
-inline void handleEncoderInterrupt(int pin) {
-    std::lock_guard<std::mutex> lock(MotorEncoderInstancesMutex);
-    if (MotorEncoderInstances.find(pin) != MotorEncoderInstances.end()) {
-        MotorEncoderInstances[pin]->updateCounter();
+void attachEncoderInterrupt() {
+    for (const auto& motor : MotorEncoderInstances) {
+        wiringPiISR(motor.first, INT_EDGE_RISING, void (*function)(void));
     }
+
 }
 
-inline void encoderISR_0() { handleEncoderInterrupt(0); }
-inline void encoderISR_1() { handleEncoderInterrupt(1); }
-inline void encoderISR_2() { handleEncoderInterrupt(2); }
-inline void encoderISR_3() { handleEncoderInterrupt(3); }
-inline void encoderISR_4() { handleEncoderInterrupt(4); }
-inline void encoderISR_5() { handleEncoderInterrupt(5); }
-inline void encoderISR_6() { handleEncoderInterrupt(6); }
-inline void encoderISR_7() { handleEncoderInterrupt(7); }
-
-inline void attachEncoderInterrupt(int pin) {
-    switch (pin) {
-        case 0: wiringPiISR(0, INT_EDGE_BOTH, encoderISR_0); break;
-        case 1: wiringPiISR(1, INT_EDGE_BOTH, encoderISR_1); break;
-        case 2: wiringPiISR(2, INT_EDGE_BOTH, encoderISR_2); break;
-        case 3: wiringPiISR(3, INT_EDGE_BOTH, encoderISR_3); break;
-        case 4: wiringPiISR(4, INT_EDGE_BOTH, encoderISR_4); break;
-        case 5: wiringPiISR(5, INT_EDGE_BOTH, encoderISR_5); break;
-        case 6: wiringPiISR(6, INT_EDGE_BOTH, encoderISR_6); break;
-        case 7: wiringPiISR(7, INT_EDGE_BOTH, encoderISR_7); break;
-        default:
-            throw std::invalid_argument("Unsupported pin for encoder ISR registration.");
-    }
-}
 
 #endif // MOTOR_ENCODER_HPP 
