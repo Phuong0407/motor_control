@@ -12,7 +12,14 @@
 
 /**
  * @brief PIDController class for implementing a PID control algorithm.
- * 
+ * @param kp Proportional gain.
+ * @param ki Integral gain.
+ * @param kd Derivative gain.
+ * @param integral Accumulated error for the integral term.
+ * @param previous_error Previous error value for the derivative term.
+ * @details This class implements a PID control algorithm use to control the relative position of motor shaft.
+ * @param setpoint Desired target value, in angle.
+ * @param measured_value Current measured value, in angle.
  */
 
 class PIDController {
@@ -26,7 +33,7 @@ private:
     double previous_error;
 
 public:
-    PIDController(double kp, double ki, double kd)
+    PIDController(double kp = 0.05, double ki = 0.05, double kd = 0.05)
     : kp(kp), ki(ki), kd(kd), setpoint(0), integral(0), previous_error(0) {}
 
     void setSetpoint(double new_setpoint) {
@@ -41,6 +48,5 @@ public:
         return kp * error + ki * integral + kd * derivative;
     }
 };
-
 
 #endif // PID_CONTROLER_HPP
