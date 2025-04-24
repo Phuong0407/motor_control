@@ -1,9 +1,9 @@
-#include "encoder.hpp"
+#include "encoder_v1.cpp"
 
 void setMotorCommand() {
     int i2c_fd = wiringPiI2CSetup(0x0f);
 
-    wiringPiI2CWriteReg16(i2c_fd, 0x82, 0x255);
+    wiringPiI2CWriteReg16(i2c_fd, 0x82, 0xffff);
     wiringPiI2CWriteReg16(i2c_fd, 0xaa, 0x06);
 }
 

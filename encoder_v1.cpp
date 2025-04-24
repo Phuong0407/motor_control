@@ -15,6 +15,7 @@
 #include <atomic>
 #include <stdexcept>
 #include <stdio.h>
+#include <iostream>
 
 static constexpr int COUNTER_PER_REV = 144;
 static constexpr double ANGLE_PER_TICK = 2.5;
