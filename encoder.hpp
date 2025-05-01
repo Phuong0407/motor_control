@@ -8,6 +8,7 @@
 #include <atomic>
 #include <stdexcept>
 #include <iostream>
+#include <vector>
 
 static constexpr int COUNTER_PER_REV = 144;
 static constexpr double ANGLE_PER_TICK = 2.5;
@@ -56,21 +57,34 @@ public:
     }
 };
 
+static std::unique_ptr<MotorEncoder> encoder1 = nullptr;
+static std::unique_ptr<MotorEncoder> encoder2 = nullptr;
+static std::unique_ptr<MotorEncoder> encoder3 = nullptr;
+static std::unique_ptr<MotorEncoder> encoder4 = nullptr;
 static std::unique_ptr<MotorEncoder> encoder5 = nullptr;
-static std::unique_ptr<MotorEncoder> encoder22 = nullptr;
+static std::unique_ptr<MotorEncoder> encoder6 = nullptr;
 
-void isr5()  { if (encoder5)  encoder5->updateCounter(); }
-void isr22() { if (encoder22) encoder22->updateCounter(); }
+void isr1() { if (encoder1) encoder1->updateCounter(); }
+void isr2() { if (encoder2) encoder2->updateCounter(); }
+void isr3() { if (encoder3) encoder3->updateCounter(); }
+void isr4() { if (encoder4) encoder4->updateCounter(); }
+void isr5() { if (encoder5) encoder5->updateCounter(); }
+void isr6() { if (encoder6) encoder6->updateCounter(); }
 
 class EncoderManager {
 private:
+    const std::vector<std::pair<int, int>> encoder_pin_table = {
+        {21, 22},
+        {3 , 4 },
+    };
+
     void declareEncoders() {
-        encoder5  = std::make_unique<MotorEncoder>(21, 22);
-        encoder22 = std::make_unique<MotorEncoder>(3, 4);
+        encoder1  = std::make_unique<MotorEncoder>(encoder_pin_table[0].first, encoder_pin_table[0].second);
+        encoder1  = std::make_unique<MotorEncoder>(encoder_pin_table[1].first, encoder_pin_table[1].second);
     }
 
     void attachEncoderInterrupts() {
-        if (wiringPiISR(21, INT_EDGE_RISING, isr5) < 0)
+        if (wiringPiISR(, INT_EDGE_RISING, isr5) < 0)
             throw std::runtime_error("Failed to attach ISR to D5");
         std::cout << "[INFO] ISR attached to pin 21\n";
 
