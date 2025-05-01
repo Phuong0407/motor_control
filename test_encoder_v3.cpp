@@ -9,10 +9,12 @@ void setMotorCommand() {
         delay(100);
         counter++;
     }
+    wiringPiI2CWriteReg16(i2c_fd, 0x82, 0x0000);
 }
 
 int main() {
     EncoderManager encoder_manager;
+    setMotorCommand();
     std::cout << encoder5->getCounter() << std::endl;
     std::cout << encoder22->getCounter() << std::endl;
 }
