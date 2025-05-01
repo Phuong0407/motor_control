@@ -69,11 +69,11 @@ private:
     void attachEncoderInterrupts() {
         if (wiringPiISR(21, INT_EDGE_RISING, isr5) < 0)
             throw std::runtime_error("Failed to attach ISR to pin 5");
-        std::cout << "[INFO] ISR attached to pin 5\n";
+        std::cout << "[INFO] ISR attached to pin 21\n";
 
-        // if (wiringPiISR(22, INT_EDGE_RISING, isr22) < 0)
-        //     throw std::runtime_error("Failed to attach ISR to pin 22");
-        // std::cout << "[INFO] ISR attached to pin 22\n";
+        if (wiringPiISR(2, INT_EDGE_RISING, isr22) < 0)
+            throw std::runtime_error("Failed to attach ISR to pin 22");
+        std::cout << "[INFO] ISR attached to pin 2\n";
     }
 
 public:
