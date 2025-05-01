@@ -12,14 +12,6 @@
 static constexpr int COUNTER_PER_REV = 144;
 static constexpr double ANGLE_PER_TICK = 2.5;
 
-class MotorEncoder;
-
-void isr5();
-void isr22();
-
-static std::unique_ptr<MotorEncoder> encoder5 = nullptr;
-static std::unique_ptr<MotorEncoder> encoder22 = nullptr;
-
 class MotorEncoder {
 private:
     int H1_PIN, H2_PIN;
@@ -59,6 +51,9 @@ public:
         return static_cast<double>(counter.load()) * ANGLE_PER_TICK;
     }
 };
+
+static std::unique_ptr<MotorEncoder> encoder5 = nullptr;
+static std::unique_ptr<MotorEncoder> encoder22 = nullptr;
 
 void isr5()  { if (encoder5)  encoder5->updateCounter(); }
 void isr22() { if (encoder22) encoder22->updateCounter(); }
