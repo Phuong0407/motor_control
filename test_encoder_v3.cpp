@@ -1,10 +1,10 @@
 #include "encoder.hpp"
 
-void setMotorCommand() {
+void setMotorCommand(int ms = 1000) {
     int i2c_fd = wiringPiI2CSetup(0x0f);
     wiringPiI2CWriteReg16(i2c_fd, 0x82, 0xffff);
     wiringPiI2CWriteReg16(i2c_fd, 0xaa, 0x06);
-    delay(100);
+    delay(ms);
     wiringPiI2CWriteReg16(i2c_fd, 0x82, 0x0000);
 }
 
