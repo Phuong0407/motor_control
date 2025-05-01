@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
     EncoderManager encoder_manager;
     setMotorCommand(ms, speed);
 
+    std::cout << "Run motor at speed " << speed << " during " << ms << "[ms]" << "\n";
     std::cout << "After run motor" << "\n";
     std::cout << "ENCODER COUNTER 1 = " << encoder1->getCounter() << "\n";
     std::cout << "ENCODER COUNTER 2 = " << encoder2->getCounter() << "\n";
