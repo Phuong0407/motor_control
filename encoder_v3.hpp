@@ -62,8 +62,8 @@ void isr22() { if (encoder22) encoder22->updateCounter(); }
 class EncoderManager {
 private:
     void declareEncoders() {
-        encoder5  = std::make_unique<MotorEncoder>(2 , 3);
-        encoder22 = std::make_unique<MotorEncoder>(22, 23);
+        encoder5  = std::make_unique<MotorEncoder>(21, 22);
+        encoder22 = std::make_unique<MotorEncoder>(2, 3);
     }
 
     void attachEncoderInterrupts() {
