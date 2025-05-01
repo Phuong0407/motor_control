@@ -14,10 +14,8 @@ void setMotorCommand() {
 
 int main() {
     EncoderManager encoder_manager;
-    std::cout << encoder5->getCounter() << std::endl;
-    std::cout << encoder22->getCounter() << std::endl;
     setMotorCommand();
     std::cout << "After run motor" << "\n";
-    std::cout << encoder5->getCounter() << std::endl;
-    std::cout << encoder22->getCounter() << std::endl;
+    std::cout << "ENCODER COUNTER 1 = " << encoder1->getCounter() << "\n";
+    std::cout << "ENCODER COUNTER 2 = " << encoder2->getCounter() << "\n";
 }
