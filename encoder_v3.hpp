@@ -67,7 +67,7 @@ private:
     }
 
     void attachEncoderInterrupts() {
-        if (wiringPiISR(2, INT_EDGE_RISING, isr5) < 0)
+        if (wiringPiISR(21, INT_EDGE_RISING, isr5) < 0)
             throw std::runtime_error("Failed to attach ISR to pin 5");
         std::cout << "[INFO] ISR attached to pin 5\n";
 
