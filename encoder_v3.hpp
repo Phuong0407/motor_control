@@ -41,6 +41,7 @@ public:
     }
 
     void updateCounter() {
+        std::cout << "Enter the update counter of " << H1_PIN << "\n";
         digitalRead(H2_PIN) ? ++counter : --counter;
     }
 
