@@ -1,4 +1,4 @@
-#include "encoder_v3.hpp"
+#include "encoder.hpp"
 
 void setMotorCommand() {
     int i2c_fd = wiringPiI2CSetup(0x0f);
