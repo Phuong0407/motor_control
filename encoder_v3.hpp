@@ -71,9 +71,9 @@ private:
             throw std::runtime_error("Failed to attach ISR to pin 5");
         std::cout << "[INFO] ISR attached to pin 5\n";
 
-        if (wiringPiISR(22, INT_EDGE_RISING, isr22) < 0)
-            throw std::runtime_error("Failed to attach ISR to pin 22");
-        std::cout << "[INFO] ISR attached to pin 22\n";
+        // if (wiringPiISR(22, INT_EDGE_RISING, isr22) < 0)
+        //     throw std::runtime_error("Failed to attach ISR to pin 22");
+        // std::cout << "[INFO] ISR attached to pin 22\n";
     }
 
 public:
