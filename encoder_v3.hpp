@@ -15,7 +15,7 @@ static constexpr double ANGLE_PER_TICK = 2.5;
 class MotorEncoder {
 private:
     int H1_PIN, H2_PIN;
-    std::atomic<int64_t> counter;
+    int64_t counter;
 
 public:
     MotorEncoder(int H1, int H2, int I2C_ADDRESS = 0x0f)
@@ -45,14 +45,14 @@ public:
     }
 
     void resetCounter() {
-        counter.store(0);
+        counter = 0;
     }
 
     int getH1() const { return H1_PIN; }
     int getH2() const { return H2_PIN; }
-    int64_t getCounter() const { return counter.load(); }
+    int64_t getCounter() const { return counter; }
     double measureShaftPosition() const {
-        return static_cast<double>(counter.load()) * ANGLE_PER_TICK;
+        return static_cast<double>(counter) * ANGLE_PER_TICK;
     }
 };
 
