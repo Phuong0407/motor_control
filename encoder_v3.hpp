@@ -63,16 +63,16 @@ class EncoderManager {
 private:
     void declareEncoders() {
         encoder5  = std::make_unique<MotorEncoder>(21, 22);
-        encoder22 = std::make_unique<MotorEncoder>(2, 3);
+        encoder22 = std::make_unique<MotorEncoder>(3, 4);
     }
 
     void attachEncoderInterrupts() {
         if (wiringPiISR(21, INT_EDGE_RISING, isr5) < 0)
-            throw std::runtime_error("Failed to attach ISR to pin 5");
+            throw std::runtime_error("Failed to attach ISR to D5");
         std::cout << "[INFO] ISR attached to pin 21\n";
 
-        if (wiringPiISR(2, INT_EDGE_RISING, isr22) < 0)
-            throw std::runtime_error("Failed to attach ISR to pin 22");
+        if (wiringPiISR(3, INT_EDGE_RISING, isr22) < 0)
+            throw std::runtime_error("Failed to attach ISR to D22");
         std::cout << "[INFO] ISR attached to pin 2\n";
     }
 
