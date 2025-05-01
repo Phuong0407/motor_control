@@ -63,7 +63,7 @@ class EncoderManager {
 private:
     void declareEncoders() {
         encoder5  = std::make_unique<MotorEncoder>(21, 22);
-        encoder22 = std::make_unique<MotorEncoder>(3, 4);
+        encoder22 = std::make_unique<MotorEncoder>(2, 3);
     }
 
     void attachEncoderInterrupts() {
