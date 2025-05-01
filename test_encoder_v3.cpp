@@ -13,12 +13,12 @@ void setMotorCommand(int ms = 1000, int speed = 0xffff) {
 
 int main(int argc, char* argv[]) {
     int ms = std::stoi(argv[1]);
-    int speed = std::stoi(argv[2]);
+    int speed = std::stoi(argv[2], nullptr, 0);
 
     EncoderManager encoder_manager;
     setMotorCommand(ms, speed);
 
-    std::cout << "Run motor at speed " << speed << " during " << ms << "[ms]" << "\n";
+    std::cout << "Run motor at speed 0x" << std::hex << speed << std::dec << " during " << ms << " [ms]" << "\n";
     std::cout << "After run motor" << "\n";
     std::cout << "ENCODER COUNTER 1 = " << encoder1->getCounter() << "\n";
     std::cout << "ENCODER COUNTER 2 = " << encoder2->getCounter() << "\n";
