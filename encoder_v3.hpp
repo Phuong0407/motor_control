@@ -41,8 +41,11 @@ public:
     }
 
     void updateCounter() {
-        std::cout << "Enter the update counter of " << H1_PIN << "\n";
         digitalRead(H2_PIN) ? ++counter : --counter;
+    }
+
+    void resetCounter() {
+        counter.store(0);
     }
 
     int getH1() const { return H1_PIN; }
@@ -63,7 +66,7 @@ class EncoderManager {
 private:
     void declareEncoders() {
         encoder5  = std::make_unique<MotorEncoder>(21, 22);
-        encoder22 = std::make_unique<MotorEncoder>(2, 3);
+        encoder22 = std::make_unique<MotorEncoder>(3, 4);
     }
 
     void attachEncoderInterrupts() {
@@ -71,7 +74,7 @@ private:
             throw std::runtime_error("Failed to attach ISR to D5");
         std::cout << "[INFO] ISR attached to pin 21\n";
 
-        if (wiringPiISR(2, INT_EDGE_RISING, isr22) < 0)
+        if (wiringPiISR(3, INT_EDGE_RISING, isr22) < 0)
             throw std::runtime_error("Failed to attach ISR to D22");
         std::cout << "[INFO] ISR attached to pin 2\n";
     }
@@ -80,6 +83,8 @@ public:
     EncoderManager() {
         declareEncoders();
         attachEncoderInterrupts();
+        encoder5->resetCounter();
+        encoder22->resetCounter();
     }
 };
 
