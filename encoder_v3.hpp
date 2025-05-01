@@ -62,12 +62,12 @@ void isr22() { if (encoder22) encoder22->updateCounter(); }
 class EncoderManager {
 private:
     void declareEncoders() {
-        encoder5  = std::make_unique<MotorEncoder>(5 , 6 );
+        encoder5  = std::make_unique<MotorEncoder>(2 , 3);
         encoder22 = std::make_unique<MotorEncoder>(22, 23);
     }
 
     void attachEncoderInterrupts() {
-        if (wiringPiISR(5, INT_EDGE_RISING, isr5) < 0)
+        if (wiringPiISR(2, INT_EDGE_RISING, isr5) < 0)
             throw std::runtime_error("Failed to attach ISR to pin 5");
         std::cout << "[INFO] ISR attached to pin 5\n";
 
