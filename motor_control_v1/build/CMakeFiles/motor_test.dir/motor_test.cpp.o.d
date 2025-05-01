@@ -1,5 +1,5 @@
 CMakeFiles/motor_test.dir/motor_test.cpp.o: \
- /home/raspberry/Documents/motor_control/motor_test.cpp \
+ /home/raspberry/Documents/motor_control/motor_control_v1/motor_test.cpp \
  /usr/include/stdc-predef.h /usr/local/include/wiringPi.h \
  /usr/local/include/wiringPiI2C.h \
  /usr/lib/gcc/arm-linux-gnueabihf/12/include/stdint.h \

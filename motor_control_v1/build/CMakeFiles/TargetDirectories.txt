@@ -1,4 +1,4 @@
-/home/raspberry/Documents/motor_control/build/CMakeFiles/red_line_bot.dir
-/home/raspberry/Documents/motor_control/build/CMakeFiles/motor_test.dir
-/home/raspberry/Documents/motor_control/build/CMakeFiles/edit_cache.dir
-/home/raspberry/Documents/motor_control/build/CMakeFiles/rebuild_cache.dir
+/home/raspberry/Documents/motor_control/motor_control_v1/build/CMakeFiles/red_line_bot.dir
+/home/raspberry/Documents/motor_control/motor_control_v1/build/CMakeFiles/motor_test.dir
+/home/raspberry/Documents/motor_control/motor_control_v1/build/CMakeFiles/edit_cache.dir
+/home/raspberry/Documents/motor_control/motor_control_v1/build/CMakeFiles/rebuild_cache.dir

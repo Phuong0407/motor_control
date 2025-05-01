@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/raspberry/Documents/motor_control/red_line_bot.cpp" "CMakeFiles/red_line_bot.dir/red_line_bot.cpp.o" "gcc" "CMakeFiles/red_line_bot.dir/red_line_bot.cpp.o.d"
+  "/home/raspberry/Documents/motor_control/motor_control_v1/red_line_bot.cpp" "CMakeFiles/red_line_bot.dir/red_line_bot.cpp.o" "gcc" "CMakeFiles/red_line_bot.dir/red_line_bot.cpp.o.d"
   )
 
 # Targets to which this target links.

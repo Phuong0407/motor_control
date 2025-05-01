@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/raspberry/Documents/motor_control/motor_test.cpp" "CMakeFiles/motor_test.dir/motor_test.cpp.o" "gcc" "CMakeFiles/motor_test.dir/motor_test.cpp.o.d"
+  "/home/raspberry/Documents/motor_control/motor_control_v1/motor_test.cpp" "CMakeFiles/motor_test.dir/motor_test.cpp.o" "gcc" "CMakeFiles/motor_test.dir/motor_test.cpp.o.d"
   )
 
 # Targets to which this target links.

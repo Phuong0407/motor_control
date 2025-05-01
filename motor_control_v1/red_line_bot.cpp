@@ -1,5 +1,5 @@
 #include <wiringPi.h>
-r#include <wiringPiI2C.h>
+#include <wiringPiI2C.h>
 #include <lccv.hpp>
 #include <libcamera_app.hpp>
 #include <opencv2/opencv.hpp>
@@ -17,8 +17,8 @@ int initMotorDriver() {
 
 void setMotors(int fd, int leftSpeed, int rightSpeed) {
     // Clamp to safe limits
-    leftSpeed = std::max(-200, std::min(200, leftSpeed));
-    rightSpeed = std::max(-200, std::min(200, rightSpeed));
+    leftSpeed = std::max(-250, std::min(250, leftSpeed));
+    rightSpeed = std::max(-250, std::min(250, rightSpeed));
 
     // Determine absolute values for speed
     uint8_t l = std::abs(leftSpeed);
@@ -28,23 +28,23 @@ void setMotors(int fd, int leftSpeed, int rightSpeed) {
     uint8_t dir = 0x00;
 
     if (leftSpeed < 0 && rightSpeed < 0) {
-        dir = 0x0A;  // both forward
+        dir = 0x0a;  // both forward
     } else if (leftSpeed > 0 && rightSpeed > 0) {
-        dir = 0x05;  // both reverse
+        dir = 0x06;  // both reverse
     } else if (leftSpeed < 0 && rightSpeed > 0) {
-        dir = 0x09;  // left forward, right reverse (spin left)
+        dir = 0x06;  // left forward, right reverse (spin left)
     } else if (leftSpeed > 0 && rightSpeed < 0) {
-        dir = 0x06;  // left reverse, right forward (spin right)
+        dir = 0x09;  // left reverse, right forward (spin right)
     } else if (leftSpeed == 0 && rightSpeed == 0) {
         dir = 0x00;  // stop
     } else if (leftSpeed == 0 && rightSpeed < 0) {
-        dir = 0x0A;  // only right forward
+        dir = 0x05;  // only right forward
     } else if (leftSpeed == 0 && rightSpeed > 0) {
-        dir = 0x05;  // only right reverse
+        dir = 0x0a;  // only right reverse
     } else if (leftSpeed < 0 && rightSpeed == 0) {
-        dir = 0x0A;  // only left forward
+        dir = 0x06;  // only left forward
     } else if (leftSpeed > 0 && rightSpeed == 0) {
-        dir = 0x05;  // only left reverse
+        dir = 0x09;  // only left reverse
     }
 
     // Write directi
@@ -124,7 +124,7 @@ int main() {
             float Kp = 0.6; // Try increasing Kp for tighter turns
             float correction = Kp * angle;
 
-            int baseSpeed = 100; // Bump this up for stronger movement
+            int baseSpeed = 200; // Bump this up for stronger movement
             int leftSpeed = baseSpeed + correction;
             int rightSpeed = baseSpeed - correction;
             

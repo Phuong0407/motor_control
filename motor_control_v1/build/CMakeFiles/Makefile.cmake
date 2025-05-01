@@ -7,7 +7,7 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "/home/raspberry/Documents/motor_control/CMakeLists.txt"
+  "/home/raspberry/Documents/motor_control/motor_control_v1/CMakeLists.txt"
   "CMakeFiles/3.25.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.25.1/CMakeSystem.cmake"
   "/usr/lib/arm-linux-gnueabihf/cmake/opencv4/OpenCVConfig-version.cmake"

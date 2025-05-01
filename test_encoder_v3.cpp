@@ -5,7 +5,7 @@ void setMotorCommand() {
     int counter = 0;
     while (counter <= 50) {
         wiringPiI2CWriteReg16(i2c_fd, 0x82, 0xffff);
-        wiringPiI2CWriteReg16(i2c_fd, 0xaa, 0x05);
+        wiringPiI2CWriteReg16(i2c_fd, 0xaa, 0x06);
         delay(100);
         counter++;
     }

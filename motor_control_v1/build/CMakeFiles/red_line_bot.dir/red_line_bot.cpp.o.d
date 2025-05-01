@@ -1,5 +1,5 @@
 CMakeFiles/red_line_bot.dir/red_line_bot.cpp.o: \
- /home/raspberry/Documents/motor_control/red_line_bot.cpp \
+ /home/raspberry/Documents/motor_control/motor_control_v1/red_line_bot.cpp \
  /usr/include/stdc-predef.h /usr/local/include/wiringPi.h \
  /usr/local/include/wiringPiI2C.h \
  /usr/lib/gcc/arm-linux-gnueabihf/12/include/stdint.h \
