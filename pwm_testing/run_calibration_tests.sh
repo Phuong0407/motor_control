@@ -1,9 +1,9 @@
 #!/bin/bash
 
-OUTPUT_FILE="motor_individual_tests.txt"
+OUTPUT_FILE="motor_calibration_result.txt"
 echo "Motor PWM TIME(ms) ENCODER1 ENCODER2 ENCODER3" > "$OUTPUT_FILE"
 
-PWM_STEP=0x20  # Reasonable step size: 0x20 = 32 decimal
+PWM_STEP=8
 TIME_MIN=50
 TIME_MAX=1000
 TIME_STEP=50
@@ -23,11 +23,25 @@ for time in $(seq $TIME_MIN $TIME_STEP $TIME_MAX); do
         e1=$(echo "$out" | grep -oP 'ENCODER COUNTER 1 = \K[0-9-]+')
         echo "1 $pwm_hex $time $e1 0 0" >> "$OUTPUT_FILE"
 
+    done
+done
+
+for time in $(seq $TIME_MIN $TIME_STEP $TIME_MAX); do
+    for pwm in $(seq 0 $((PWM_STEP)) 255); do
+        pwm_hex=$(to_hex $pwm)
+
         # Test motor 2
         echo "Testing Motor 2: PWM=$pwm_hex Time=${time}ms"
         out=$(./calibration 0x00 $pwm_hex 0x00 $time)
         e2=$(echo "$out" | grep -oP 'ENCODER COUNTER 2 = \K[0-9-]+')
         echo "2 $pwm_hex $time 0 $e2 0" >> "$OUTPUT_FILE"
+
+    done
+done
+
+for time in $(seq $TIME_MIN $TIME_STEP $TIME_MAX); do
+    for pwm in $(seq 0 $((PWM_STEP)) 255); do
+        pwm_hex=$(to_hex $pwm)
 
         # Test motor 3
         echo "Testing Motor 3: PWM=$pwm_hex Time=${time}ms"
@@ -37,6 +51,5 @@ for time in $(seq $TIME_MIN $TIME_STEP $TIME_MAX); do
 
     done
 done
-
 echo "Individual motor tests complete. Results saved in $OUTPUT_FILE"
 
