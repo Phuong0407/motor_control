@@ -144,10 +144,10 @@ private:
         }
     }
 
-    std::size_t number_encoder = 0;
+    int number_encoder = 0;
 
 public:
-    EncoderManager(std::size_t number_encoder = 2) :
+    EncoderManager(int number_encoder = 2) :
     number_encoder(number_encoder)    
     {
         declareEncoders();

@@ -6,8 +6,9 @@
 
 void setMotorCommand(int ms = 1000, int speed = 0xffff) {
      int i2c_fd = wiringPiI2CSetup(0x0f);
-     int i2c_fd_2 = wiringPiI2CSetup(0x0e);
-     wiringPiI2CWriteReg16(i2c_fd, 0x82, speed);
+     int i2c_fd_2 = wiringPiI2CSetup(0x0d);
+
+     wiringPiI2CWriteReg16(i2c_fd, 0x82, 0xff00);
      wiringPiI2CWriteReg16(i2c_fd, 0xaa, 0x06);
      wiringPiI2CWriteReg16(i2c_fd_2, 0x82, 0xffff);
      wiringPiI2CWriteReg16(i2c_fd_2, 0xaa, 0x06);

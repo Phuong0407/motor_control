@@ -9,28 +9,30 @@
 #define MOTOR_ADDR 0x0f // Change this if your motor driver uses a different I2C address
 
 // ======== Motor Control Setup ========
-int initMotorDriver() {
+void initMotorDriver(int &fd1, int &fd2) {
     wiringPiSetup();
-    int fd = wiringPiI2CSetup(MOTOR_ADDR);
-    return fd;
+    fd1 = wiringPiI2CSetup(0x0f);
+    fd2 = wiringPiI2CSetup(0x0d);
 }
 
-void setMotors(int fd, int leftSpeed, int rightSpeed) {
+void setMotors(int fd1, int fd2, int leftSpeed, int rightSpeed, int frontSpeed) {
     // Clamp to safe limits
     leftSpeed = std::max(-250, std::min(250, leftSpeed));
     rightSpeed = std::max(-250, std::min(250, rightSpeed));
+    frontSpeed = std::max(-250, std::min(250, frontSpeed));
 
     // Determine absolute values for speed
     uint8_t l = std::abs(leftSpeed);
     uint8_t r = std::abs(rightSpeed);
+    uint8_t f = std::abs(frontSpeed);
 
     // Determine direction register value
     uint8_t dir = 0x00;
 
     if (leftSpeed < 0 && rightSpeed < 0) {
-        dir = 0x0a;  // both forward
+        dir = 0x09;  // both reverse
     } else if (leftSpeed > 0 && rightSpeed > 0) {
-        dir = 0x06;  // both reverse
+        dir = 0x06;  // both forward
     } else if (leftSpeed < 0 && rightSpeed > 0) {
         dir = 0x06;  // left forward, right reverse (spin left)
     } else if (leftSpeed > 0 && rightSpeed < 0) {
@@ -46,15 +48,33 @@ void setMotors(int fd, int leftSpeed, int rightSpeed) {
     } else if (leftSpeed > 0 && rightSpeed == 0) {
         dir = 0x09;  // only left reverse
     }
+    
+    uint8_t dir2 = 0x00;
+    
+    if (leftSpeed == rightSpeed) {
+		dir2 = 0x00;
+	} else if (leftSpeed > rightSpeed) {
+		dir2 = 0x09;
+	} else {
+		dir2 = 0x06;
+	}
 
     // Write directi
-    wiringPiI2CWriteReg16(fd, 0xAA, dir);
+    wiringPiI2CWriteReg16(fd1, 0xAA, dir);
 
     // Combine speeds into 16-bit value (left in high byte, right in low byte)
     uint16_t speedVal = (l << 8) | r;
 
     // Write speed
-    wiringPiI2CWriteReg16(fd, 0x82, speedVal);
+    wiringPiI2CWriteReg16(fd1, 0x82, speedVal);
+    
+    wiringPiI2CWriteReg16(fd2, 0xAA, dir2);
+
+    // Combine speeds into 16-bit value (left in high byte, right in low byte)
+    uint16_t speedVal2 = (f << 8) | f;
+
+    // Write speed
+    wiringPiI2CWriteReg16(fd2, 0x82, speedVal2);
 }
 
 // ======== Vision: Red Line Detection ========
@@ -74,7 +94,9 @@ cv::Mat extractRedMask(const cv::Mat& image) {
 
 int main() {
     // ======== Motor Init ========
-    int fd = initMotorDriver();
+    int fd1;
+    int fd2;
+    initMotorDriver(fd1, fd2);
 
     // ======== Camera Init ========
     lccv::PiCamera cam;
@@ -127,11 +149,22 @@ int main() {
             int baseSpeed = 200; // Bump this up for stronger movement
             int leftSpeed = baseSpeed + correction;
             int rightSpeed = baseSpeed - correction;
+            int frontSpeed = baseSpeed;
+         
+            if (-10 < leftSpeed - rightSpeed && leftSpeed - rightSpeed < 10 ) {
+				frontSpeed = 0;
+			} else if (leftSpeed > rightSpeed) {
+				frontSpeed = leftSpeed - rightSpeed + 100;
+			} else {
+				frontSpeed = rightSpeed - leftSpeed + 100;
+			}
             
-            std::cout << "[main] Angle: " << angle << " | LeftSpeed: " << leftSpeed << " | RightSpeed: " << rightSpeed << std::endl;
+            std::cout << "[main] Angle: " << angle << " | LeftSpeed: " << leftSpeed << " | RightSpeed: " << rightSpeed << " | FrontSpeed: " << frontSpeed << std::endl;
+            
+            
 
 
-            setMotors(fd, leftSpeed, rightSpeed);
+            setMotors(fd1, fd2 ,leftSpeed, rightSpeed, frontSpeed);
 
             // ======== Visual Overlay ========
             cv::line(image, pt_bot, pt_top, cv::Scalar(255, 255, 0), 2);
@@ -139,7 +172,7 @@ int main() {
             cv::circle(image, pt_top, 5, cv::Scalar(0, 255, 0), -1);
         } else {
             std::cout << "Line not detected. Stopping motors." << std::endl;
-            setMotors(fd, 0, 0); // Stop if line is lost
+            setMotors(fd1, fd2, 0, 0, 0); // Stop if line is lost
         }
 
         cv::imshow("Red Mask", redBinary);
@@ -148,7 +181,7 @@ int main() {
     }
 
     // ======== Cleanup ========
-    setMotors(fd, 0, 0); // stop motors on exit
+    setMotors(fd1, fd2 ,0 , 0, 0); // stop motors on exit
     cam.stopVideo();
     cv::destroyAllWindows();
 
