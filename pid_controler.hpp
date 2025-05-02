@@ -28,6 +28,8 @@ private:
     double ki;
     double kd;
 
+    double max_integral = 200;
+
     double setpoint;
     double integral;
     double previous_error;
@@ -43,6 +45,7 @@ public:
     double compute(double measured_value, double dt) {
         double error = setpoint - measured_value;
         integral += error * dt;
+        integral = std::clamp(integral, -max_integral, max_integral);
         double derivative = (error - previous_error) / dt;
         previous_error = error;
         return kp * error + ki * integral + kd * derivative;
