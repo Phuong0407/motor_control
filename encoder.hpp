@@ -156,6 +156,12 @@ public:
             (*encoder_vars[i])->resetCounter();
         }
     }
+
+    void getMotorCounter(std::vector<int64_t> &motor_counter) {
+        for (std::size_t i = 0; i < number_encoder; ++i) {
+            motor_counter[i] = (*encoder_vars[i])->getCounter();
+        }
+    }
 };
 
 #endif // MOTOR_ENCODER_HPP
