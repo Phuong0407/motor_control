@@ -107,61 +107,47 @@ void isr6() { if (encoder6) encoder6->updateCounter(); }
 // ==============================================================================
 // ==============================================================================
 
-class EncoderManager {
-private:
-    std::vector<EncoderPtr*> encoder_vars = {
-        &encoder1, &encoder2, &encoder3,
-        &encoder4, &encoder5, &encoder6
-    };
-    std::vector<IsrFunc> isr_functions = {
-        isr1, isr2, isr3,
-        isr4, isr5, isr6
-    };
-
-    const std::vector<std::pair<int, int>> encoder_pin_table = {
-        {21, 22}, // D5  = {5 , 6 }
-        {3 , 4 }, // D22 = {22, 23}
-        {27, 0 }, // D16 = {16, 17}
-        {5 , 6 }, // D24 = {24, 25}
-        {1 , 24}, // D18 = {18, 19}
-        {25, 2 }  // D26 = {26, 27}
-    };
-
-    void declareEncoders() {
-        for (std::size_t i = 0; i < number_encoder; ++i) {
-            int H1 = encoder_pin_table[i].first;
-            int H2 = encoder_pin_table[i].second;
-            *encoder_vars[i] = std::make_unique<MotorEncoder>(H1, H2);
-        }
-    }
-
-    void attachEncoderInterrupts() {
-        for (std::size_t i = 0; i < number_encoder; ++i) {
-            int H1 = encoder_pin_table[i].first;
-            if (wiringPiISR(H1, INT_EDGE_RISING, isr_functions[i]) < 0)
-                throw std::runtime_error("Failed to attach ISR to pin " + std::to_string(H1));
-            std::cout << "[INFO] ISR attached to pin " << H1 << "\n";
-        }
-    }
-
-    std::size_t number_encoder = 0;
-
-public:
-    EncoderManager(std::size_t number_encoder = 2) :
-    number_encoder(number_encoder)    
-    {
-        declareEncoders();
-        attachEncoderInterrupts();
-        for (std::size_t i = 0; i < number_encoder; ++i) {
-            (*encoder_vars[i])->resetCounter();
-        }
-    }
-
-    void getMotorCounter(std::vector<int64_t> &motor_counter) {
-        for (std::size_t i = 0; i < number_encoder; ++i) {
-            motor_counter[i] = (*encoder_vars[i])->getCounter();
-        }
-    }
+std::vector<EncoderPtr*> encoder_vars = {
+    &encoder1, &encoder2, &encoder3,
+    &encoder4, &encoder5, &encoder6
 };
+std::vector<IsrFunc> isr_functions = {
+    isr1, isr2, isr3,
+    isr4, isr5, isr6
+};
+
+const std::vector<std::pair<int, int>> encoder_pin_table = {
+    {21, 22}, // D5  = {5 , 6 }
+    {3 , 4 }, // D22 = {22, 23}
+    {27, 0 }, // D16 = {16, 17}
+    {5 , 6 }, // D24 = {24, 25}
+    {1 , 24}, // D18 = {18, 19}
+    {25, 2 }  // D26 = {26, 27}
+};
+
+#define number_encoders 3
+
+void declareEncoders() {
+    int H1 = encoder_pin_table[0].first;
+    int H2 = encoder_pin_table[0].second;
+    *encoder_vars[0] = std::make_unique<MotorEncoder>(H1, H2, 0x0f);
+
+    H1 = encoder_pin_table[1].first;
+    H2 = encoder_pin_table[1].second;
+    *encoder_vars[1] = std::make_unique<MotorEncoder>(H1, H2, 0x0f);
+    
+    H1 = encoder_pin_table[2].first;
+    H2 = encoder_pin_table[2].second;
+    *encoder_vars[2] = std::make_unique<MotorEncoder>(H1, H2, 0x0d);
+}
+
+void attachEncoderInterrupts() {
+    for (std::size_t i = 0; i < number_encoders; ++i) {
+        int H1 = encoder_pin_table[i].first;
+        if (wiringPiISR(H1, INT_EDGE_RISING, isr_functions[i]) < 0)
+            throw std::runtime_error("Failed to attach ISR to pin " + std::to_string(H1));
+        std::cout << "[INFO] ISR attached to pin " << H1 << "\n";
+    }
+}
 
 #endif // MOTOR_ENCODER_HPP
