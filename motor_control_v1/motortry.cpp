@@ -8,7 +8,7 @@ int main() {
     int fd1 = wiringPiI2CSetup(0x0F);
 
     // Second driver at address 0x0E (controls wheel 3)
-    int fd2 = wiringPiI2CSetup(0x0E);
+    int fd2 = wiringPiI2CSetup(0x0D);
 
     // Set speed and direction for driver 1
     wiringPiI2CWriteReg16(fd1, 0x82, 0xffff); // speed

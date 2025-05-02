@@ -441,7 +441,6 @@ CMakeFiles/red_line_bot.dir/red_line_bot.cpp.o: /home/raspberry/Documents/motor_
   /usr/include/libcamera/libcamera/base/signal.h \
   /usr/include/libcamera/libcamera/controls.h \
   /usr/include/libcamera/libcamera/geometry.h \
-  /usr/include/libcamera/libcamera/base/compiler.h \
   /usr/include/libcamera/libcamera/orientation.h \
   /usr/include/libcamera/libcamera/request.h \
   /usr/include/libcamera/libcamera/fence.h \
@@ -1341,8 +1340,6 @@ CMakeFiles/red_line_bot.dir/red_line_bot.cpp.o: /home/raspberry/Documents/motor_
 /usr/lib/gcc/arm-linux-gnueabihf/12/include/syslimits.h:
 
 /usr/include/c++/12/bits/unique_ptr.h:
-
-/usr/include/libcamera/libcamera/base/compiler.h:
 
 /usr/include/c++/12/tr1/modified_bessel_func.tcc:
 
