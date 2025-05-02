@@ -28,6 +28,10 @@ inline bool checkTickSetLogic(int ms1, int ms2, int dir) {
 }
 
 
+#define MAX_LEFT_RPS    0.5972
+#define MAX_RIGHT_RPS   0.6250
+#define MAX_FRONT_RPS   
+
 
 class MotorDriver {
 private:
@@ -47,7 +51,11 @@ private:
         i2c_fd[1] = wiringPiI2CSetup(0x0d);
     }
 
-    
+    void setLeftMotor(double rps) {
+
+    }
+
+
 public:
     MotorDriver(
         double kp,
