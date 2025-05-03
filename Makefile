@@ -1,13 +1,8 @@
-XX = g++
-CXXFLAGS = -Wall -lwiringPi
+all: test_motor_driver test_encoder
 
-SRC = test_motor_driver.cpp motor_driver.hpp pid_controler.hpp encoder.hpp
-TARGET = test_motor_driver
 
-all: $(TARGET)
+test_motor_driver: test_motor_driver.cpp motor_driver.hpp pid_control.hpp encoder.hpp
+	g++ -o moteur moteur.cpp -lwiringPi
 
-$(TARGET): $(SRC)
-		$(CXX) -o $@ $(SRC) $(CXXFLAGS)
-
-clean:
-		rm -f $(TARGET)
+test_encoder: test_encoder.cpp encoder.hpp
+	g++ -o moteur moteur.cpp -lwiringPi
