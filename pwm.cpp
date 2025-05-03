@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     int pwm3 = std::stoi(argv[3], nullptr, 0);
     int ms   = std::stoi(argv[4]);
 
-    declareEncoders(0xff, 0xdd);
+    declareEncoders(0x0f, 0x0d);
     attachEncoderInterrupts();
 
     set_motor_pwm(pwm1, pwm2, pwm3, ms);
