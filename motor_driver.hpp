@@ -12,28 +12,6 @@
 #include <iomanip>
 #include <fstream>
 
-// #define MOVE_FORWARD    1
-// #define MOVE_BACKWARD   2
-// #define TURN_LEFT       3
-// #define TURN_RIGHT      4
-// #define HOLD_POSITION   0
-
-
-// inline bool checkTickSetLogic(int ms1, int ms2, int dir) {
-//     if (ms1 == 0 && ms2 == 0 && dir == HOLD_POSITION)
-//         return true;
-//     if ((ms1 == ms2) && (dir == MOVE_FORWARD || dir == MOVE_BACKWARD))
-//         return true;
-//     if ((ms1 < ms2) && dir == TURN_RIGHT)
-//         return true;
-//     if ((ms1 < ms2) && dir == TURN_LEFT)
-//         return true;
-//     else
-//         return false;
-// }
-
-
-
 
 
 #define MAX_RPS_LOADED      0.6250
@@ -157,8 +135,7 @@ public:
         }
     }
 
-    void controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3, bool loaded_run = false) {
-        const double dt = 0.01;
+    void controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3, double dt = 0.01, bool loaded_run = false) {
         const double error_threshold = 0.05;
         const int stable_cycles_required = 5;
         int stable_cycle_count = 0;
@@ -223,7 +200,7 @@ public:
         measured_omega[1] = static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv_msm / COUNTER_PER_REV;
         measured_omega[2] = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv_msm / COUNTER_PER_REV;
 
-        std::ofstream outFile("omega_output.txt");
+        std::ofstream outFile("omega_output.txt", std::ios::app);
         std::cout << std::setprecision(3) << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
         outFile << std::setprecision(3) << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
         outFile.close();
