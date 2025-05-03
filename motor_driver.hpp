@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 
 // #define MOVE_FORWARD    1
 // #define MOVE_BACKWARD   2
@@ -157,7 +158,7 @@ public:
     }
 
     void controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3, bool loaded_run = false) {
-        const double dt = 0.2;
+        const double dt = 0.01;
         const double error_threshold = 0.05;
         const int stable_cycles_required = 5;
         int stable_cycle_count = 0;
@@ -222,7 +223,10 @@ public:
         measured_omega[1] = static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv_msm / COUNTER_PER_REV;
         measured_omega[2] = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv_msm / COUNTER_PER_REV;
 
+        std::ofstream outFile("omega_output.txt");
         std::cout << std::setprecision(3) << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
+        outFile << std::setprecision(3) << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
+        outFile.close();
     }
 
     void set_motor_pwm(int pwm1 = 0xff, int pwm2 = 0xff, int pwm3 = 0xff) {
