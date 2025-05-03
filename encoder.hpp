@@ -20,19 +20,13 @@ private:
     int H1, H2;
     volatile int64_t counter;
 
-public:
-    MotorEncoder() = default;
-    void initEncoder(int H1, int H2, int I2C_ADDRESS = 0x0f)
-    {
+    void initEncoder(int i2c_addr) {
         if (wiringPiSetup() == -1)
             throw std::runtime_error("[ERROR] wiringPiSetup failed");
 
-        int i2c_fd = wiringPiI2CSetup(I2C_ADDRESS);
+        int i2c_fd = wiringPiI2CSetup(i2c_addr);
         if (i2c_fd < 0)
             throw std::runtime_error("[ERROR] I2C setup failed");
-
-        this->H1 = H1;
-        this->H2 = H2;
 
         pinMode(H1, INPUT);
         pinMode(H2, INPUT);
@@ -44,6 +38,13 @@ public:
 
         std::cout   << "[INFO] Encoder initialized on pins H1 = "
                     << H1 << ", H2 = " << H2 << "\n";
+    }
+
+public:
+    MotorEncoder(int H1, int H2, int i2c_addr = 0x0f) :
+    H1(H1), H2(H2), counter(0)
+    {
+        initEncoder(i2c_addr);
     }
 
     void updateCounter() {
@@ -90,14 +91,13 @@ public:
 // ==============================================================================
 // ==============================================================================
 
-static MotorEncoder encoders[NUM_ENCODERS];
+extern MotorEncoder* encoders[NUM_ENCODERS];
+
+static void isr0() { if (encoders[0]) encoders[0]->updateCounter(); }
+static void isr1() { if (encoders[1]) encoders[1]->updateCounter(); }
+static void isr2() { if (encoders[2]) encoders[2]->updateCounter(); }
 
 typedef void (*IsrFunc)();
-
-static void isr0() { encoders[0].updateCounter(); }
-static void isr1() { encoders[1].updateCounter(); }
-static void isr2() { encoders[2].updateCounter(); }
-
 static IsrFunc isr_functions[NUM_ENCODERS] = {
     isr0, isr1, isr2
 };
@@ -112,10 +112,15 @@ inline void declareEncoders() {
     for (int i = 0; i < NUM_ENCODERS; ++i) {
         int H1 = encoder_pin_table[i][0];
         int H2 = encoder_pin_table[i][1];
-        if (i == 2)
-            encoders[i].initEncoder(H1, H2, 0x0d);
-        else
-            encoders[i].initEncoder(H1, H2, 0x0f);
+        int addr = (i == 2) ? 0x0d : 0x0f;
+        encoders[i] = new MotorEncoder(H1, H2, addr);
+    }
+}
+
+inline void cleanupEncoders() {
+    for (int i = 0; i < NUM_ENCODERS; ++i) {
+        delete encoders[i];
+        encoders[i] = nullptr;
     }
 }
 
