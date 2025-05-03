@@ -49,8 +49,6 @@ private:
     double ref_omega[3];
     double measured_omega[3];
     double controlled_omega[3];
-    int64_t previous_ticks[3];
-    int64_t current_ticks[3];
     int previous_cmd[3];
     PIDController pid1, pid2, pid3;
 
@@ -99,6 +97,13 @@ private:
         previous_cmd[1] = pwm2;
     }
 
+    void setLeftRightMotor(double l_rps, double r_rps) {
+        int dir = computeDirection(l_rps, r_rps);
+        double l_throttle = computeThrottleRPS(l_rps);
+        double r_throttle = computeThrottleRPS(r_rps);
+        
+    }
+
     void setFrontMotor(double f_rps) {
         int dir = 0;
         if (f_rps < 0)
@@ -132,10 +137,8 @@ public:
     {
         i2c_fd[0] = i2c_fd[1] = -1;
         ref_omega[0] = ref_omega[1] = ref_omega[2] = 0.0;
-        measured_omega[0] = measured_omega[1] = measured_omega[2] = 0.0;        
-        controlled_omega[0] = controlled_omega[1] = controlled_omega[2] = 0.0;        
-        previous_ticks[0] = previous_ticks[1] = previous_ticks[2] = 0;    
-        current_ticks[0] = current_ticks[1] = current_ticks[2] = 0;
+        measured_omega[0] = measured_omega[1] = measured_omega[2] = 0.0;  
+        controlled_omega[0] = controlled_omega[1] = controlled_omega[2] = 0.0;
         previous_cmd[0] = previous_cmd[1] = previous_cmd[2] = 0;
 
         declareEncoders(driver1_addr, driver2_addr);
@@ -152,47 +155,42 @@ public:
         this->pid3.setSetpoint(ref_omega[2]);
     }
 
-    inline void getPreviousTicks() {
-        previous_ticks[0] = encoders[0]->getCounter();
-        previous_ticks[1] = encoders[1]->getCounter();
-        previous_ticks[2] = encoders[2]->getCounter();
-    }
-    inline void getCurrentTicks() {
-        current_ticks[0] = encoders[0]->getCounter();
-        current_ticks[1] = encoders[1]->getCounter();
-        current_ticks[2] = encoders[2]->getCounter();
-    }
-    inline void computeAngularVelocity(double dt) {
-        measured_omega[0] = static_cast<double>(current_ticks[0] - previous_ticks[0]) / dt / COUNTER_PER_REV;
-        measured_omega[1] = static_cast<double>(current_ticks[1] - previous_ticks[1]) / dt / COUNTER_PER_REV;
-        measured_omega[2] = static_cast<double>(current_ticks[2] - previous_ticks[2]) / dt / COUNTER_PER_REV;
+    void control() {
+        // while (true) {
+        //     auto t0 = std::chrono::steady_clock::now();
+        //     double dt1 = 0.5;
+        //     double dt2 = 0.1;
+        //     controlled_omega[0] = pid1.compute(measured_omega[0], dt2);
+        //     controlled_omega[1] = pid2.compute(measured_omega[1], dt2);
+        //     controlled_omega[2] = pid3.compute(measured_omega[2], dt2);
+        //     setLeftMotor(controlled_omega[0], measured_omega[1]);
+        //     setRightMotor(controlled_omega[0], controlled_omega[1]);
+        //     setFrontMotor(controlled_omega[2]);
+        // }
     }
 
-    void control() {
-        while (true) {
-            getPreviousTicks();
-            auto t0 = std::chrono::steady_clock::now();
-            double dt1 = 0.5;
-            double dt2 = 0.1;
-            getCurrentTicks();
-            computeAngularVelocity(dt1);
-            controlled_omega[0] = pid1.compute(measured_omega[0], dt2);
-            controlled_omega[1] = pid2.compute(measured_omega[1], dt2);
-            controlled_omega[2] = pid3.compute(measured_omega[2], dt2);
-            setLeftMotor(controlled_omega[0], measured_omega[1]);
-            setRightMotor(controlled_omega[0], controlled_omega[1]);
-            setFrontMotor(controlled_omega[2]);
-        }
-    }
     void measureAngularVelocity(double smpl_itv = 0.2) {
-        getPreviousTicks();
+        int64_t prev_ticks0, prev_ticks1, prev_ticks2;
+        int64_t curr_ticks0, curr_ticks1, curr_ticks2;
+
+        prev_ticks0 = encoders[0]->getCounter();
+        prev_ticks1 = encoders[1]->getCounter();
+        prev_ticks2 = encoders[2]->getCounter();
+
         auto t_start = std::chrono::steady_clock::now();
         std::this_thread::sleep_for(std::chrono::duration<double>(smpl_itv));
-        getCurrentTicks();
+
+        curr_ticks0 = encoders[0]->getCounter();
+        curr_ticks1 = encoders[1]->getCounter();
+        curr_ticks2 = encoders[2]->getCounter();
+        
         auto t_end = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed = t_end - t_start;
         double smpl_itv_msm = elapsed.count();
-        computeAngularVelocity(smpl_itv_msm);
+
+        measured_omega[0] = static_cast<double>(curr_ticks0 - prev_ticks0) / smpl_itv_msm / COUNTER_PER_REV;
+        measured_omega[1] = static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv_msm / COUNTER_PER_REV;
+        measured_omega[2] = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv_msm / COUNTER_PER_REV;
     }
 
     void set_motor_pwm(int pwm1 = 0xff, int pwm2 = 0xff, int pwm3 = 0xff) {
