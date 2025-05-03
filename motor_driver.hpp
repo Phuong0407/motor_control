@@ -159,7 +159,8 @@ public:
     void controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3) {
         double lerror = 0.0, rerror = 0.0, ferror = 0.0;
         while (true) {
-            measureAngularVelocity();
+            auto start = std::chrono::steady_clock::now();
+            measureAngularVelocity(0.2);
             lerror = ref_rps1 - measured_omega[0];
             rerror = ref_rps2 - measured_omega[1];
             ferror = ref_rps3 - measured_omega[2];
@@ -173,6 +174,7 @@ public:
                 set_rps2 = pid2.compute(ref_rps2, measured_omega[1], 0.2);
             }
             setLeftRightMotor(set_rps1, set_rps2, false);
+            std::this_thread::sleep_until(start + std::chrono::duration<double>(0.2));
         }
     }
 
