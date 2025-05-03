@@ -12,22 +12,8 @@ int main(int argc, char* argv[]) {
 
     MotorDriver motor_driver(0.05, 0.05, 0.05, 0.2, 0x0f, 0x0d);
 
-    // auto t_start = std::chrono::steady_clock::now();
-    // while(true) {
-    //     auto t_now = std::chrono::steady_clock::now();
-    //     std::chrono::duration<double> elapsed = t_now - t_start;
-
-    //     if (elapsed.count() > 20.0)
-    //         break;
-
-    //     motor_driver.set_motor_pwm(pwm1, pwm2, pwm3); 
-    //     motor_driver.measureAngularVelocity(smpling_intv);
-    // }
-
     auto t_start = std::chrono::steady_clock::now();
-
-    motor_driver.set_motor_pwm(pwm1, pwm2, pwm3);
-
+    motor_driver.setLeftRightMotor(0.2, 0.2, false);
     while (true) {
         auto t_now = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed = t_now - t_start;
