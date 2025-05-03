@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <chrono>
+#include <algorithm>
 
 #define MOVE_FORWARD    1
 #define MOVE_BACKWARD   2
@@ -28,9 +29,14 @@ inline bool checkTickSetLogic(int ms1, int ms2, int dir) {
 }
 
 
-#define MAX_LEFT_RPS    0.5972
-#define MAX_RIGHT_RPS   0.6250
-#define MAX_FRONT_RPS   
+
+
+
+#define MAX_RPS         0.6250
+#define SAFTY_OFFSET    0.60
+
+
+
 
 
 class MotorDriver {
@@ -44,14 +50,21 @@ private:
     int64_t current_ticks[3];
     int previous_cmd[3];
     PIDController pid1, pid2, pid3;
-    EncoderManager encoder_manager;
 
-    void initMotor(int driver1_addr = 0x0f, int driver2_addr = 0x0d) {
+    inline void initMotor(int driver1_addr = 0x0f, int driver2_addr = 0x0d) {
         i2c_fd[0] = wiringPiI2CSetup(0x0f);
         i2c_fd[1] = wiringPiI2CSetup(0x0d);
     }
 
+    inline double computeThrottleRPS(double rps) {
+        double clamped_rps = std::clamp(rps, -MAX_RPS, MAX_RPS);
+        return clamped_rps / MAX_RPS * SAFTY_OFFSET;
+    }
+
     void setLeftMotor(double rps) {
+        double throttle = computeThrottleRPS(rps);
+        int int_command = static_cast<int>(std::round(255.0 * throttle));
+        int pwm = std::abs(int_command);
 
     }
 
@@ -68,8 +81,7 @@ public:
     dt(dt),
     pid1(kp, kd, ki),
     pid2(kp, kd, ki),
-    pid3(kp, kd, ki),
-    encoder_manager(3)
+    pid3(kp, kd, ki)
     {
         i2c_fd[0] = i2c_fd[1] = -1;
         ref_omega[0] = ref_omega[1] = ref_omega[2] = 0.0;
@@ -92,14 +104,14 @@ public:
     }
 
     inline void getPreviousTicks() {
-        previous_ticks[0] = encoder1->getCounter();
-        previous_ticks[1] = encoder2->getCounter();
-        previous_ticks[2] = encoder3->getCounter();
+        previous_ticks[0] = encoders[0]->getCounter();
+        previous_ticks[1] = encoders[1]->getCounter();
+        previous_ticks[2] = encoders[2]->getCounter();
     }
     inline void getCurrentTicks() {
-        current_ticks[0] = encoder1->getCounter();
-        current_ticks[1] = encoder2->getCounter();
-        current_ticks[2] = encoder3->getCounter();
+        current_ticks[0] = encoders[0]->getCounter();
+        current_ticks[1] = encoders[1]->getCounter();
+        current_ticks[2] = encoders[2]->getCounter();
     }
     inline void measureAngularVelocity(double dt) {
         measured_omega[0] = (current_ticks[0] - previous_ticks[0]) / dt;
