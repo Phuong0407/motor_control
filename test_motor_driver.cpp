@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
     double run_itv  = std::stod(argv[4]);
     double smpl_itv = std::stod(argv[5]);
 
-    MotorDriver motor_driver(0.05, 0.05, 0.05, 0.2, 0x0f, 0x0d);
+    MotorDriver motor_driver(0.05, 0.1, 0.1, 0.2, 0x0f, 0x0d);
 
     auto t_start = std::chrono::steady_clock::now();
     motor_driver.controlAngularVelocity(0.6, 0.6, 0.0);
