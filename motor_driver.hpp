@@ -11,25 +11,25 @@
 #include <iostream>
 #include <iomanip>
 
-#define MOVE_FORWARD    1
-#define MOVE_BACKWARD   2
-#define TURN_LEFT       3
-#define TURN_RIGHT      4
-#define HOLD_POSITION   0
+// #define MOVE_FORWARD    1
+// #define MOVE_BACKWARD   2
+// #define TURN_LEFT       3
+// #define TURN_RIGHT      4
+// #define HOLD_POSITION   0
 
 
-inline bool checkTickSetLogic(int ms1, int ms2, int dir) {
-    if (ms1 == 0 && ms2 == 0 && dir == HOLD_POSITION)
-        return true;
-    if ((ms1 == ms2) && (dir == MOVE_FORWARD || dir == MOVE_BACKWARD))
-        return true;
-    if ((ms1 < ms2) && dir == TURN_RIGHT)
-        return true;
-    if ((ms1 < ms2) && dir == TURN_LEFT)
-        return true;
-    else
-        return false;
-}
+// inline bool checkTickSetLogic(int ms1, int ms2, int dir) {
+//     if (ms1 == 0 && ms2 == 0 && dir == HOLD_POSITION)
+//         return true;
+//     if ((ms1 == ms2) && (dir == MOVE_FORWARD || dir == MOVE_BACKWARD))
+//         return true;
+//     if ((ms1 < ms2) && dir == TURN_RIGHT)
+//         return true;
+//     if ((ms1 < ms2) && dir == TURN_LEFT)
+//         return true;
+//     else
+//         return false;
+// }
 
 
 
