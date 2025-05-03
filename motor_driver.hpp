@@ -199,8 +199,8 @@ public:
 
     void setLeftRightMotor(double lrps, double rrps, bool loaded_run = true) {
         int dir = computeDirection(lrps, rrps);
-        double lthrottle = computeThrottleRPS(lrps);
-        double rthrottle = computeThrottleRPS(rrps);
+        double lthrottle = computeThrottleRPS(lrps, loaded_run);
+        double rthrottle = computeThrottleRPS(rrps, loaded_run);
         int lint_command = static_cast<int>(std::round(255.0 * lthrottle));
         int rint_command = static_cast<int>(std::round(255.0 * rthrottle));
         int pwm1 = std::abs(lint_command);
