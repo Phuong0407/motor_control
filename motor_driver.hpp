@@ -70,10 +70,10 @@ private:
         return 0.0;
     }
 
-    inline int computeDirection(double lcurrrps, double rcurrrps)
+    inline int computeDirection(double lcurrps, double rcurrps)
     {
-        bool lcw = (lcurrrps > 0);
-        bool rcw = (rcurrrps > 0);
+        bool lcw = (lcurrps > 0);
+        bool rcw = (rcurrps > 0);
         if ( lcw &&  rcw)
             return 0x0a;
         if ( lcw && !rcw)
