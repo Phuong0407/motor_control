@@ -138,7 +138,7 @@ public:
 
         declareEncoders(driver1_addr, driver2_addr);
         attachEncoderInterrupts();
-//        initMotor(driver1_addr, driver2_addr);
+        initMotor(driver1_addr, driver2_addr);
     }
 
     void setReferenceOmega(const double (&ref_omega)[3]) {
@@ -190,6 +190,18 @@ public:
         computeAngularVelocity(0.2);
 
         std::cout << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
+    }
+
+    void set_motor_pwm(int pwm1 = 0xff, int pwm2 = 0xff, int pwm3 = 0xff, int ms = 1000) {
+        wiringPiI2CWriteReg16(i2c_fd[0], 0x82, (pwm1 << 8) | pwm2);
+        wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, 0x06);
+        wiringPiI2CWriteReg16(i2c_fd[1], 0x82, (pwm3 << 8));
+        wiringPiI2CWriteReg16(i2c_fd[1], 0xaa, 0x06);
+    
+        delay(ms);
+    
+        wiringPiI2CWriteReg16(i2c_fd[0], 0x82, 0x0000);
+        wiringPiI2CWriteReg16(i2c_fd[1], 0x82, 0x0000);
     }
 };
 
