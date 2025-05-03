@@ -11,9 +11,9 @@
 #include <vector>
 #include <string>
 
-constexpr int NUM_ENCODERS = 3;
-static constexpr int COUNTER_PER_REV = 144;
-static constexpr double ANGLE_PER_TICK = 2.5;
+constexpr int NUM_ENCODERS              = 3;
+static constexpr double COUNTER_PER_REV = 144.0;
+static constexpr double ANGLE_PER_TICK  = 2.5;
 
 class MotorEncoder {
 private:

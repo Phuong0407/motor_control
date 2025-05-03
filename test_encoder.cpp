@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-void setMotorCommand(int ms = 1000, int speed = 0xffff) {
+void setMotorCommand(int ms = 200, int speed = 0xffff) {
     int i2c_fd1 = wiringPiI2CSetup(0x0f);
     int i2c_fd2 = wiringPiI2CSetup(0x0d);
 

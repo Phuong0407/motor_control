@@ -9,6 +9,7 @@
 #include <thread>
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
 
 #define MOVE_FORWARD    1
 #define MOVE_BACKWARD   2
@@ -162,9 +163,9 @@ public:
         current_ticks[2] = encoders[2]->getCounter();
     }
     inline void computeAngularVelocity(double dt) {
-        measured_omega[0] = (current_ticks[0] - previous_ticks[0]) / dt;
-        measured_omega[1] = (current_ticks[1] - previous_ticks[1]) / dt;
-        measured_omega[2] = (current_ticks[2] - previous_ticks[2]) / dt;
+        measured_omega[0] = static_cast<double>(current_ticks[0] - previous_ticks[0]) / dt / COUNTER_PER_REV;
+        measured_omega[1] = static_cast<double>(current_ticks[1] - previous_ticks[1]) / dt / COUNTER_PER_REV;
+        measured_omega[2] = static_cast<double>(current_ticks[2] - previous_ticks[2]) / dt / COUNTER_PER_REV;
     }
 
     void control() {
@@ -188,6 +189,7 @@ public:
         getPreviousTicks();
         auto t_start = std::chrono::steady_clock::now();
         std::this_thread::sleep_for(std::chrono::duration<double>(smpl_itv));
+        getCurrentTicks();
         auto t_end = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed = t_end - t_start;
         double smpl_itv_msm = elapsed.count();
@@ -201,7 +203,7 @@ public:
         //     }
         // }
         computeAngularVelocity(smpl_itv_msm);
-        std::cout << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
+        std::cout << std::setprecision(4) << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
     }
 
     void set_motor_pwm(int pwm1 = 0xff, int pwm2 = 0xff, int pwm3 = 0xff) {
