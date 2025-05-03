@@ -186,6 +186,7 @@ public:
         }
     }
     void measureAngularVelocity() {
+        double dt = 0.0;
         getPreviousTicks();
         auto t_start = std::chrono::steady_clock::now();
         while(true) {
@@ -194,11 +195,12 @@ public:
             std::cout << "elapsed time" << elapsed.count() << "\n.";
             if (elapsed.count() >= 0.2) {
                 getCurrentTicks();
+                dt = elapsed.count();
+                break;
             }
-            computeAngularVelocity(elapsed.count());
-            std::cout << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
-            break;
         }
+        computeAngularVelocity(dt);
+        std::cout << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
     }
 
     void set_motor_pwm(int pwm1 = 0xff, int pwm2 = 0xff, int pwm3 = 0xff) {
