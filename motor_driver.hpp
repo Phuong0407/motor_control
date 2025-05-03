@@ -199,9 +199,8 @@ public:
         wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, 0x06);
         wiringPiI2CWriteReg16(i2c_fd[1], 0x82, (pwm3 << 8));
         wiringPiI2CWriteReg16(i2c_fd[1], 0xaa, 0x06);
-    
-        delay(ms);
-    
+    }
+    void stop_motor() {
         wiringPiI2CWriteReg16(i2c_fd[0], 0x82, 0x0000);
         wiringPiI2CWriteReg16(i2c_fd[1], 0x82, 0x0000);
     }
