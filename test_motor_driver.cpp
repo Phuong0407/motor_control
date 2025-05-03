@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     MotorDriver motor_driver(0.05, 0.05, 0.05, 0.2, 0x0f, 0x0d);
 
     auto t_start = std::chrono::steady_clock::now();
-    motor_driver.setLeftRightMotor(0.6, 0.6, false);
+    motor_driver.setLeftRightMotor(rps1, rps2, false);
     while (true) {
         auto t_now = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed = t_now - t_start;
