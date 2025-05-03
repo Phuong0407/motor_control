@@ -166,10 +166,10 @@ public:
             double set_rps1 = 0.0;
             double set_rps2 = 0.0;
 
-            if (std::abs(lerror) < 0.02) {
+            if (std::abs(lerror) >= 0.02) {
                 set_rps1 = pid1.compute(ref_rps1, measured_omega[0], 0.2);
             }
-            if (std::abs(rerror) < 0.02) {
+            if (std::abs(rerror) >= 0.02) {
                 set_rps2 = pid2.compute(ref_rps2, measured_omega[1], 0.2);
             }
             setLeftRightMotor(set_rps1, set_rps2, false);
