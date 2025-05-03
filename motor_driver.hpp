@@ -138,8 +138,6 @@ public:
         previous_cmd[0] = previous_cmd[1] = previous_cmd[2] = 0;
 
         declareEncoders(driver1_addr, driver2_addr);
-        std::cout << "Enter motor driver.\n";
-
         attachEncoderInterrupts();
         initMotor(driver1_addr, driver2_addr);
     }
@@ -192,7 +190,6 @@ public:
         while(true) {
             auto t_now = std::chrono::steady_clock::now();
             std::chrono::duration<double> elapsed = t_now - t_start;
-            std::cout << "elapsed time" << elapsed.count() << "\n.";
             if (elapsed.count() >= 0.2) {
                 getCurrentTicks();
                 dt = elapsed.count();
