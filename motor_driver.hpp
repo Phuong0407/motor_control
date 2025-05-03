@@ -154,13 +154,30 @@ public:
         for (std::size_t i = 0; i < 3; ++i) {
             this->ref_omega[i] = ref_omega[i];
         }
-        this->pid1.setSetpoint(ref_omega[0]);
-        this->pid2.setSetpoint(ref_omega[1]);
-        this->pid3.setSetpoint(ref_omega[2]);
+    }
+
+    void controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3) {
+        double lerror = 0.0, rerror = 0.0, ferror = 0.0;
+        while (true) {
+            measureAngularVelocity();
+            lerror = ref_rps1 - measured_omega[0];
+            rerror = ref_rps2 - measured_omega[1];
+            ferror = ref_rps3 - measured_omega[2];
+            double set_rps1 = 0.0;
+            double set_rps2 = 0.0;
+
+            if (std::abs(lerror) < 0.02) {
+                set_rps1 = pid1.compute(ref_rps1, measured_omega[0], 0.2);
+            }
+            if (std::abs(rerror) < 0.02) {
+                set_rps2 = pid2.compute(ref_rps2, measured_omega[1], 0.2);
+            }
+            setLeftRightMotor(set_rps1, set_rps2, false);
+        }
     }
 
 
-    void measureAngularVelocity(double smpl_itv = 0.2) {
+    void measureAngularVelocity(double smpl_itv = 0.4) {
         int64_t prev_ticks0, prev_ticks1, prev_ticks2;
         int64_t curr_ticks0, curr_ticks1, curr_ticks2;
 
