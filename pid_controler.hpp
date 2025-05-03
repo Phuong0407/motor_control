@@ -34,7 +34,7 @@ private:
     double previous_error;
 
 public:
-    PIDController(double kp = 0.05, double ki = 0.05, double kd = 0.05)
+    PIDController(double kp = 0.05, double ki = 0.1, double kd = 0.1)
     : kp(kp), ki(ki), kd(kd), integral(0), previous_error(0) {}
 
     double compute(double ref_value, double measured_value, double dt) {
