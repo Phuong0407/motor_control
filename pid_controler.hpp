@@ -28,14 +28,17 @@ private:
     double ki;
     double kd;
 
-    double max_integral = 10;
+    double max_integral = 0.0;
 
     double integral;
     double previous_error;
 
 public:
     PIDController(double kp = 0.05, double ki = 0.1, double kd = 0.1)
-    : kp(kp), ki(ki), kd(kd), integral(0), previous_error(0) {}
+    : kp(kp), ki(ki), kd(kd), integral(0), previous_error(0)
+    {
+        max_integral = 0.8681 / ki;
+    }
 
     double compute(double ref_value, double measured_value, double dt) {
         double error = ref_value - measured_value;

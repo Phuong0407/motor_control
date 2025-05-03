@@ -157,7 +157,7 @@ public:
     }
 
     void controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3, bool loaded_run = false) {
-        const double dt = 0.1;
+        const double dt = 0.2;
         const double error_threshold = 0.05;
         const int stable_cycles_required = 5;
         int stable_cycle_count = 0;
@@ -166,7 +166,7 @@ public:
     
         while (true) {
             auto start = std::chrono::steady_clock::now();
-            measureAngularVelocity(0.4);
+            measureAngularVelocity(dt);
     
             lerror = ref_rps1 - measured_omega[0];
             rerror = ref_rps2 - measured_omega[1];
@@ -199,7 +199,7 @@ public:
     }    
 
 
-    void measureAngularVelocity(double smpl_itv = 0.4) {
+    void measureAngularVelocity(double smpl_itv = 0.05) {
         int64_t prev_ticks0, prev_ticks1, prev_ticks2;
         int64_t curr_ticks0, curr_ticks1, curr_ticks2;
 
