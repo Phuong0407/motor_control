@@ -11,68 +11,51 @@
 #include <vector>
 #include <string>
 
+constexpr int NUM_ENCODERS = 3;
 static constexpr int COUNTER_PER_REV = 144;
 static constexpr double ANGLE_PER_TICK = 2.5;
 
 class MotorEncoder {
 private:
-    int H1_PIN, H2_PIN;
-    int64_t counter;
+    int H1, H2;
+    volatile int64_t counter;
 
 public:
-    MotorEncoder(int H1, int H2, int I2C_ADDRESS = 0x0f)
-        : H1_PIN(H1), H2_PIN(H2), counter(0)
+    MotorEncoder() = default;
+    void initEncoder(int H1, int H2, int I2C_ADDRESS = 0x0f)
     {
         if (wiringPiSetup() == -1)
-            throw std::runtime_error("wiringPiSetup failed");
+            throw std::runtime_error("[ERROR] wiringPiSetup failed");
 
-        int I2C_FD = wiringPiI2CSetup(I2C_ADDRESS);
-        if (I2C_FD < 0)
-            throw std::runtime_error("I2C setup failed");
+        int i2c_fd = wiringPiI2CSetup(I2C_ADDRESS);
+        if (i2c_fd < 0)
+            throw std::runtime_error("[ERROR] I2C setup failed");
 
-        pinMode(H1_PIN, INPUT);
-        pinMode(H2_PIN, INPUT);
-        pullUpDnControl(H1_PIN, PUD_UP);
-        pullUpDnControl(H2_PIN, PUD_UP);
+        this->H1 = H1;
+        this->H2 = H2;
 
-        if (wiringPiI2CRead(I2C_FD) == -1)
-            std::cerr << "[WARNING] I2C device is not responding.\n";
+        pinMode(H1, INPUT);
+        pinMode(H2, INPUT);
+        pullUpDnControl(H1, PUD_UP);
+        pullUpDnControl(H2, PUD_UP);
 
-        std::cout << "[INFO] Encoder initialized on pins H1 = " 
-                  << H1_PIN << ", H2 = " << H2_PIN << "\n";
+        if (wiringPiI2CRead(i2c_fd) == -1)
+            std::cerr << "[ERROR] I2C device is not responding.\n";
+
+        std::cout   << "[INFO] Encoder initialized on pins H1 = "
+                    << H1 << ", H2 = " << H2 << "\n";
     }
 
     void updateCounter() {
-        digitalRead(H2_PIN) ? ++counter : --counter;
+        digitalRead(H2) ? ++counter : --counter;
     }
 
     void resetCounter() {
         counter = 0;
     }
 
-    int getH1() const { return H1_PIN; }
-    int getH2() const { return H2_PIN; }
     int64_t getCounter() const { return counter; }
-    double measureShaftPosition() const {
-        return static_cast<double>(counter) * ANGLE_PER_TICK;
-    }
 };
-
-using EncoderPtr = std::unique_ptr<MotorEncoder>;
-static EncoderPtr encoder1 = nullptr;
-static EncoderPtr encoder2 = nullptr;
-static EncoderPtr encoder3 = nullptr;
-static EncoderPtr encoder4 = nullptr;
-static EncoderPtr encoder5 = nullptr;
-static EncoderPtr encoder6 = nullptr;
-
-using IsrFunc = void (*)();
-void isr1() { if (encoder1) encoder1->updateCounter(); }
-void isr2() { if (encoder2) encoder2->updateCounter(); }
-void isr3() { if (encoder3) encoder3->updateCounter(); }
-void isr4() { if (encoder4) encoder4->updateCounter(); }
-void isr5() { if (encoder5) encoder5->updateCounter(); }
-void isr6() { if (encoder6) encoder6->updateCounter(); }
 
 // BCM = grove-hat-base numbering
 // wPi = wiringPiNumbering, use with <wiringPi.h> and <wiringPiI2C.h>
@@ -107,45 +90,40 @@ void isr6() { if (encoder6) encoder6->updateCounter(); }
 // ==============================================================================
 // ==============================================================================
 
-std::vector<EncoderPtr*> encoder_vars = {
-    &encoder1, &encoder2, &encoder3,
-    &encoder4, &encoder5, &encoder6
-};
-std::vector<IsrFunc> isr_functions = {
-    isr1, isr2, isr3,
-    isr4, isr5, isr6
+static MotorEncoder encoders[NUM_ENCODERS];
+
+typedef void (*IsrFunc)();
+
+static void isr0() { encoders[0].updateCounter(); }
+static void isr1() { encoders[1].updateCounter(); }
+static void isr2() { encoders[2].updateCounter(); }
+
+static IsrFunc isr_functions[NUM_ENCODERS] = {
+    isr0, isr1, isr2
 };
 
-const std::vector<std::pair<int, int>> encoder_pin_table = {
+static const int encoder_pin_table[NUM_ENCODERS][2] = {
     {21, 22}, // D5  = {5 , 6 }
     {3 , 4 }, // D22 = {22, 23}
     {27, 0 }, // D16 = {16, 17}
-    {5 , 6 }, // D24 = {24, 25}
-    {1 , 24}, // D18 = {18, 19}
-    {25, 2 }  // D26 = {26, 27}
 };
 
-#define number_encoders 3
-
-void declareEncoders() {
-    int H1 = encoder_pin_table[0].first;
-    int H2 = encoder_pin_table[0].second;
-    *encoder_vars[0] = std::make_unique<MotorEncoder>(H1, H2, 0x0f);
-
-    H1 = encoder_pin_table[1].first;
-    H2 = encoder_pin_table[1].second;
-    *encoder_vars[1] = std::make_unique<MotorEncoder>(H1, H2, 0x0f);
-    
-    H1 = encoder_pin_table[2].first;
-    H2 = encoder_pin_table[2].second;
-    *encoder_vars[2] = std::make_unique<MotorEncoder>(H1, H2, 0x0d);
+inline void declareEncoders() {
+    for (int i = 0; i < NUM_ENCODERS; ++i) {
+        int H1 = encoder_pin_table[i][0];
+        int H2 = encoder_pin_table[i][1];
+        if (i == 2)
+            encoders[i].initEncoder(H1, H2, 0x0d);
+        else
+            encoders[i].initEncoder(H1, H2, 0x0f);
+    }
 }
 
-void attachEncoderInterrupts() {
-    for (std::size_t i = 0; i < number_encoders; ++i) {
-        int H1 = encoder_pin_table[i].first;
+inline void attachEncoderInterrupts() {
+    for (std::size_t i = 0; i < NUM_ENCODERS; ++i) {
+        int H1 = encoder_pin_table[i][0];
         if (wiringPiISR(H1, INT_EDGE_RISING, isr_functions[i]) < 0)
-            throw std::runtime_error("Failed to attach ISR to pin " + std::to_string(H1));
+            throw std::runtime_error("[ERROR] Failed to attach ISR to pin " + std::to_string(H1));
         std::cout << "[INFO] ISR attached to pin " << H1 << "\n";
     }
 }
