@@ -36,7 +36,7 @@ inline bool checkTickSetLogic(int ms1, int ms2, int dir) {
 
 
 #define MAX_RPS_LOADED      0.6250
-#define MAX_RPS_NOLOADED    0.6250
+#define MAX_RPS_NOLOADED    0.8681
 #define SAFTY_OFFSET        0.70
 
 
@@ -61,11 +61,11 @@ private:
     inline double computeThrottleRPS(double rps, bool loaded_run = true) {
         if (loaded_run) {
             double clamped_rps = std::clamp(rps, -MAX_RPS_LOADED, MAX_RPS_LOADED);
-            return clamped_rps / MAX_RPS_LOADED * SAFTY_OFFSET;
+            return clamped_rps / MAX_RPS_LOADED;
         }
         else {
             double clamped_rps = std::clamp(rps, -MAX_RPS_NOLOADED, MAX_RPS_NOLOADED);
-            return clamped_rps / MAX_RPS_NOLOADED * SAFTY_OFFSET;
+            return clamped_rps / MAX_RPS_NOLOADED;
         }
         return 0.0;
     }
@@ -182,6 +182,8 @@ public:
         measured_omega[0] = static_cast<double>(curr_ticks0 - prev_ticks0) / smpl_itv_msm / COUNTER_PER_REV;
         measured_omega[1] = static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv_msm / COUNTER_PER_REV;
         measured_omega[2] = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv_msm / COUNTER_PER_REV;
+
+        std::cout << std::setprecision(3) << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
     }
 
     void set_motor_pwm(int pwm1 = 0xff, int pwm2 = 0xff, int pwm3 = 0xff) {
