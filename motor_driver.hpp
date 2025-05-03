@@ -157,26 +157,60 @@ public:
     }
 
     void controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3) {
+        const double dt = 0.2;                      // Control loop interval (seconds)
+        const double error_threshold = 0.02;        // Error tolerance for stability
+        const int stable_cycles_required = 10;      // Number of consecutive stable cycles before stopping
+        int stable_cycle_count = 0;
+    
         double lerror = 0.0, rerror = 0.0, ferror = 0.0;
+    
         while (true) {
             auto start = std::chrono::steady_clock::now();
-            measureAngularVelocity(0.2);
+    
+            // Measure actual angular velocity
+            measureAngularVelocity(dt);
+    
+            // Compute errors
             lerror = ref_rps1 - measured_omega[0];
             rerror = ref_rps2 - measured_omega[1];
             ferror = ref_rps3 - measured_omega[2];
-            double set_rps1 = 0.0;
-            double set_rps2 = 0.0;
-
-            if (std::abs(lerror) >= 0.02) {
-                set_rps1 = pid1.compute(ref_rps1, measured_omega[0], 0.2);
-            }
-            if (std::abs(rerror) >= 0.02) {
-                set_rps2 = pid2.compute(ref_rps2, measured_omega[1], 0.2);
-            }
+    
+            // Run PID only if error is meaningful
+            double set_rps1 = std::abs(lerror) >= error_threshold ? pid1.compute(ref_rps1, measured_omega[0], dt) : 0.0;
+            double set_rps2 = std::abs(rerror) >= error_threshold ? pid2.compute(ref_rps2, measured_omega[1], dt) : 0.0;
+            double set_rps3 = std::abs(ferror) >= error_threshold ? pid3.compute(ref_rps3, measured_omega[2], dt) : 0.0;
+    
+            // Clamp values to safe range
+            set_rps1 = std::clamp(set_rps1, -1.0, 1.0);
+            set_rps2 = std::clamp(set_rps2, -1.0, 1.0);
+            set_rps3 = std::clamp(set_rps3, -1.0, 1.0);
+    
+            // Apply to motors
             setLeftRightMotor(set_rps1, set_rps2, false);
-            std::this_thread::sleep_until(start + std::chrono::duration<double>(0.2));
+            setFrontMotor(set_rps3);
+    
+            // Check for convergence
+            bool stable = std::abs(lerror) < error_threshold &&
+                          std::abs(rerror) < error_threshold &&
+                          std::abs(ferror) < error_threshold;
+    
+            if (stable) {
+                stable_cycle_count++;
+            } else {
+                stable_cycle_count = 0;
+            }
+    
+            // Stop if velocity has stayed within tolerance long enough
+            if (stable_cycle_count >= stable_cycles_required) {
+                stop_motor();
+                std::cout << "Target angular velocity reached and stabilized.\n";
+                break;
+            }
+    
+            // Wait until next cycle
+            std::this_thread::sleep_until(start + std::chrono::duration<double>(dt));
         }
-    }
+    }    
 
 
     void measureAngularVelocity(double smpl_itv = 0.4) {
