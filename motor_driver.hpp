@@ -53,8 +53,8 @@ private:
     PIDController pid1, pid2, pid3;
 
     inline void initMotor(int driver1_addr = 0x0f, int driver2_addr = 0x0d) {
-        i2c_fd[0] = wiringPiI2CSetup(0x0f);
-        i2c_fd[1] = wiringPiI2CSetup(0x0d);
+        i2c_fd[0] = wiringPiI2CSetup(driver1_addr);
+        i2c_fd[1] = wiringPiI2CSetup(driver2_addr);
     }
 
     inline double computeThrottleRPS(double rps) {
@@ -138,7 +138,7 @@ public:
 
         declareEncoders(driver1_addr, driver2_addr);
         attachEncoderInterrupts();
-        initMotor(driver1_addr, driver2_addr);
+//        initMotor(driver1_addr, driver2_addr);
     }
 
     void setReferenceOmega(const double (&ref_omega)[3]) {

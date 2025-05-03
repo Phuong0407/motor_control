@@ -1,8 +1,11 @@
-all: test_motor_driver test_encoder
+all: test_motor_driver test_encoder pwm
 
-
-test_motor_driver: test_motor_driver.cpp motor_driver.hpp pid_control.hpp encoder.hpp
-	g++ -o moteur moteur.cpp -lwiringPi
+test_motor_driver: test_motor_driver.cpp motor_driver.hpp pid_controler.hpp encoder.hpp
+		g++ -o $@ $< -lwiringPi
 
 test_encoder: test_encoder.cpp encoder.hpp
-	g++ -o moteur moteur.cpp -lwiringPi
+		g++ -o $@ $< -lwiringPi
+
+pwm: pwm.cpp encoder.hpp
+		g++ -o $@ $< -lwiringPi
+
