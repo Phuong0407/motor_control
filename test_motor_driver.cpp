@@ -11,10 +11,11 @@ int main(int argc, char* argv[]) {
 
     MotorDriver motor_driver(0.05, 0.05, 0.05, 0.2, 0x0f, 0x0d);
     int counter = 0;
-    while(counter <= 200) {
-        motor_driver.set_motor_pwm(pwm1, pwm2, pwm3, ms); 
+    while(counter <= 20) {
+        motor_driver.set_motor_pwm(pwm1, pwm2, pwm3); 
         motor_driver.measureAngularVelocity();
-        motor_driver.set_motor_pwm(pwm1, pwm2, pwm3, 1000);
+        delay(1000);
+        // motor_driver.set_motor_pwm(pwm1, pwm2, pwm3);
         motor_driver.measureAngularVelocity();
         counter++;
     }

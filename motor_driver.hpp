@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <chrono>
+#include <thread>
 #include <algorithm>
 #include <iostream>
 
@@ -186,15 +187,21 @@ public:
     }
     void measureAngularVelocity() {
         getPreviousTicks();
-        auto t0 = std::chrono::steady_clock::now();
-        delay(200);
-        getCurrentTicks();
-        computeAngularVelocity(0.2);
+        auto t_start = std::chrono::steady_clock::now();
+        while(true) {
+            auto t_now = std::chrono::steady_clock::now();
+            std::chrono::duration<double> elapsed = t_now - t_start;
 
-        std::cout << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
+            if (elapsed.count() >= 0.2) {
+                getCurrentTicks();
+            }
+            computeAngularVelocity(elapsed.count());
+            std::cout << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
+            break;
+        }
     }
 
-    void set_motor_pwm(int pwm1 = 0xff, int pwm2 = 0xff, int pwm3 = 0xff, int ms = 1000) {
+    void set_motor_pwm(int pwm1 = 0xff, int pwm2 = 0xff, int pwm3 = 0xff) {
         wiringPiI2CWriteReg16(i2c_fd[0], 0x82, (pwm1 << 8) | pwm2);
         wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, 0x06);
         wiringPiI2CWriteReg16(i2c_fd[1], 0x82, (pwm3 << 8));
