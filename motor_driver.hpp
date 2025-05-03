@@ -158,7 +158,7 @@ public:
 
     void controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3) {
         const double dt = 0.2;                      // Control loop interval (seconds)
-        const double error_threshold = 0.02;        // Error tolerance for stability
+        const double error_threshold = 0.05;        // Error tolerance for stability
         const int stable_cycles_required = 10;      // Number of consecutive stable cycles before stopping
         int stable_cycle_count = 0;
     
