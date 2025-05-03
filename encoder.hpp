@@ -91,7 +91,7 @@ public:
 // ==============================================================================
 // ==============================================================================
 
-extern MotorEncoder* encoders[NUM_ENCODERS];
+inline MotorEncoder* encoders[NUM_ENCODERS] = { nullptr };
 
 static void isr0() { if (encoders[0]) encoders[0]->updateCounter(); }
 static void isr1() { if (encoders[1]) encoders[1]->updateCounter(); }

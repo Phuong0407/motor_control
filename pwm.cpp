@@ -1,4 +1,4 @@
-#include "../encoder.hpp"
+#include "encoder.hpp"
 
 #include <wiringPi.h>
 #include <wiringPiI2C.h>
@@ -23,19 +23,23 @@ void set_motor_pwm(int pwm1 = 0xff, int pwm2 = 0xff, int pwm3 = 0xff, int ms = 1
 int main(int argc, char* argv[]) {
     if (argc < 4)
         return 0;
-
-    EncoderManager encoder_manager(static_cast<std::size_t>(3));
     
     int pwm1 = std::stoi(argv[1], nullptr, 0);
     int pwm2 = std::stoi(argv[2], nullptr, 0);
     int pwm3 = std::stoi(argv[3], nullptr, 0);
     int ms   = std::stoi(argv[4]);
 
-    std::cout << std::hex << "0x" << pwm1 << " 0x" << pwm2 << " 0x" << pwm3 << " " << std::dec << ms << " [ms].\n"; 
+    declareEncoders();
+    attachEncoderInterrupts();
 
     set_motor_pwm(pwm1, pwm2, pwm3, ms);
+ 
+    std::cout << std::hex << "0x" << pwm1 << " 0x" << pwm2 << " 0x" << pwm3 << " " << std::dec << ms << " [ms].\n"; 
+    for (int i = 0; i < NUM_ENCODERS; ++i) {
+        std::cout << "ENCODER COUNTER " << (i + 1)
+                  << " = " << encoders[i]->getCounter() << "\n";
+    }
+    cleanupEncoders();
 
-    std::cout << "ENCODER COUNTER 1 = " << encoder1->getCounter() << "\n";
-    std::cout << "ENCODER COUNTER 2 = " << encoder2->getCounter() << "\n";
-    std::cout << "ENCODER COUNTER 3 = " << encoder3->getCounter() << "\n";
+    return 0;
 }

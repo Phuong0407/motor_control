@@ -1,10 +1,13 @@
-all: test_encoder_v3 test_3_motor #motor_calibration
+XX = g++
+CXXFLAGS = -Wall -lwiringPi
 
-#motor_calibration: motor_calibration.cpp
-#		g++ -o $@ $< -lwiringPi -latomic
+SRC = pwm.cpp encoder.hpp
+TARGET = pwm
 
-test_encoder_v3: test_encoder_v3.cpp
-		g++ -o $@ $< -lwiringPi
+all: $(TARGET)
 
-test_3_motor: test_3_motor.cpp
-		g++ -o $@ $< -lwiringPi
+$(TARGET): $(SRC)
+		$(CXX) -o $@ $(SRC) $(CXXFLAGS)
+
+clean:
+		rm -f $(TARGET)
