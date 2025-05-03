@@ -28,7 +28,7 @@ private:
     double ki;
     double kd;
 
-    double max_integral = 200;
+    double max_integral = 10;
 
     double integral;
     double previous_error;

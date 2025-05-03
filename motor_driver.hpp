@@ -156,8 +156,8 @@ public:
         }
     }
 
-    void controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3) {
-        const double dt = 0.01;
+    void controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3, bool loaded_run = false) {
+        const double dt = 0.1;
         const double error_threshold = 0.05;
         const int stable_cycles_required = 5;
         int stable_cycle_count = 0;
@@ -176,7 +176,7 @@ public:
             double set_rps2 = std::abs(rerror) >= error_threshold ? pid2.compute(ref_rps2, measured_omega[1], dt) : 0.0;
             double set_rps3 = std::abs(ferror) >= error_threshold ? pid3.compute(ref_rps3, measured_omega[2], dt) : 0.0;
     
-            setLeftRightMotor(set_rps1, set_rps2, false);
+            setLeftRightMotor(set_rps1, set_rps2, loaded_run);
             setFrontMotor(set_rps3);
     
             bool stable = std::abs(lerror) < error_threshold &&
