@@ -1,8 +1,8 @@
 XX = g++
 CXXFLAGS = -Wall -lwiringPi
 
-SRC = pwm.cpp encoder.hpp
-TARGET = pwm
+SRC = test_motor_driver.cpp motor_driver.hpp pid_controler.hpp encoder.hpp
+TARGET = test_motor_driver
 
 all: $(TARGET)
 
