@@ -7,6 +7,7 @@
 #include <cmath>
 #include <chrono>
 #include <algorithm>
+#include <iostream>
 
 #define MOVE_FORWARD    1
 #define MOVE_BACKWARD   2
@@ -134,7 +135,7 @@ public:
         previous_ticks[0] = previous_ticks[1] = previous_ticks[2] = 0;    
         current_ticks[0] = current_ticks[1] = current_ticks[2] = 0;
         previous_cmd[0] = previous_cmd[1] = previous_cmd[2] = 0;
-        
+
         declareEncoders(driver1_addr, driver2_addr);
         attachEncoderInterrupts();
         initMotor(driver1_addr, driver2_addr);
@@ -188,7 +189,7 @@ public:
         getCurrentTicks();
         computeAngularVelocity(0.2);
 
-        std::cout << measured_omega[0] << " " << measured_omega[1] << " " << measured_omega[2] << "\n";
+        std::cout << measured_omega[0] << "\t" << measured_omega[1] << "\t" << measured_omega[2] << "\n";
     }
 };
 
