@@ -19,6 +19,7 @@ int main(int argc, char* argv[]) {
         motor_driver.measureAngularVelocity();
         counter++;
     }
+    motor_driver.stop_motor();
         cleanupEncoders();
     return 0;
 }
