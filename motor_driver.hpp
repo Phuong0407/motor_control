@@ -61,11 +61,55 @@ private:
         return clamped_rps / MAX_RPS * SAFTY_OFFSET;
     }
 
-    void setLeftMotor(double rps) {
-        double throttle = computeThrottleRPS(rps);
-        int int_command = static_cast<int>(std::round(255.0 * throttle));
-        int pwm = std::abs(int_command);
+    inline int computeDirection(double l_rps, double r_rps) {
+        if (l_rps > 0 && r_rps > 0)
+            return 0x0a;
+        else if (l_rps > 0 && r_rps < 0)
+            return 0x06;
+        else if (l_rps < 0 && r_rps > 0)
+            return 0x09;
+        else
+            return 0x05;
+    }
 
+    void setLeftMotor(double l_rps, double r_rps) {
+        int dir = computeDirection(l_rps, r_rps);
+        double throttle = computeThrottleRPS(l_rps);
+        int int_command = static_cast<int>(std::round(255.0 * throttle));
+        int pwm1 = std::abs(int_command);
+        int pwm2 = previous_cmd[1];
+        int pwm_out = (pwm1 << 8) | pwm2;
+        wiringPiI2CWriteReg16(i2c_fd[0], 0x82, pwm_out);
+        wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, dir);
+        previous_cmd[0] = pwm1;
+    }
+
+    void setRightMotor(double l_rps, double r_rps) {
+        int dir = computeDirection(l_rps, r_rps);
+        double throttle = computeThrottleRPS(r_rps);
+        int int_command = static_cast<int>(std::round(255.0 * throttle));
+        int pwm1 = previous_cmd[0];
+        int pwm2 = std::abs(int_command);
+        int pwm_out = (pwm1 << 8) | pwm2;
+        wiringPiI2CWriteReg16(i2c_fd[0], 0x82, pwm_out);
+        wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, dir);
+        previous_cmd[1] = pwm2;
+    }
+
+    void setFrontMotor(double f_rps) {
+        int dir = 0;
+        if (f_rps < 0)
+            dir = 0x06;
+        else
+            dir = 0x09;
+
+        double throttle = computeThrottleRPS(f_rps);
+        int int_command = static_cast<int>(std::round(255.0 * throttle));
+        int pwm3 = std::abs(int_command);
+        int pwm_out = (pwm3 << 8);
+        wiringPiI2CWriteReg16(i2c_fd[1], 0x82, pwm_out);
+        wiringPiI2CWriteReg16(i2c_fd[1], 0xaa, dir);
+        previous_cmd[2] = pwm3;
     }
 
 
@@ -113,22 +157,27 @@ public:
         current_ticks[1] = encoders[1]->getCounter();
         current_ticks[2] = encoders[2]->getCounter();
     }
-    inline void measureAngularVelocity(double dt) {
+    inline void computeAngularVelocity(double dt) {
         measured_omega[0] = (current_ticks[0] - previous_ticks[0]) / dt;
         measured_omega[1] = (current_ticks[1] - previous_ticks[1]) / dt;
         measured_omega[2] = (current_ticks[2] - previous_ticks[2]) / dt;
     }
 
     void control() {
-        getPreviousTicks();
-        auto t0 = std::chrono::steady_clock::now();
-        double dt1 = 0.5;
-        double dt2 = 0.1;
-        getCurrentTicks();
-        measureAngularVelocity(dt1);
-        controlled_omega[0] = pid1.compute(measured_omega[0], dt2);
-        controlled_omega[1] = pid2.compute(measured_omega[1], dt2);
-        controlled_omega[2] = pid3.compute(measured_omega[2], dt2);
+        while (true) {
+            getPreviousTicks();
+            auto t0 = std::chrono::steady_clock::now();
+            double dt1 = 0.5;
+            double dt2 = 0.1;
+            getCurrentTicks();
+            computeAngularVelocity(dt1);
+            controlled_omega[0] = pid1.compute(measured_omega[0], dt2);
+            controlled_omega[1] = pid2.compute(measured_omega[1], dt2);
+            controlled_omega[2] = pid3.compute(measured_omega[2], dt2);
+            setLeftMotor(controlled_omega[0], measured_omega[1]);
+            setRightMotor(controlled_omega[0], controlled_omega[1]);
+            setFrontMotor(controlled_omega[2]);
+        }
     }
 };
 
