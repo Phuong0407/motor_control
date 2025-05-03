@@ -22,7 +22,7 @@ void setMotorCommand(int ms = 1000, int speed = 0xffff) {
 }
 
 int main() {
-    declareEncoders();
+    declareEncoders(0x0f, 0x0d);
     attachEncoderInterrupts();
 
     setMotorCommand();

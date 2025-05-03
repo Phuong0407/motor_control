@@ -108,11 +108,11 @@ static const int encoder_pin_table[NUM_ENCODERS][2] = {
     {27, 0 }, // D16 = {16, 17}
 };
 
-inline void declareEncoders() {
+inline void declareEncoders(int driver1_addr, int driver2_addr) {
     for (int i = 0; i < NUM_ENCODERS; ++i) {
         int H1 = encoder_pin_table[i][0];
         int H2 = encoder_pin_table[i][1];
-        int addr = (i == 2) ? 0x0d : 0x0f;
+        int addr = (i == 2) ? driver2_addr : driver1_addr;
         encoders[i] = new MotorEncoder(H1, H2, addr);
     }
 }

@@ -134,7 +134,9 @@ public:
         previous_ticks[0] = previous_ticks[1] = previous_ticks[2] = 0;    
         current_ticks[0] = current_ticks[1] = current_ticks[2] = 0;
         previous_cmd[0] = previous_cmd[1] = previous_cmd[2] = 0;
-
+        
+        declareEncoders(driver1_addr, driver2_addr);
+        attachEncoderInterrupts();
         initMotor(driver1_addr, driver2_addr);
     }
 
@@ -178,6 +180,15 @@ public:
             setRightMotor(controlled_omega[0], controlled_omega[1]);
             setFrontMotor(controlled_omega[2]);
         }
+    }
+    void measureAngularVelocity() {
+        getPreviousTicks();
+        auto t0 = std::chrono::steady_clock::now();
+        delay(200);
+        getCurrentTicks();
+        computeAngularVelocity(0.2);
+
+        std::cout << measured_omega[0] << " " << measured_omega[1] << " " << measured_omega[2] << "\n";
     }
 };
 
