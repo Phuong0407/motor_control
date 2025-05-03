@@ -21,6 +21,7 @@ int main(int argc, char* argv[]) {
         if (elapsed.count() >= run_itv)
             break;
 
+        std::cout << "stable motor velocity.\n";
         motor_driver.measureAngularVelocity(smpl_itv);
         std::this_thread::sleep_for(std::chrono::duration<double>(smpl_itv));
     }
