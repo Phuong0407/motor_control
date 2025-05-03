@@ -136,9 +136,9 @@ public:
         current_ticks[0] = current_ticks[1] = current_ticks[2] = 0;
         previous_cmd[0] = previous_cmd[1] = previous_cmd[2] = 0;
 
+        declareEncoders(driver1_addr, driver2_addr);
         std::cout << "Enter motor driver.\n";
 
-        declareEncoders(driver1_addr, driver2_addr);
         attachEncoderInterrupts();
         initMotor(driver1_addr, driver2_addr);
     }
