@@ -35,8 +35,8 @@ private:
     int computePWMFromNormRPS(double norm_rps) {
         double clamped = std::clamp(norm_rps, -1.0, 1.0);
         int raw_pwm = static_cast<int>(std::round(255.0 * clamped * SAFTY_OFFSET));
-//        return raw_pwm;
-        return overcomeDeadZonePWM(std::abs(raw_pwm));
+        return raw_pwm;
+//        return overcomeDeadZonePWM(std::abs(raw_pwm));
     }
 
     inline int overcomeDeadZonePWM(int pwm) {
@@ -45,14 +45,14 @@ private:
         return DEADZONE_PWM + (pwm * (255 - DEADZONE_PWM)) / 255;
     }
 
-    inline int computeDirection(double lcurrps, double rcurrps)
+    inline int computeDirection(double norm_lrps, double norm_rrps)
     {
-        bool lcw = (lcurrps > 0);
-        bool rcw = (rcurrps > 0);
+        bool lcw = (norm_lrps > 0);
+        bool rcw = (norm_rrps > 0);
         if ( lcw &&  rcw)
             return 0x06;
         if ( lcw && !rcw)
-            return 0x09;
+            return 0x0a;
         if (!lcw &&  rcw)
             return 0x05;
         else
@@ -179,7 +179,7 @@ public:
         int pwm2 = computePWMFromNormRPS(norm_rrps);
         int pwm  = (pwm1 << 8) | pwm2;
         wiringPiI2CWriteReg16(i2c_fd[0], 0x82, pwm);
-        wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, dir);
+        wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, 0x05);
     }
 
     void setFrontMotorNormalized(double norm_frps) {

@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
         auto start = std::chrono::steady_clock::now();
         std::this_thread::sleep_until(start + std::chrono::duration<double>(smpl_itv));
         motor_driver.measureAngularVelocity(omega1, omega2, omega3, smpl_itv);
+        std::cout << std::setprecision(3) << std::fixed << omega1 << "\t" << omega2 << "\n";
         time += smpl_itv;
     }
 

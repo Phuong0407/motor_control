@@ -1,4 +1,4 @@
-all: test_motor_driver test_encoder pwm
+all: test_motor_driver test_encoder pwm test_set_direction
 
 test_motor_driver: test_motor_driver.cpp motor_driver.hpp pid_controller.hpp encoder.hpp
 		g++ -o $@ $< -lwiringPi
@@ -9,3 +9,5 @@ test_encoder: test_encoder.cpp encoder.hpp
 pwm: pwm.cpp encoder.hpp
 		g++ -o $@ $< -lwiringPi
 
+test_set_direction: test_set_direction.cpp motor_driver.hpp pid_controller.hpp encoder.hpp
+		g++ -o $@ $< -lwiringPi
