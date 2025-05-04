@@ -13,9 +13,9 @@
 #include <fstream>
 
 #ifdef NOLOADED_RUN
-#define MAX_RPS 0.6250
-#else
 #define MAX_RPS 0.8681
+#else // LOADED_RUN
+#define MAX_RPS 0.6250
 #endif
 
 #define SAFTY_OFFSET 0.6
@@ -32,15 +32,16 @@ private:
         i2c_fd[1] = wiringPiI2CSetup(driver2_addr);
     }
 
-    inline double computeThrottleRPS(double rps) {
-        double clamped_rps = std::clamp(rps, -MAX_RPS, MAX_RPS);
-        return clamped_rps * SAFTY_OFFSET;
+    int computePWMFromNormRPS(double norm_rps) {
+        double clamped = std::clamp(norm_rps, -1.0, 1.0);
+        int raw_pwm = static_cast<int>(std::round(255.0 * clamped * SAFTY_OFFSET));
+        return overcomeDeadZonePWM(std::abs(raw_pwm));
     }
 
-    inline int passDeadZonePWM(int pwm) {
-        if (pwm > DEADZONE_PWM && pwm < DEADZONE_PWM)
-            pwm = DEADZONE_PWM + (pwm * (255 - DEADZONE_PWM)) / 255;
-        return pwm;
+    inline int overcomeDeadZonePWM(int pwm) {
+        if (pwm = 0)
+            return 0;
+        return DEADZONE_PWM + (pwm * (255 - DEADZONE_PWM)) / 255;
     }
 
     inline int computeDirection(double lcurrps, double rcurrps)
@@ -82,42 +83,55 @@ public:
         double ref_rps1,
         double ref_rps2,
         double ref_rps3
-    ) {
-        const double error_threshold = 0.05;
-        const int stable_cycles_required = 5;
+    )
+    {
+        constexpr double ERROR_THRESHOLD = 0.05;
+        constexpr int STABLE_CYCLES_REQUIRED = 5;
+    
         int stable_cycle_count = 0;
-
         double lerror = 0.0, rerror = 0.0, ferror = 0.0;
+    
         while (true) {
             auto start = std::chrono::steady_clock::now();
+    
             double omega1, omega2, omega3;
             measureAngularVelocity(omega1, omega2, omega3, smpl_intv);
-
+    
             lerror = ref_rps1 - omega1;
             rerror = ref_rps2 - omega2;
             ferror = ref_rps3 - omega3;
+    
+            std::cout << std::setprecision(3)
+                      << "error " << lerror / ref_rps1 * 100.0 << "%" << "\t"
+                      << rerror / ref_rps2 * 100.0 << "%" << "\n";
+    
+            double ref_norm1 = ref_rps1 / MAX_RPS;
+            double ref_norm2 = ref_rps2 / MAX_RPS;
+            double ref_norm3 = ref_rps3 / MAX_RPS;
+    
+            double omega_norm1 = omega1 / MAX_RPS;
+            double omega_norm2 = omega2 / MAX_RPS;
+            double omega_norm3 = omega3 / MAX_RPS;
+    
+            double norm_rps1 = std::abs(lerror) >= ERROR_THRESHOLD ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
+            double norm_rps2 = std::abs(rerror) >= ERROR_THRESHOLD ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
+            double norm_rps3 = std::abs(ferror) >= ERROR_THRESHOLD ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
 
-            std::cout << std::setprecision(3) << "rps\t" << omega1 << "\t" << omega2 << "\n";
-            std::cout << std::setprecision(3) << "error\t" << lerror/ref_rps1 * 100.0 << "%\t" << rerror/ref_rps2 *100.0 << "%\n";
-
-            double set_rps1 = std::abs(lerror) >= error_threshold ? pid1.compute(ref_rps1, omega1) : omega1;
-            double set_rps2 = std::abs(rerror) >= error_threshold ? pid2.compute(ref_rps2, omega2) : omega2;
-            double set_rps3 = std::abs(ferror) >= error_threshold ? pid3.compute(ref_rps3, omega3) : omega3;
-
-            setLeftRightMotor(set_rps1, set_rps2);
-            setFrontMotor(set_rps3);
-
-            bool stable = std::abs(lerror) < error_threshold &&
-                          std::abs(rerror) < error_threshold &&
-                          std::abs(ferror) < error_threshold;
-
+            setLeftRightMotorNormalized(norm_rps1, norm_rps2);
+            setFrontMotorNormalized(norm_rps3);
+    
+            bool stable = std::abs(lerror) < ERROR_THRESHOLD &&
+                          std::abs(rerror) < ERROR_THRESHOLD &&
+                          std::abs(ferror) < ERROR_THRESHOLD;
+    
             if (stable)
                 stable_cycle_count++;
             else
                 stable_cycle_count = 0;
-
-            if (stable_cycle_count >= stable_cycles_required)
+    
+            if (stable_cycle_count >= STABLE_CYCLES_REQUIRED)
                 break;
+    
             std::this_thread::sleep_until(start + std::chrono::duration<double>(smpl_intv));
         }
     }
@@ -161,32 +175,22 @@ public:
         wiringPiI2CWriteReg16(i2c_fd[1], 0x82, 0x0000);
     }
 
-    void setLeftRightMotor(double lrps, double rrps) {
-        int dir = computeDirection(lrps, rrps);
-        double lthrottle = computeThrottleRPS(lrps);
-        double rthrottle = computeThrottleRPS(rrps);
-        int lint_command = static_cast<int>(std::round(255.0 * lthrottle));
-        int rint_command = static_cast<int>(std::round(255.0 * rthrottle));
-        int pwm1    = std::abs(lint_command);
-        int pwm2    = std::abs(rint_command);
-        pwm1        = passDeadZonePWM(pwm1);
-        pwm2        = passDeadZonePWM(pwm2);
-        int pwm     = (pwm1 << 8) | pwm2;
+    void setLeftRightMotorNormalized(double norm_lrps, double norm_rrps) {
+        int dir = computeDirection(norm_lrps, norm_rrps);
+        int pwm1 = computePWMFromNormRPS(norm_lrps);
+        int pwm2 = computePWMFromNormRPS(norm_rrps);
+        int pwm  = (pwm1 << 8) | pwm2;
         wiringPiI2CWriteReg16(i2c_fd[0], 0x82, pwm);
         wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, dir);
     }
 
-    void setFrontMotor(double f_rps) {
-        int dir = (f_rps < 0) ? 0x06 : 0x09;
-        double throttle = computeThrottleRPS(f_rps);
-        int int_command = static_cast<int>(std::round(255.0 * throttle));
-        int pwm3    = std::abs(int_command);
-        pwm3        = passDeadZonePWM(pwm3);
-        int pwm     = (pwm3 << 8);
+    void setFrontMotorNormalized(double norm_frps) {
+        int dir = (norm_frps < 0) ? 0x06 : 0x09;
+        int pwm3 = computePWMFromNormRPS(norm_frps);
+        int pwm = (pwm3 << 8);
         wiringPiI2CWriteReg16(i2c_fd[1], 0x82, pwm);
         wiringPiI2CWriteReg16(i2c_fd[1], 0xaa, dir);
     }
-
 };
 
 #endif // MOTOR_DRIVER_HPP
