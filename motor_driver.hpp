@@ -74,8 +74,8 @@ public:
     void controlAngularVelocity(
         double ref_rps1,
         double ref_rps2,
-        double ref_rps3,
-        bool loaded_run = false) {
+        double ref_rps3
+    ) {
         const double error_threshold = 0.05;
         const int stable_cycles_required = 5;
         int stable_cycle_count = 0;
@@ -89,6 +89,8 @@ public:
             lerror = ref_rps1 - omega1;
             rerror = ref_rps2 - omega2;
             ferror = ref_rps3 - omega3;
+
+            std::cout << std::setprecision(3) << "error " << lerror/ref_rps1 * 100.0 << "%\t" << rerror/ref_rps2 *100.0 << "%\n";
 
             double set_rps1 = std::abs(lerror) >= error_threshold ? pid1.compute(ref_rps1, omega1) : omega1;
             double set_rps2 = std::abs(rerror) >= error_threshold ? pid2.compute(ref_rps2, omega2) : omega2;
@@ -136,7 +138,7 @@ public:
         omega3 = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv_msm / COUNTER_PER_REV;
 
         std::ofstream outFile("omega_output.txt", std::ios::app);
-        std::cout   << std::setprecision(3) << omega1 << "\t" << omega2 << "\t" << omega3 << "\n";
+//        std::cout   << std::setprecision(3) << omega1 << "\t" << omega2 << "\t" << omega3 << "\n";
         outFile     << std::setprecision(3) << omega1 << "\t" << omega2 << "\t" << omega3 << "\n";
         outFile.close();
     }
