@@ -18,7 +18,7 @@
 #define MAX_RPS 0.6250
 #endif
 
-#define SAFTY_OFFSET 0.6
+#define SAFTY_OFFSET 0.8
 #define DEADZONE_PWM 70
 
 class MotorDriver {
@@ -35,11 +35,12 @@ private:
     int computePWMFromNormRPS(double norm_rps) {
         double clamped = std::clamp(norm_rps, -1.0, 1.0);
         int raw_pwm = static_cast<int>(std::round(255.0 * clamped * SAFTY_OFFSET));
+//        return raw_pwm;
         return overcomeDeadZonePWM(std::abs(raw_pwm));
     }
 
     inline int overcomeDeadZonePWM(int pwm) {
-        if (pwm = 0)
+        if (pwm < DEADZONE_PWM)
             return 0;
         return DEADZONE_PWM + (pwm * (255 - DEADZONE_PWM)) / 255;
     }
@@ -97,11 +98,12 @@ public:
             double omega1, omega2, omega3;
             measureAngularVelocity(omega1, omega2, omega3, smpl_intv);
     
-            lerror = ref_rps1 - omega1;
-            rerror = ref_rps2 - omega2;
-            ferror = ref_rps3 - omega3;
+            lerror = std::abs(ref_rps1 - omega1);
+            rerror = std::abs(ref_rps2 - omega2);
+            ferror = std::abs(ref_rps3 - omega3);
     
-            std::cout << std::setprecision(3)
+            std::cout << std::fixed << std::setprecision(3)
+                      << "rps " << omega1 << "\t" << omega2 << "\t"
                       << "error " << lerror / ref_rps1 * 100.0 << "%" << "\t"
                       << rerror / ref_rps2 * 100.0 << "%" << "\n";
     
@@ -113,9 +115,9 @@ public:
             double omega_norm2 = omega2 / MAX_RPS;
             double omega_norm3 = omega3 / MAX_RPS;
     
-            double norm_rps1 = std::abs(lerror) >= ERROR_THRESHOLD ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
-            double norm_rps2 = std::abs(rerror) >= ERROR_THRESHOLD ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
-            double norm_rps3 = std::abs(ferror) >= ERROR_THRESHOLD ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
+            double norm_rps1 = lerror >= ERROR_THRESHOLD ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
+            double norm_rps2 = rerror >= ERROR_THRESHOLD ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
+            double norm_rps3 = ferror >= ERROR_THRESHOLD ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
 
             setLeftRightMotorNormalized(norm_rps1, norm_rps2);
             setFrontMotorNormalized(norm_rps3);
@@ -144,20 +146,15 @@ public:
         prev_ticks1 = encoders[1]->getCounter();
         prev_ticks2 = encoders[2]->getCounter();
 
-        auto t_start = std::chrono::steady_clock::now();
         std::this_thread::sleep_for(std::chrono::duration<double>(smpl_itv));
 
         curr_ticks0 = encoders[0]->getCounter();
         curr_ticks1 = encoders[1]->getCounter();
         curr_ticks2 = encoders[2]->getCounter();
 
-        auto t_end = std::chrono::steady_clock::now();
-        std::chrono::duration<double> elapsed = t_end - t_start;
-        double smpl_itv_msm = elapsed.count();
-
-        omega1 = static_cast<double>(curr_ticks0 - prev_ticks0) / smpl_itv_msm / COUNTER_PER_REV;
-        omega2 = static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv_msm / COUNTER_PER_REV;
-        omega3 = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv_msm / COUNTER_PER_REV;
+        omega1 = static_cast<double>(curr_ticks0 - prev_ticks0) / smpl_itv / COUNTER_PER_REV;
+        omega2 = static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv / COUNTER_PER_REV;
+        omega3 = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv / COUNTER_PER_REV;
 
         std::ofstream outFile("omega_output.txt", std::ios::app);
         outFile     << std::setprecision(3) << omega1 << "\t" << omega2 << "\t" << omega3 << "\n";
