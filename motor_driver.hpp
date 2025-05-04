@@ -102,11 +102,6 @@ public:
             rerror = std::abs(ref_rps2 - omega2);
             ferror = std::abs(ref_rps3 - omega3);
     
-            std::cout << std::fixed << std::setprecision(3)
-                      << "rps " << omega1 << "\t" << omega2 << "\t"
-                      << "error " << lerror / ref_rps1 * 100.0 << "%" << "\t"
-                      << rerror / ref_rps2 * 100.0 << "%" << "\n";
-    
             double ref_norm1 = ref_rps1 / MAX_RPS;
             double ref_norm2 = ref_rps2 / MAX_RPS;
             double ref_norm3 = ref_rps3 / MAX_RPS;
@@ -118,6 +113,12 @@ public:
             double norm_rps1 = lerror >= ERROR_THRESHOLD ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
             double norm_rps2 = rerror >= ERROR_THRESHOLD ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
             double norm_rps3 = ferror >= ERROR_THRESHOLD ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
+
+            std::cout << std::fixed << std::setprecision(3)
+                      << "measured rps" << "\t" << omega1 << "\t" << omega2 << "\t"
+                      << "norm rps" << "\t" << norm_rps1 << "\t" << norm_rps2
+                      << "error " << lerror / ref_rps1 * 100.0 << "%" << "\t"
+                      << rerror / ref_rps2 * 100.0 << "%" << "\n";
 
             setLeftRightMotorNormalized(norm_rps1, norm_rps2);
             setFrontMotorNormalized(norm_rps3);
