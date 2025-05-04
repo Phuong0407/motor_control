@@ -50,13 +50,13 @@ private:
         bool lcw = (lcurrps > 0);
         bool rcw = (rcurrps > 0);
         if ( lcw &&  rcw)
-            return 0x0a;
-        if ( lcw && !rcw)
             return 0x06;
-        if (!lcw &&  rcw)
+        if ( lcw && !rcw)
             return 0x09;
-        else
+        if (!lcw &&  rcw)
             return 0x05;
+        else
+            return 0x09;
     }
 
 public:
