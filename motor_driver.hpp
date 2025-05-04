@@ -18,7 +18,7 @@
 #define MAX_RPS 0.8681
 #endif
 
-#define SAFTY_OFFSET 0.70
+#define SAFTY_OFFSET 0.6
 
 class MotorDriver {
 private:
