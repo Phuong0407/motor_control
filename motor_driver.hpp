@@ -177,6 +177,7 @@ public:
         int dir = computeDirection(norm_lrps, norm_rrps);
         int pwm1 = computePWMFromNormRPS(norm_lrps);
         int pwm2 = computePWMFromNormRPS(norm_rrps);
+        std::cout << pwm1 << "\t" << pwm2;
         int pwm  = (pwm1 << 8) | pwm2;
         wiringPiI2CWriteReg16(i2c_fd[0], 0x82, pwm);
         wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, 0x05);
