@@ -8,7 +8,7 @@ class PIDController {
 private:
     double kp, ki, kd, Alpha, smpl_intv;
     double intgr, prev_fltrerr;
-    double max_out, max_intgr = 10.0;
+    double max_out, max_intgr = 200.0;
 
     static double calcAlphaEMA(double cutoff_freq) {
         if (cutoff_freq <= 0.0)

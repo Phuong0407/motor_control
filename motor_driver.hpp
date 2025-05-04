@@ -38,7 +38,7 @@ private:
     }
 
     inline int passDeadZonePWM(int pwm) {
-        if (pwm < DEADZONE_PWM)
+        if (pwm > DEADZONE_PWM && pwm < DEADZONE_PWM)
             pwm = DEADZONE_PWM + (pwm * (255 - DEADZONE_PWM)) / 255;
         return pwm;
     }
@@ -97,7 +97,8 @@ public:
             rerror = ref_rps2 - omega2;
             ferror = ref_rps3 - omega3;
 
-            std::cout << std::setprecision(3) << "error " << lerror/ref_rps1 * 100.0 << "%\t" << rerror/ref_rps2 *100.0 << "%\n";
+            std::cout << std::setprecision(3) << "rps\t" << omega1 << "\t" << omega2 << "\n";
+            std::cout << std::setprecision(3) << "error\t" << lerror/ref_rps1 * 100.0 << "%\t" << rerror/ref_rps2 *100.0 << "%\n";
 
             double set_rps1 = std::abs(lerror) >= error_threshold ? pid1.compute(ref_rps1, omega1) : omega1;
             double set_rps2 = std::abs(rerror) >= error_threshold ? pid2.compute(ref_rps2, omega2) : omega2;
