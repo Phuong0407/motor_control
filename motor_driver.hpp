@@ -47,14 +47,14 @@ private:
 
     inline int computeDirection(double norm_lrps, double norm_rrps)
     {
-        bool lcw = (norm_lrps > 0);
-        bool rcw = (norm_rrps > 0);
-        if ( lcw &&  rcw)
+        bool lforward = (norm_lrps > 0);
+        bool rforward = (norm_rrps > 0);
+        if ( lforward &&  rforward)
             return 0x06;
-        if ( lcw && !rcw)
-            return 0x0a;
-        if (!lcw &&  rcw)
+        if ( lforward && !rforward)
             return 0x05;
+        if (!lforward &&  rforward)
+            return 0x0a;
         else
             return 0x09;
     }
@@ -152,7 +152,7 @@ public:
         curr_ticks1 = encoders[1]->getCounter();
         curr_ticks2 = encoders[2]->getCounter();
 
-        omega1 = static_cast<double>(curr_ticks0 - prev_ticks0) / smpl_itv / COUNTER_PER_REV;
+        omega1 = static_cast<double>(prev_ticks0 - curr_ticks0) / smpl_itv / COUNTER_PER_REV;
         omega2 = static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv / COUNTER_PER_REV;
         omega3 = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv / COUNTER_PER_REV;
 
@@ -174,13 +174,13 @@ public:
 
     void setLeftRightMotorNormalized(double norm_lrps, double norm_rrps) {
         int dir = computeDirection(norm_lrps, norm_rrps);
+        std::cout << dir << "\n";
         int pwm1 = computePWMFromNormRPS(norm_lrps);
         int pwm2 = computePWMFromNormRPS(norm_rrps);
-        std::cout << "pwm" << "\t" << pwm1 << "\t" << pwm2 << "\n";
-        std::cout << i2c_fd[0] << "\t" << i2c_fd[1] << "\n";
         int pwm  = (pwm1 << 8) | pwm2;
         wiringPiI2CWriteReg16(i2c_fd[0], 0x82, pwm);
-        wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, 0x05);
+        wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, dir);
+        std::cout << "finish left right motor" << "\n";
     }
 
     void setFrontMotorNormalized(double norm_frps) {
