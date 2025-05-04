@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     MotorDriver motor_driver(kp, ki, kd, smpl_itv, cutoff_freq, 0x0f, 0x0d);
 
     auto t_start = std::chrono::steady_clock::now();
-    motor_driver.setLeftRightMotorNormalized(0.5, 0.5);
+    motor_driver.setLeftRightMotorNormalized(0.5/0.8681, 0.5/0.8681);
     double omega1 = 0.0, omega2 = 0.0, omega3 = 0.0;
     double time = 0.0;
     while (time <= run_itv) {

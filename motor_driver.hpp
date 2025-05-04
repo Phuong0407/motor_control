@@ -74,7 +74,6 @@ public:
     pid2(kp, kd, ki, MAX_RPS, cutoff_freq, smpl_intv),
     pid3(kp, kd, ki, MAX_RPS, cutoff_freq, smpl_intv)
     {
-        i2c_fd[0] = i2c_fd[1] = -1;
         declareEncoders(driver1_addr, driver2_addr);
         attachEncoderInterrupts();
         initMotor(driver1_addr, driver2_addr);
@@ -178,6 +177,7 @@ public:
         int pwm1 = computePWMFromNormRPS(norm_lrps);
         int pwm2 = computePWMFromNormRPS(norm_rrps);
         std::cout << "pwm" << "\t" << pwm1 << "\t" << pwm2 << "\n";
+        std::cout << i2c_fd[0] << "\t" << i2c_fd[1] << "\n";
         int pwm  = (pwm1 << 8) | pwm2;
         wiringPiI2CWriteReg16(i2c_fd[0], 0x82, pwm);
         wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, 0x05);
