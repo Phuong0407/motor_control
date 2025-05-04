@@ -19,6 +19,7 @@
 #endif
 
 #define SAFTY_OFFSET 0.6
+#define DEADZONE_PWM 70
 
 class MotorDriver {
 private:
@@ -34,6 +35,12 @@ private:
     inline double computeThrottleRPS(double rps) {
         double clamped_rps = std::clamp(rps, -MAX_RPS, MAX_RPS);
         return clamped_rps * SAFTY_OFFSET;
+    }
+
+    inline int passDeadZonePWM(int pwm) {
+        if (pwm < DEADZONE_PWM)
+            pwm = DEADZONE_PWM + (pwm * (255 - DEADZONE_PWM)) / 255;
+        return pwm;
     }
 
     inline int computeDirection(double lcurrps, double rcurrps)
@@ -138,7 +145,6 @@ public:
         omega3 = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv_msm / COUNTER_PER_REV;
 
         std::ofstream outFile("omega_output.txt", std::ios::app);
-//        std::cout   << std::setprecision(3) << omega1 << "\t" << omega2 << "\t" << omega3 << "\n";
         outFile     << std::setprecision(3) << omega1 << "\t" << omega2 << "\t" << omega3 << "\n";
         outFile.close();
     }
@@ -162,6 +168,8 @@ public:
         int rint_command = static_cast<int>(std::round(255.0 * rthrottle));
         int pwm1    = std::abs(lint_command);
         int pwm2    = std::abs(rint_command);
+        pwm1        = passDeadZonePWM(pwm1);
+        pwm2        = passDeadZonePWM(pwm2);
         int pwm     = (pwm1 << 8) | pwm2;
         wiringPiI2CWriteReg16(i2c_fd[0], 0x82, pwm);
         wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, dir);
@@ -171,9 +179,10 @@ public:
         int dir = (f_rps < 0) ? 0x06 : 0x09;
         double throttle = computeThrottleRPS(f_rps);
         int int_command = static_cast<int>(std::round(255.0 * throttle));
-        int pwm3 = std::abs(int_command);
-        int pwm_out = (pwm3 << 8);
-        wiringPiI2CWriteReg16(i2c_fd[1], 0x82, pwm_out);
+        int pwm3    = std::abs(int_command);
+        pwm3        = passDeadZonePWM(pwm3);
+        int pwm     = (pwm3 << 8);
+        wiringPiI2CWriteReg16(i2c_fd[1], 0x82, pwm);
         wiringPiI2CWriteReg16(i2c_fd[1], 0xaa, dir);
     }
 
