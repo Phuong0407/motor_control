@@ -35,16 +35,12 @@ public:
 
     double compute(double ref, double measured) {
         double err = ref - measured;
-        double fltrerr = Alpha * err + (1 - Alpha) * prev_fltrerr;
+        double fltrerr = Alpha * err + (1.0 - Alpha) * prev_fltrerr;
         double dev = (fltrerr - prev_fltrerr) / smpl_intv;
         double new_intgr = intgr + err * smpl_intv;
+        intgr = std::clamp(new_intgr, -max_intgr, max_intgr);
         double ctrl_sgnl = kp * err + ki * intgr + kd * dev;
-        if (ctrl_sgnl > max_out)
-            ctrl_sgnl = max_out;
-        else if (ctrl_sgnl < -max_out)
-            ctrl_sgnl = -max_out;
-        else
-            intgr = new_intgr;
+        ctrl_sgnl = std::clamp(ctrl_sgnl, -max_out, max_out);
         prev_fltrerr = fltrerr;
         return ctrl_sgnl;
     }
