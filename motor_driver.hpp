@@ -116,7 +116,7 @@ public:
 
             std::cout << std::fixed << std::setprecision(3)
                       << "measured rps" << "\t" << omega1 << "\t" << omega2 << "\t"
-                      << "norm rps" << "\t" << norm_rps1 << "\t" << norm_rps2
+                      << "computed rps" << "\t" << norm_rps1 << "\t" << norm_rps2 << "\t"
                       << "error " << lerror / ref_rps1 * 100.0 << "%" << "\t"
                       << rerror / ref_rps2 * 100.0 << "%" << "\n";
 
