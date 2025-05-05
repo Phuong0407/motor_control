@@ -31,8 +31,8 @@ int main(int argc, char* argv[]) {
     double time = 0.0;
 
     while (time <= run_itv) {
-        double left_speed = dist(gen) / 0.8681;
-        double right_speed = dist(gen) / 0.8681;
+        double left_speed = 0.5 / 0.8681;
+        double right_speed = 0.5 / 0.8681;
 
         std::cout << "set velocity\t" << std::setprecision(3) << std::fixed << left_speed << "\t" << right_speed << "\t";
         motor_driver.setLeftRightMotorNormalized(left_speed, right_speed);
