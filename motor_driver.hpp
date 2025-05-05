@@ -85,9 +85,9 @@ public:
         double ref_rps3
     )
     {
-        constexpr double ERROR_THRESHOLD = 0.05;
+        constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
+        constexpr double MIN_ERROR_RPS = 0.07;
         constexpr int STABLE_CYCLES_REQUIRED = 5;
-    
         int stable_cycle_count = 0;
         double lerror = 0.0, rerror = 0.0, ferror = 0.0;
     
@@ -100,7 +100,11 @@ public:
             lerror = std::abs(ref_rps1 - omega1);
             rerror = std::abs(ref_rps2 - omega2);
             ferror = std::abs(ref_rps3 - omega3);
-    
+   
+            double l_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps1), MIN_ERROR_RPS);
+            double r_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps2), MIN_ERROR_RPS);
+            double f_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps3), MIN_ERROR_RPS);
+
             double ref_norm1 = ref_rps1 / MAX_RPS;
             double ref_norm2 = ref_rps2 / MAX_RPS;
             double ref_norm3 = ref_rps3 / MAX_RPS;
@@ -109,9 +113,9 @@ public:
             double omega_norm2 = omega2 / MAX_RPS;
             double omega_norm3 = omega3 / MAX_RPS;
     
-            double norm_rps1 = lerror >= ERROR_THRESHOLD ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
-            double norm_rps2 = rerror >= ERROR_THRESHOLD ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
-            double norm_rps3 = ferror >= ERROR_THRESHOLD ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
+            double norm_rps1 = l_thresh >= ERROR_THRESHOLD_PERCENT ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
+            double norm_rps2 = r_thresh >= ERROR_THRESHOLD_PERCENT ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
+            double norm_rps3 = f_thresh >= ERROR_THRESHOLD_PERCENT ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
 
             std::cout << std::fixed << std::setprecision(3)
                       << "measured rps" << "\t" << omega1 << "\t" << omega2 << "\t"
@@ -122,9 +126,9 @@ public:
             setLeftRightMotorNormalized(norm_rps1, norm_rps2);
             setFrontMotorNormalized(norm_rps3);
     
-            bool stable = std::abs(lerror) < ERROR_THRESHOLD &&
-                          std::abs(rerror) < ERROR_THRESHOLD &&
-                          std::abs(ferror) < ERROR_THRESHOLD;
+            bool stable = std::abs(l_thresh) < ERROR_THRESHOLD_PERCENT &&
+                          std::abs(r_thresh) < ERROR_THRESHOLD_PERCENT &&
+                          std::abs(f_thresh) < ERROR_THRESHOLD_PERCENT;
     
             if (stable)
                 stable_cycle_count++;
@@ -174,13 +178,12 @@ public:
 
     void setLeftRightMotorNormalized(double norm_lrps, double norm_rrps) {
         int dir = computeDirection(norm_lrps, norm_rrps);
-        std::cout << dir << "\n";
         int pwm1 = computePWMFromNormRPS(norm_lrps);
         int pwm2 = computePWMFromNormRPS(norm_rrps);
         int pwm  = (pwm1 << 8) | pwm2;
         wiringPiI2CWriteReg16(i2c_fd[0], 0x82, pwm);
+        delay(1);
         wiringPiI2CWriteReg16(i2c_fd[0], 0xaa, dir);
-        std::cout << "finish left right motor" << "\n";
     }
 
     void setFrontMotorNormalized(double norm_frps) {
@@ -188,6 +191,7 @@ public:
         int pwm3 = computePWMFromNormRPS(norm_frps);
         int pwm = (pwm3 << 8);
         wiringPiI2CWriteReg16(i2c_fd[1], 0x82, pwm);
+        delay(1);
         wiringPiI2CWriteReg16(i2c_fd[1], 0xaa, dir);
     }
 };

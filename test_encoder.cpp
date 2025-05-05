@@ -13,8 +13,11 @@ void setMotorCommand(int ms = 1000, int speed = 0xffff) {
     std::cout << i2c_fd1 << "\t" << i2c_fd2 << "\n";
 
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xffff);
-    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
+    delay(1);
+    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x09);
+    delay(1);
     wiringPiI2CWriteReg16(i2c_fd2, 0x82, 0xffff);
+    delay(1);
     wiringPiI2CWriteReg16(i2c_fd2, 0xaa, 0x06);
 
     delay(ms);
