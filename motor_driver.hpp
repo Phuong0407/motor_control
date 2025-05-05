@@ -113,9 +113,9 @@ public:
             double omega_norm2 = omega2 / MAX_RPS;
             double omega_norm3 = omega3 / MAX_RPS;
     
-            double norm_rps1 = l_thresh >= ERROR_THRESHOLD_PERCENT ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
-            double norm_rps2 = r_thresh >= ERROR_THRESHOLD_PERCENT ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
-            double norm_rps3 = f_thresh >= ERROR_THRESHOLD_PERCENT ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
+            double norm_rps1 = lerror >= l_thresh ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
+            double norm_rps2 = rerror >= r_thresh ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
+            double norm_rps3 = ferror >= f_thresh ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
 
             std::cout << std::fixed << std::setprecision(3)
                       << "measured rps" << "\t" << omega1 << "\t" << omega2 << "\t"
@@ -126,9 +126,9 @@ public:
             setLeftRightMotorNormalized(norm_rps1, norm_rps2);
             setFrontMotorNormalized(norm_rps3);
     
-            bool stable = std::abs(l_thresh) < ERROR_THRESHOLD_PERCENT &&
-                          std::abs(r_thresh) < ERROR_THRESHOLD_PERCENT &&
-                          std::abs(f_thresh) < ERROR_THRESHOLD_PERCENT;
+            bool stable =   lerror < l_thresh && 
+                            rerror < r_thresh &&
+                            ferror < f_thresh;
     
             if (stable)
                 stable_cycle_count++;
