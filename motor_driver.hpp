@@ -86,7 +86,7 @@ public:
     )
     {
         constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
-        constexpr double MIN_ERROR_RPS = 0.07;
+        constexpr double MIN_ERROR_RPS = 0.08;
         constexpr int STABLE_CYCLES_REQUIRED = 5;
         int stable_cycle_count = 0;
         double lerror = 0.0, rerror = 0.0, ferror = 0.0;
