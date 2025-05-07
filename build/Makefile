@@ -117,6 +117,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named test_camera_controller
+
+# Build rule for target.
+test_camera_controller: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_camera_controller
+.PHONY : test_camera_controller
+
+# fast build rule for target.
+test_camera_controller/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/build
+.PHONY : test_camera_controller/fast
+
+#=============================================================================
 # Target rules for targets named takephoto
 
 # Build rule for target.
@@ -190,6 +203,30 @@ takevideo.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/takevideo.cpp.s
 .PHONY : takevideo.cpp.s
 
+test_camera_controller.o: test_camera_controller.cpp.o
+.PHONY : test_camera_controller.o
+
+# target to build an object file
+test_camera_controller.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/test_camera_controller.cpp.o
+.PHONY : test_camera_controller.cpp.o
+
+test_camera_controller.i: test_camera_controller.cpp.i
+.PHONY : test_camera_controller.i
+
+# target to preprocess a source file
+test_camera_controller.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/test_camera_controller.cpp.i
+.PHONY : test_camera_controller.cpp.i
+
+test_camera_controller.s: test_camera_controller.cpp.s
+.PHONY : test_camera_controller.s
+
+# target to generate assembly for a file
+test_camera_controller.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/test_camera_controller.cpp.s
+.PHONY : test_camera_controller.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -200,12 +237,16 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... takephoto"
 	@echo "... takevideo"
+	@echo "... test_camera_controller"
 	@echo "... takephoto.o"
 	@echo "... takephoto.i"
 	@echo "... takephoto.s"
 	@echo "... takevideo.o"
 	@echo "... takevideo.i"
 	@echo "... takevideo.s"
+	@echo "... test_camera_controller.o"
+	@echo "... test_camera_controller.i"
+	@echo "... test_camera_controller.s"
 .PHONY : help
 
 
