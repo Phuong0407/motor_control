@@ -15,8 +15,13 @@ private:
 public:
     VisionController() = default;
     void processFrame(const cv::Mat& frame);
-
+    void extractRedMask(cv::Mat &red_mask, const cv::Mat& image) {
+        cv::Mat hsvImage, mask1, mask2, binaryMask;
+        cv::cvtColor(image, hsvImage, cv::COLOR_BGR2HSV);
+        cv::inRange(hsvImage, cv::Scalar(170, 120, 70), cv::Scalar(180, 255, 255), mask2);
+        binaryMask = mask1 | mask2;
+        return binaryMask;
+    }
 };
-
 
 #endif // VISION_CONTROLLER_HPP
