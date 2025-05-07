@@ -1,5 +1,5 @@
-#ifndef VISION_CONTROLLER_HPP
-#define VISION_CONTROLLER_HPP
+#ifndef VISION_HPP
+#define VISION_HPP
 
 #include <lccv.hpp>
 #include <libcamera_app.hpp>
@@ -102,4 +102,4 @@ public:
     }
 };
 
-#endif // VISION_CONTROLLER_HPP
+#endif // VISION_HPP

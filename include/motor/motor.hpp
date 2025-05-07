@@ -1,8 +1,8 @@
-#ifndef MOTOR_DRIVER_HPP
-#define MOTOR_DRIVER_HPP
+#ifndef MOTOR_HPP
+#define MOTOR_HPP
 
 #include "encoder.hpp"
-#include "pid_controller.hpp"
+#include "pid.hpp"
 
 #include <cmath>
 #include <chrono>
@@ -25,7 +25,7 @@ class MotorDriver {
 private:
     int i2c_fd[2];
     double smpl_intv;
-    PIDController pid1, pid2, pid3;
+    PID pid1, pid2, pid3;
 
     inline void initMotor(int driver1_addr, int driver2_addr) {
         i2c_fd[0] = wiringPiI2CSetup(driver1_addr);
@@ -36,7 +36,6 @@ private:
         double clamped = std::clamp(norm_rps, -1.0, 1.0);
         int raw_pwm = static_cast<int>(std::round(255.0 * clamped * SAFTY_OFFSET));
         return raw_pwm;
-//        return overcomeDeadZonePWM(std::abs(raw_pwm));
     }
 
     inline int overcomeDeadZonePWM(int pwm) {
@@ -196,4 +195,4 @@ public:
     }
 };
 
-#endif // MOTOR_DRIVER_HPP
+#endif // MOTOR_HPP

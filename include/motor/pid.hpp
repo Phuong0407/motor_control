@@ -1,10 +1,10 @@
-#ifndef PID_CONTROLLER_HPP
-#define PID_CONTROLLER_HPP
+#ifndef PID_HPP
+#define PID_HPP
 
 #include <cmath>
 #include <algorithm>
 
-class PIDController {
+class PID {
 private:
     double kp, ki, kd, Alpha, smpl_intv;
     double intgr, prev_fltrerr;
@@ -18,7 +18,7 @@ private:
     }
 
 public:
-    PIDController(
+    PID(
         double kp,
         double ki,
         double kd,
@@ -46,4 +46,4 @@ public:
     }
 };
 
-#endif // PID_CONTROLER_HPP
+#endif // PID_HPP

@@ -1,5 +1,5 @@
-#ifndef CAMERA_CONTROLLER_HPP
-#define CAMERA_CONTROLLER_HPP
+#ifndef CAMERA_HPP
+#define CAMERA_HPP
 
 #include <opencv2/opencv.hpp>
 #include <lccv.hpp>
@@ -45,4 +45,4 @@ public:
 
 
 
-#endif // CAMERA_CONTROLLER_HPP
+#endif // CAMERA_HPP
