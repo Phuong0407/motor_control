@@ -7,9 +7,8 @@ find_package(OpenCV REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBCAMERA REQUIRED libcamera)
 
-include_directories(${LIBCAMERA_INCLUDE_DIRS} ${OPENCV_INCLUDE_DIRS})
+include_directories(${LIBCAMERA_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
 add_executable(takephoto takephoto.cpp)
 add_executable(takevideo takevideo.cpp)
 
-target_link_libraries(takephoto -llccv ${OpenCV_LIBS})
-target_link_libraries(takevideo -llccv ${OpenCV_LIBS})
+target_link_libraries(test_camera_controller -llccv ${OpenCV_LIBS})
