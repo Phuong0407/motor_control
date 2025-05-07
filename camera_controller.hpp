@@ -22,34 +22,23 @@ public:
         cam.options->verbose = verbose;
         std::cout << "[INFO] Camera initialized successfully: "
                   << frame_width << "x" << frame_height << "@" << frame_rate << "fps.\n";
+    }
 
+    ~CameraController() {
+        cam.stopVideo();
+        std::cout << "[INFO] Camera stopped.\n";
+    }
+
+    bool getFrame(/*cv::Mat& frame*/) {
         cv::namedWindow("Image",cv::WINDOW_NORMAL);
         if(!cam.capturePhoto(image)) {
-            std::cout<<"Camera error"<<std::endl;
+            std::cout<<"[ERROR] Camera error.\n";
+            return false;
         }
         cv::imshow("Image",image);
         cv::waitKey(30);
         cv::waitKey();
         cv::destroyWindow("Image");
-    }
-
-    ~CameraController() {
-        cam.stopVideo();
-        if (verbose_mode) {
-            std::cout << "[CameraController] Camera stopped.\n";
-        }
-    }
-
-    bool getFrame(cv::Mat& frame) {
-        cv::namedWindow("Image",cv::WINDOW_NORMAL);                                                            27         if(!cam.capturePhoto(image)) {                                                                         28             std::cout<<"Camera error"<<std::endl;                                                              29         }                                                                                                      30         cv::imshow("Image",image);                                                                             31         cv::waitKey(30);                                             
-        cv::waitKey();
-        cv::destroyWindow("Image");
-        if (!cam.getVideoFrame(frame, 1000)) {
-            if (verbose_mode) {
-                std::cerr << "[ERROR] Failed to capture frame (timeout).\n";
-            }
-            return false;
-        }
         return true;
     }
 };
