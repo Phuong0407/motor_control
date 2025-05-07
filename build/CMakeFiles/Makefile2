@@ -63,7 +63,8 @@ CMAKE_BINARY_DIR = /home/raspberry/Documents/motor_control/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/test_camera.dir/all
+all: CMakeFiles/takephoto.dir/all
+all: CMakeFiles/takevideo.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -71,34 +72,61 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/test_camera.dir/clean
+clean: CMakeFiles/takephoto.dir/clean
+clean: CMakeFiles/takevideo.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/test_camera.dir
+# Target rules for target CMakeFiles/takephoto.dir
 
 # All Build rule for target.
-CMakeFiles/test_camera.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera.dir/build.make CMakeFiles/test_camera.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera.dir/build.make CMakeFiles/test_camera.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/raspberry/Documents/motor_control/build/CMakeFiles --progress-num=1,2 "Built target test_camera"
-.PHONY : CMakeFiles/test_camera.dir/all
+CMakeFiles/takephoto.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/raspberry/Documents/motor_control/build/CMakeFiles --progress-num=1,2 "Built target takephoto"
+.PHONY : CMakeFiles/takephoto.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/test_camera.dir/rule: cmake_check_build_system
+CMakeFiles/takephoto.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/raspberry/Documents/motor_control/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_camera.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/takephoto.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/raspberry/Documents/motor_control/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_camera.dir/rule
+.PHONY : CMakeFiles/takephoto.dir/rule
 
 # Convenience name for target.
-test_camera: CMakeFiles/test_camera.dir/rule
-.PHONY : test_camera
+takephoto: CMakeFiles/takephoto.dir/rule
+.PHONY : takephoto
 
 # clean rule for target.
-CMakeFiles/test_camera.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera.dir/build.make CMakeFiles/test_camera.dir/clean
-.PHONY : CMakeFiles/test_camera.dir/clean
+CMakeFiles/takephoto.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/clean
+.PHONY : CMakeFiles/takephoto.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/takevideo.dir
+
+# All Build rule for target.
+CMakeFiles/takevideo.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/raspberry/Documents/motor_control/build/CMakeFiles --progress-num=3,4 "Built target takevideo"
+.PHONY : CMakeFiles/takevideo.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/takevideo.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/raspberry/Documents/motor_control/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/takevideo.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/raspberry/Documents/motor_control/build/CMakeFiles 0
+.PHONY : CMakeFiles/takevideo.dir/rule
+
+# Convenience name for target.
+takevideo: CMakeFiles/takevideo.dir/rule
+.PHONY : takevideo
+
+# clean rule for target.
+CMakeFiles/takevideo.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/clean
+.PHONY : CMakeFiles/takevideo.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -117,41 +117,78 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_camera
+# Target rules for targets named takephoto
 
 # Build rule for target.
-test_camera: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_camera
-.PHONY : test_camera
+takephoto: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 takephoto
+.PHONY : takephoto
 
 # fast build rule for target.
-test_camera/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera.dir/build.make CMakeFiles/test_camera.dir/build
-.PHONY : test_camera/fast
+takephoto/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/build
+.PHONY : takephoto/fast
 
-test_camera.o: test_camera.cpp.o
-.PHONY : test_camera.o
+#=============================================================================
+# Target rules for targets named takevideo
+
+# Build rule for target.
+takevideo: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 takevideo
+.PHONY : takevideo
+
+# fast build rule for target.
+takevideo/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/build
+.PHONY : takevideo/fast
+
+takephoto.o: takephoto.cpp.o
+.PHONY : takephoto.o
 
 # target to build an object file
-test_camera.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera.dir/build.make CMakeFiles/test_camera.dir/test_camera.cpp.o
-.PHONY : test_camera.cpp.o
+takephoto.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/takephoto.cpp.o
+.PHONY : takephoto.cpp.o
 
-test_camera.i: test_camera.cpp.i
-.PHONY : test_camera.i
+takephoto.i: takephoto.cpp.i
+.PHONY : takephoto.i
 
 # target to preprocess a source file
-test_camera.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera.dir/build.make CMakeFiles/test_camera.dir/test_camera.cpp.i
-.PHONY : test_camera.cpp.i
+takephoto.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/takephoto.cpp.i
+.PHONY : takephoto.cpp.i
 
-test_camera.s: test_camera.cpp.s
-.PHONY : test_camera.s
+takephoto.s: takephoto.cpp.s
+.PHONY : takephoto.s
 
 # target to generate assembly for a file
-test_camera.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera.dir/build.make CMakeFiles/test_camera.dir/test_camera.cpp.s
-.PHONY : test_camera.cpp.s
+takephoto.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/takephoto.cpp.s
+.PHONY : takephoto.cpp.s
+
+takevideo.o: takevideo.cpp.o
+.PHONY : takevideo.o
+
+# target to build an object file
+takevideo.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/takevideo.cpp.o
+.PHONY : takevideo.cpp.o
+
+takevideo.i: takevideo.cpp.i
+.PHONY : takevideo.i
+
+# target to preprocess a source file
+takevideo.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/takevideo.cpp.i
+.PHONY : takevideo.cpp.i
+
+takevideo.s: takevideo.cpp.s
+.PHONY : takevideo.s
+
+# target to generate assembly for a file
+takevideo.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/takevideo.cpp.s
+.PHONY : takevideo.cpp.s
 
 # Help Target
 help:
@@ -161,10 +198,14 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... test_camera"
-	@echo "... test_camera.o"
-	@echo "... test_camera.i"
-	@echo "... test_camera.s"
+	@echo "... takephoto"
+	@echo "... takevideo"
+	@echo "... takephoto.o"
+	@echo "... takephoto.i"
+	@echo "... takephoto.s"
+	@echo "... takevideo.o"
+	@echo "... takevideo.i"
+	@echo "... takevideo.s"
 .PHONY : help
 
 

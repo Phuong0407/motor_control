@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/raspberry/Documents/motor_control/test_camera.cpp" "CMakeFiles/test_camera.dir/test_camera.cpp.o" "gcc" "CMakeFiles/test_camera.dir/test_camera.cpp.o.d"
+  "/home/raspberry/Documents/motor_control/takephoto.cpp" "CMakeFiles/takephoto.dir/takephoto.cpp.o" "gcc" "CMakeFiles/takephoto.dir/takephoto.cpp.o.d"
   )
 
 # Targets to which this target links.
