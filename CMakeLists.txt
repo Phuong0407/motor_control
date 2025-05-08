@@ -14,3 +14,5 @@ add_executable(takevideo takevideo.cpp)
 add_executable(test_camera_controller test_camera_controller.cpp)
 
 target_link_libraries(test_camera_controller -llccv ${OpenCV_LIBS})
+target_link_libraries(takephoto -llccv ${OpenCV_LIBS})
+target_link_libraries(takevideo -llccv ${OpenCV_LIBS})

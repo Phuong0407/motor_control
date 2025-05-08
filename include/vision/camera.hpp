@@ -15,13 +15,12 @@ public:
         int photo_width = 640,
         int photo_height = 480,
         bool verbose = false
-    ) :
-    {
+    ) {
         cam.options->photo_width = photo_width;
         cam.options->photo_height = photo_height;
         cam.options->verbose = verbose;
-        std::cout << "[INFO] Camera initialized successfully: "
-                  << frame_width << "x" << frame_height << "@" << frame_rate << "fps.\n";
+        std::cout << "[INFO] Camera initialized successfully with resolution "
+                  << photo_width << "x" << photo_height << ".\n";
     }
 
     ~CameraController() {
