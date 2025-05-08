@@ -9,7 +9,7 @@ int main() {
     cv::Mat pathImage;
     std::vector<cv::Point> waypoints;
 
-    int timeout = 5000;
+    int timeout = 100;
     int counter = 0;
     while (counter <= 1000) {
         vision.extrackRouteBinaryMap(binary_mask, timeout);
