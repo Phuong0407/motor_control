@@ -4,7 +4,7 @@
 #include <iostream>
 
 int main() {
-    Camera camera(640, 480, true);
+    Camera camera(640, 480, 30, false);
     Vision<RedHSV> red_visualizer;
     cv::Mat image(480, 640, CV_8UC3);
     int timeout = 1000;
