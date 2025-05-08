@@ -101,7 +101,7 @@ public:
                 cv::circle(mask, cv::Point(cx, cy), 5, cv::Scalar(255, 255, 255), -1);
             }
         }
-    }
+    }                       
 
 };
 
