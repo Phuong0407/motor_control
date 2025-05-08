@@ -2,6 +2,7 @@ line_follower_program/
 LCCV/
 libcamera/
 build/
+VisionRace/
 _makefile
 LFR_Demo.py
 LFR_Demo.cpp
