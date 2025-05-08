@@ -1,4 +1,4 @@
-#include "./include/vision/vision.hpp"
+#include "../include/vision/vision.hpp"
 
 int main() {
     Vision vision(800, 640, 30, false);
