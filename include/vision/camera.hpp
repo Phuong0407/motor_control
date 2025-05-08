@@ -20,8 +20,8 @@ public:
         int framerate = 30,
         bool verbose = false
     ) {
-        cam.options->photo_width = photo_width;
-        cam.options->photo_height = photo_height;
+        cam.options->video_width = frame_width;
+        cam.options->video_height = frame_height;
         cam.options->framefrate;
         cam.options->verbose = verbose;
         printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", photo_width, photo_height);
