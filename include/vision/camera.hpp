@@ -27,34 +27,6 @@ public:
         cam.options->verbose = verbose;
         printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", frame_width, frame_height);
     }
-
-    ~Camera() {
-        cam.stopVideo();
-        printf("[INFO] Camera stopped.\n");
-    }
-
-    bool getFrame() {
-        cam.startVideo();
-        printf("Camera starts recording video.\n");
-        cv::Mat image(cam.options->video_width, cam.options->video_height, CV_8UC3);
-
-        int ch = 0;
-        while (ch != 27) {
-            if (!cam.getVideoFrame(image, 1000)) {
-                printf("[ERROR] Timeout while grabbing frame.\n");
-                return false;
-            }
-            // TODO 
-            cv::Mat mask;
-            v.extractColoredMask(image, mask);
-            v.displayMaskAsASCII(mask);
-            cv::imshow("Binary Mask", mask);
-            cv::waitKey(100);
-        }
-        cv::destroyWindow("Binary Mask");
-        return true;
-    }
-
     bool captureFrame(cv::Mat &image, int timeout = 1000) {
         cam.startVideo();
         printf("[INFO] Camera starts recording video.\n");
