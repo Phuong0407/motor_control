@@ -1,7 +1,7 @@
 #include "./include/vision/camera.hpp"
 
 int main() {
-    CameraController a;
+    Camera a;
 //    a.getFrame();
-    a.~CameraController();
+    a.~Camera();
 }

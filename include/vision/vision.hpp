@@ -7,7 +7,7 @@
 #include <vector>
 
 struct RedHSV {
-    static inline const cv::Scalar lower = cv::Scalar(0, 100, 100);
+    static inline const cv::Scalar lower = cv::Scalar(0, 120, 50);
     static inline const cv::Scalar upper = cv::Scalar(10, 255, 255);
 };
 
@@ -50,20 +50,12 @@ public:
      * @param width  Desired width of the ASCII output
      * @param height Desired height of the ASCII output
      */
-    void displayMaskAsASCII(cv::Mat mask, int width = 60, int height = 30) {
-        // Resize the mask to the specified width and height
-        cv::Mat resizedMask;
-        cv::resize(mask, resizedMask, cv::Size(width, height), 0, 0, cv::INTER_NEAREST);
-
-        // Calculate the scaling factor for ASCII intensity
+    void displayMaskAsASCII(cv::Mat mask) {
         int charLevels = asciiChars.length() - 1;
-
         std::cout << "\nASCII Mask Display:\n";
-        for (int y = 0; y < resizedMask.rows; ++y) {
-            for (int x = 0; x < resizedMask.cols; ++x) {
-                uchar pixel = resizedMask.at<uchar>(y, x);
-
-                // Map pixel value to ASCII characters
+        for (int y = 0; y < mask.rows; ++y) {
+            for (int x = 0; x < mask.cols; ++x) {
+                uchar pixel = mask.at<uchar>(y, x);
                 int index = static_cast<int>((pixel / 255.0) * charLevels);
                 std::cout << asciiChars[index];
             }
