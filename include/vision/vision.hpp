@@ -5,6 +5,9 @@
 #include "color_extractor.hpp"
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/ximgproc.hpp>
+#include <vector>
+
 
 class Vision {
 private:
@@ -36,6 +39,9 @@ public:
     void extrackRouteBinaryMap(cv::Mat& mask, int timeout = 1000) {
         if (!camera.captureFrame(image, timeout))
             printf("[ERROR] The program stops now!\n");
+
+        cv::imshow("FRAME", image);
+        
         cv::Mat red_mask, blue_mask;
         red_extractor.extractColoredMask(image, red_mask);
         blue_extractor.extractColoredMask(image, blue_mask);
