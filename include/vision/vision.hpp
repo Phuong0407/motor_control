@@ -23,8 +23,8 @@ struct RedHSV{
 
 class Vision {
 private:
-    cv::Mat image;
     lccv::PiCamera cam;
+
 public:
     Vision(
         int frame_width = 640,
@@ -36,21 +36,28 @@ public:
         cam.options->video_height = frame_height;
         cam.options->framerate = framerate;
         cam.options->verbose = verbose;
-        cv::Mat image(frame_height, frame_width, CV_8UC3);
-        camera.startVideo();
+
+        int ret_code = cam.startVideo();
+        if (ret_code)
+            printf("[ERROR] Failed to initialize camera with error code: %d\n", ret_code);
+        else
+            printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", frame_width, frame_height);
         cv::namedWindow("Video", cv::WINDOW_NORMAL);
+        cv::Mat image(frame_height, frame_width, CV_8UC3);
     }
+
     ~Vision() {
-        camera.stopVideo();
+        cam.stopVideo();
     }
-    void captureFrame(int timeout = 1000) {
-        if (!camera.captureFrame(image, timeout))
+
+    void captureFrame(cv::Mat image, int timeout) {
+        if (!cam.getVideoFrame(image, timeout))
             printf("[ERROR] The program stops now!\n");
+        else
+            printf("[INFO] Capture image successfully!\n");
     }
-    void extrackRouteBinaryMap(cv::Mat& mask, int timeout = 1000) {
-        if (!camera.captureFrame(image, timeout))
-            printf("[ERROR] The program stops now!\n");
-        
+
+    void extrackBinaryMap(cv::Mat& mask) {
         cv::Mat red_mask, blue_mask;
         red_extractor.extractColoredMask(image, red_mask);
         blue_extractor.extractColoredMask(image, blue_mask);
