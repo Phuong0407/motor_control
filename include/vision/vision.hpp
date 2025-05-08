@@ -17,7 +17,7 @@ struct BlueHSV {
 };
 
 template<typename RGBColor>
-class VisionController {
+class Vision {
 private:
     cv::Mat currentFrame;
     /**
@@ -27,7 +27,7 @@ private:
     const std::string asciiChars = " .:-=+*#%@";
 
 public:
-    VisionController() = default;
+    Vision() = default;
 
     /**
      * Updates the current frame.

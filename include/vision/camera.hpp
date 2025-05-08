@@ -8,13 +8,13 @@
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
 
-class CameraController{
+class Camera{
 private:
     lccv::PiCamera cam;
-    Vision v;
+    Vision<RedHSV> v;
 
 public:
-    CameraController(
+    Camera(
         int frame_width = 640,
         int frame_height = 480,
         int framerate = 30,
@@ -27,18 +27,18 @@ public:
         printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", photo_width, photo_height);
     }
 
-    ~CameraController() {
+    ~Camera() {
         cam.stopVideo();
         printf("[INFO] Camera stopped.\n");
     }
 
-    bool getFrame(cv::Mat& frame) {
+    bool getFrame() {
         cam.startVideo();
         printf("Camera starts recording video.\n");
         cv::namedWindown("Video", cv::WINDOW_NORMAL);
         cv::Mat image(cam.options->video_width, cam.options->video_height, CV_8UC3);
 
-        int char = 0;
+        int ch = 0;
         // PRESS ESC KEY TO STOP
         while (ch != 27) {
             if (!cam.getVideoFrame(image, 1000)) {
@@ -46,7 +46,7 @@ public:
                 return false;
             }
             // TODO 
-            cv::Mat<RedHSV> mask;
+            cv::Mat mask;
             v.extractColoredMask(image, mask);
             v.displayMaskAsASCII(mask);
         }
