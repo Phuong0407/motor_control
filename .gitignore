@@ -1,5 +1,6 @@
 line_follower_program/
 LCCV/
 libcamera/
+build/
 _makefile
 
