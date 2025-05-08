@@ -36,11 +36,9 @@ public:
     bool getFrame() {
         cam.startVideo();
         printf("Camera starts recording video.\n");
-//      cv::namedWindow("Video", cv::WINDOW_NORMAL);
         cv::Mat image(cam.options->video_width, cam.options->video_height, CV_8UC3);
 
         int ch = 0;
-        // PRESS ESC KEY TO STOP
         while (ch != 27) {
             if (!cam.getVideoFrame(image, 1000)) {
                 printf("[ERROR] Timeout while grabbing frame.\n");
@@ -52,11 +50,25 @@ public:
             v.displayMaskAsASCII(mask);
             cv::imshow("Binary Mask", mask);
             cv::waitKey(100);
-//            std::this_thread::sleep_for(std::chrono::milliseconds(5000));
         }
         cv::destroyWindow("Binary Mask");
         return true;
     }
+
+    bool getFrame(cv::Mat &image, int timeout = 1000) {
+        cam.startVideo();
+        printf("[INFO] Camera starts recording video.\n");
+    
+        if (!cam.getVideoFrame(image, timeout)) {
+            printf("[ERROR] Timeout while grabbing frame.\n");
+            cam.stopVideo();
+            return false;
+        }
+        printf("[INFO] Frame captured successfully.\n");
+        cam.stopVideo();
+        return true;
+    }
+    
 };
 
 
