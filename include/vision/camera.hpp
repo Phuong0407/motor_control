@@ -9,8 +9,6 @@
 class Camera{
 private:
     lccv::PiCamera cam;
-    Vision<RedHSV> v;
-
 public:
     Camera(
         int frame_width = 800,
