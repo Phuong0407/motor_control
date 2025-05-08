@@ -4,12 +4,14 @@
 #include "camera.hpp"
 #include "color_extractor.hpp"
 
+#include <opencv2/opencv.hpp>
+
 class Vision {
 private:
+    cv::Mat image;
     Camera camera;
     ColorExtractor<RedHSV>  red_extractor;
     ColorExtractor<BlueHSV> blue_extractor;
-
 public:
     Vision(
         int frame_width = 800,
