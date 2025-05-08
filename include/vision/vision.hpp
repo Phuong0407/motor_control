@@ -23,7 +23,15 @@ public:
     red_extractor(),
     blue_extractor()
     {
+        cv::Mat image(frame_width, frame_height, CV_8UC3);
         camera.startVideo();
+    }
+    ~Vision() {
+        camera.stopVideo();
+    }
+    void captureFrame(int timeout = 1000) {
+        if (!camera.captureFrame(image, timeout))
+            printf("[ERROR] The program stops now!\n");
     }
     void extrackRouteBinaryMap(cv::Mat& mask, int timeout = 1000) {
         if (!camera.captureFrame(image, timeout))
