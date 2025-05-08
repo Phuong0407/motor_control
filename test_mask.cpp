@@ -8,7 +8,7 @@ int main() {
     Vision<RedHSV> red_visualizer;
     cv::Mat image(480, 640, CV_8UC3);
     int timeout = 1000;
-    int ch = 0
+    int ch = 0;
     while(ch != 27) {
         if (camera.captureFrame(image, timeout)) {
             printf("[ERROR] The program stops now!\n");
