@@ -28,19 +28,13 @@ public:
         printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", frame_width, frame_height);
     }
     bool captureFrame(cv::Mat &image, int timeout = 1000) {
-        cam.startVideo();
-        printf("[INFO] Camera starts recording video.\n");
-    
         if (!cam.getVideoFrame(image, timeout)) {
             printf("[ERROR] Timeout while grabbing frame.\n");
             cam.stopVideo();
             return false;
         }
-        printf("[INFO] Frame captured successfully.\n");
-        cam.stopVideo();
         return true;
     }
-    
 };
 
 
