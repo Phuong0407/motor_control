@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/test_mask.dir/test_mask.cpp.o"
-  "CMakeFiles/test_mask.dir/test_mask.cpp.o.d"
+  "CMakeFiles/test_mask.dir/test/test_mask.cpp.o"
+  "CMakeFiles/test_mask.dir/test/test_mask.cpp.o.d"
   "test_mask"
   "test_mask.pdb"
 )

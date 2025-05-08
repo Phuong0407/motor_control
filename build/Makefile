@@ -117,152 +117,41 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named takephoto
+# Target rules for targets named test_binarymask
 
 # Build rule for target.
-takephoto: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 takephoto
-.PHONY : takephoto
+test_binarymask: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_binarymask
+.PHONY : test_binarymask
 
 # fast build rule for target.
-takephoto/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/build
-.PHONY : takephoto/fast
+test_binarymask/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_binarymask.dir/build.make CMakeFiles/test_binarymask.dir/build
+.PHONY : test_binarymask/fast
 
-#=============================================================================
-# Target rules for targets named takevideo
-
-# Build rule for target.
-takevideo: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 takevideo
-.PHONY : takevideo
-
-# fast build rule for target.
-takevideo/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/build
-.PHONY : takevideo/fast
-
-#=============================================================================
-# Target rules for targets named test_camera_controller
-
-# Build rule for target.
-test_camera_controller: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_camera_controller
-.PHONY : test_camera_controller
-
-# fast build rule for target.
-test_camera_controller/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/build
-.PHONY : test_camera_controller/fast
-
-#=============================================================================
-# Target rules for targets named test_mask
-
-# Build rule for target.
-test_mask: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_mask
-.PHONY : test_mask
-
-# fast build rule for target.
-test_mask/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/build
-.PHONY : test_mask/fast
-
-takephoto.o: takephoto.cpp.o
-.PHONY : takephoto.o
+test/test_binarymask.o: test/test_binarymask.cpp.o
+.PHONY : test/test_binarymask.o
 
 # target to build an object file
-takephoto.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/takephoto.cpp.o
-.PHONY : takephoto.cpp.o
+test/test_binarymask.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_binarymask.dir/build.make CMakeFiles/test_binarymask.dir/test/test_binarymask.cpp.o
+.PHONY : test/test_binarymask.cpp.o
 
-takephoto.i: takephoto.cpp.i
-.PHONY : takephoto.i
-
-# target to preprocess a source file
-takephoto.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/takephoto.cpp.i
-.PHONY : takephoto.cpp.i
-
-takephoto.s: takephoto.cpp.s
-.PHONY : takephoto.s
-
-# target to generate assembly for a file
-takephoto.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/takephoto.dir/build.make CMakeFiles/takephoto.dir/takephoto.cpp.s
-.PHONY : takephoto.cpp.s
-
-takevideo.o: takevideo.cpp.o
-.PHONY : takevideo.o
-
-# target to build an object file
-takevideo.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/takevideo.cpp.o
-.PHONY : takevideo.cpp.o
-
-takevideo.i: takevideo.cpp.i
-.PHONY : takevideo.i
+test/test_binarymask.i: test/test_binarymask.cpp.i
+.PHONY : test/test_binarymask.i
 
 # target to preprocess a source file
-takevideo.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/takevideo.cpp.i
-.PHONY : takevideo.cpp.i
+test/test_binarymask.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_binarymask.dir/build.make CMakeFiles/test_binarymask.dir/test/test_binarymask.cpp.i
+.PHONY : test/test_binarymask.cpp.i
 
-takevideo.s: takevideo.cpp.s
-.PHONY : takevideo.s
-
-# target to generate assembly for a file
-takevideo.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/takevideo.cpp.s
-.PHONY : takevideo.cpp.s
-
-test_camera_controller.o: test_camera_controller.cpp.o
-.PHONY : test_camera_controller.o
-
-# target to build an object file
-test_camera_controller.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/test_camera_controller.cpp.o
-.PHONY : test_camera_controller.cpp.o
-
-test_camera_controller.i: test_camera_controller.cpp.i
-.PHONY : test_camera_controller.i
-
-# target to preprocess a source file
-test_camera_controller.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/test_camera_controller.cpp.i
-.PHONY : test_camera_controller.cpp.i
-
-test_camera_controller.s: test_camera_controller.cpp.s
-.PHONY : test_camera_controller.s
+test/test_binarymask.s: test/test_binarymask.cpp.s
+.PHONY : test/test_binarymask.s
 
 # target to generate assembly for a file
-test_camera_controller.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/test_camera_controller.cpp.s
-.PHONY : test_camera_controller.cpp.s
-
-test_mask.o: test_mask.cpp.o
-.PHONY : test_mask.o
-
-# target to build an object file
-test_mask.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/test_mask.cpp.o
-.PHONY : test_mask.cpp.o
-
-test_mask.i: test_mask.cpp.i
-.PHONY : test_mask.i
-
-# target to preprocess a source file
-test_mask.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/test_mask.cpp.i
-.PHONY : test_mask.cpp.i
-
-test_mask.s: test_mask.cpp.s
-.PHONY : test_mask.s
-
-# target to generate assembly for a file
-test_mask.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/test_mask.cpp.s
-.PHONY : test_mask.cpp.s
+test/test_binarymask.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_binarymask.dir/build.make CMakeFiles/test_binarymask.dir/test/test_binarymask.cpp.s
+.PHONY : test/test_binarymask.cpp.s
 
 # Help Target
 help:
@@ -272,22 +161,10 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... takephoto"
-	@echo "... takevideo"
-	@echo "... test_camera_controller"
-	@echo "... test_mask"
-	@echo "... takephoto.o"
-	@echo "... takephoto.i"
-	@echo "... takephoto.s"
-	@echo "... takevideo.o"
-	@echo "... takevideo.i"
-	@echo "... takevideo.s"
-	@echo "... test_camera_controller.o"
-	@echo "... test_camera_controller.i"
-	@echo "... test_camera_controller.s"
-	@echo "... test_mask.o"
-	@echo "... test_mask.i"
-	@echo "... test_mask.s"
+	@echo "... test_binarymask"
+	@echo "... test/test_binarymask.o"
+	@echo "... test/test_binarymask.i"
+	@echo "... test/test_binarymask.s"
 .PHONY : help
 
 

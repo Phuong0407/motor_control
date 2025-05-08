@@ -50,8 +50,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/takephoto.dir/DependInfo.cmake"
-  "CMakeFiles/takevideo.dir/DependInfo.cmake"
-  "CMakeFiles/test_camera_controller.dir/DependInfo.cmake"
-  "CMakeFiles/test_mask.dir/DependInfo.cmake"
+  "CMakeFiles/test_binarymask.dir/DependInfo.cmake"
   )
