@@ -55,7 +55,7 @@ public:
         return true;
     }
 
-    bool getFrame(cv::Mat &image, int timeout = 1000) {
+    bool captureFrame(cv::Mat &image, int timeout = 1000) {
         cam.startVideo();
         printf("[INFO] Camera starts recording video.\n");
     
