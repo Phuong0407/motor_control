@@ -3,7 +3,7 @@
 
 #include <lccv.hpp>
 #include <opencv2/opencv.hpp>
-#include <iostream>
+#include <stdio.h>
 #include <vector>
 
 struct RedHSV {
@@ -19,6 +19,7 @@ struct BlueHSV {
 template<typename RGBColor>
 class VisionController {
 private:
+    cv::Mat currentFrame;
     /**
      * Character set for ASCII representation
      * Adjust this string to change the output characters
@@ -38,10 +39,10 @@ public:
     /**
      * Extracts the target color mask based on the HSV range.
      */
-    void extractColoredMask(cv::Mat& mask) {
-        cv::Mat hsv;
-        cv::cvtColor(currentFrame, hsv, cv::COLOR_BGR2HSV);
-        cv::inRange(hsv, RGBColor::lower, RGBColor::upper, mask);
+    void extractColoredMask(const cv::Mat& image, cv::Mat &mask) {
+        cv::Mat hsv_image;
+        cv::cvtColor(image, hsv_image, cv::COLOR_BGR2HSV);
+        cv::inRange(hsv_image, RGBColor::lower, RGBColor::upper, mask);
     }
 
     /**
@@ -49,10 +50,7 @@ public:
      * @param width  Desired width of the ASCII output
      * @param height Desired height of the ASCII output
      */
-    void displayMaskAsASCII(int width = 60, int height = 30) {
-        cv::Mat mask;
-        extractColoredMask(mask);
-
+    void displayMaskAsASCII(cv::Mat mask, int width = 60, int height = 30) {
         // Resize the mask to the specified width and height
         cv::Mat resizedMask;
         cv::resize(mask, resizedMask, cv::Size(width, height), 0, 0, cv::INTER_NEAREST);

@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/local/include/libcamera -I/home/raspberry/Documents/motor_control -isystem /usr/local/include/opencv4
+CXX_INCLUDES = -I/usr/local/include/libcamera -I/home/raspberry/Documents/motor_control/include/camera -isystem /usr/local/include/opencv4
 
 CXX_FLAGS = -std=gnu++17
 

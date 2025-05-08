@@ -63,9 +63,10 @@ CMAKE_BINARY_DIR = /home/raspberry/Documents/motor_control/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/test_camera_controller.dir/all
 all: CMakeFiles/takephoto.dir/all
 all: CMakeFiles/takevideo.dir/all
+all: CMakeFiles/test_camera_controller.dir/all
+all: CMakeFiles/test_mask.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -73,36 +74,11 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/test_camera_controller.dir/clean
 clean: CMakeFiles/takephoto.dir/clean
 clean: CMakeFiles/takevideo.dir/clean
+clean: CMakeFiles/test_camera_controller.dir/clean
+clean: CMakeFiles/test_mask.dir/clean
 .PHONY : clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/test_camera_controller.dir
-
-# All Build rule for target.
-CMakeFiles/test_camera_controller.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/raspberry/Documents/motor_control/build/CMakeFiles --progress-num=5,6 "Built target test_camera_controller"
-.PHONY : CMakeFiles/test_camera_controller.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/test_camera_controller.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/raspberry/Documents/motor_control/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_camera_controller.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/raspberry/Documents/motor_control/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_camera_controller.dir/rule
-
-# Convenience name for target.
-test_camera_controller: CMakeFiles/test_camera_controller.dir/rule
-.PHONY : test_camera_controller
-
-# clean rule for target.
-CMakeFiles/test_camera_controller.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/clean
-.PHONY : CMakeFiles/test_camera_controller.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/takephoto.dir
@@ -155,6 +131,58 @@ takevideo: CMakeFiles/takevideo.dir/rule
 CMakeFiles/takevideo.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/clean
 .PHONY : CMakeFiles/takevideo.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_camera_controller.dir
+
+# All Build rule for target.
+CMakeFiles/test_camera_controller.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/raspberry/Documents/motor_control/build/CMakeFiles --progress-num=5,6 "Built target test_camera_controller"
+.PHONY : CMakeFiles/test_camera_controller.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_camera_controller.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/raspberry/Documents/motor_control/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_camera_controller.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/raspberry/Documents/motor_control/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_camera_controller.dir/rule
+
+# Convenience name for target.
+test_camera_controller: CMakeFiles/test_camera_controller.dir/rule
+.PHONY : test_camera_controller
+
+# clean rule for target.
+CMakeFiles/test_camera_controller.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/clean
+.PHONY : CMakeFiles/test_camera_controller.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_mask.dir
+
+# All Build rule for target.
+CMakeFiles/test_mask.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/raspberry/Documents/motor_control/build/CMakeFiles --progress-num=7,8 "Built target test_mask"
+.PHONY : CMakeFiles/test_mask.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_mask.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/raspberry/Documents/motor_control/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_mask.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/raspberry/Documents/motor_control/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_mask.dir/rule
+
+# Convenience name for target.
+test_mask: CMakeFiles/test_mask.dir/rule
+.PHONY : test_mask
+
+# clean rule for target.
+CMakeFiles/test_mask.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/clean
+.PHONY : CMakeFiles/test_mask.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

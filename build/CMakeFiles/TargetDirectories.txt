@@ -1,5 +1,6 @@
-/home/raspberry/Documents/motor_control/build/CMakeFiles/test_camera_controller.dir
 /home/raspberry/Documents/motor_control/build/CMakeFiles/takephoto.dir
 /home/raspberry/Documents/motor_control/build/CMakeFiles/takevideo.dir
+/home/raspberry/Documents/motor_control/build/CMakeFiles/test_camera_controller.dir
+/home/raspberry/Documents/motor_control/build/CMakeFiles/test_mask.dir
 /home/raspberry/Documents/motor_control/build/CMakeFiles/edit_cache.dir
 /home/raspberry/Documents/motor_control/build/CMakeFiles/rebuild_cache.dir

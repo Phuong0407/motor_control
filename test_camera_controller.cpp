@@ -2,6 +2,6 @@
 
 int main() {
     CameraController a;
-    a.getFrame();
+//    a.getFrame();
     a.~CameraController();
 }

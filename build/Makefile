@@ -117,19 +117,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_camera_controller
-
-# Build rule for target.
-test_camera_controller: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_camera_controller
-.PHONY : test_camera_controller
-
-# fast build rule for target.
-test_camera_controller/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/build
-.PHONY : test_camera_controller/fast
-
-#=============================================================================
 # Target rules for targets named takephoto
 
 # Build rule for target.
@@ -154,6 +141,32 @@ takevideo: cmake_check_build_system
 takevideo/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/takevideo.dir/build.make CMakeFiles/takevideo.dir/build
 .PHONY : takevideo/fast
+
+#=============================================================================
+# Target rules for targets named test_camera_controller
+
+# Build rule for target.
+test_camera_controller: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_camera_controller
+.PHONY : test_camera_controller
+
+# fast build rule for target.
+test_camera_controller/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/build
+.PHONY : test_camera_controller/fast
+
+#=============================================================================
+# Target rules for targets named test_mask
+
+# Build rule for target.
+test_mask: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_mask
+.PHONY : test_mask
+
+# fast build rule for target.
+test_mask/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/build
+.PHONY : test_mask/fast
 
 takephoto.o: takephoto.cpp.o
 .PHONY : takephoto.o
@@ -227,6 +240,30 @@ test_camera_controller.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_camera_controller.dir/build.make CMakeFiles/test_camera_controller.dir/test_camera_controller.cpp.s
 .PHONY : test_camera_controller.cpp.s
 
+test_mask.o: test_mask.cpp.o
+.PHONY : test_mask.o
+
+# target to build an object file
+test_mask.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/test_mask.cpp.o
+.PHONY : test_mask.cpp.o
+
+test_mask.i: test_mask.cpp.i
+.PHONY : test_mask.i
+
+# target to preprocess a source file
+test_mask.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/test_mask.cpp.i
+.PHONY : test_mask.cpp.i
+
+test_mask.s: test_mask.cpp.s
+.PHONY : test_mask.s
+
+# target to generate assembly for a file
+test_mask.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_mask.dir/build.make CMakeFiles/test_mask.dir/test_mask.cpp.s
+.PHONY : test_mask.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -238,6 +275,7 @@ help:
 	@echo "... takephoto"
 	@echo "... takevideo"
 	@echo "... test_camera_controller"
+	@echo "... test_mask"
 	@echo "... takephoto.o"
 	@echo "... takephoto.i"
 	@echo "... takephoto.s"
@@ -247,6 +285,9 @@ help:
 	@echo "... test_camera_controller.o"
 	@echo "... test_camera_controller.i"
 	@echo "... test_camera_controller.s"
+	@echo "... test_mask.o"
+	@echo "... test_mask.i"
+	@echo "... test_mask.s"
 .PHONY : help
 
 

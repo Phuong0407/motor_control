@@ -1,5 +1,5 @@
-#include "camera.hpp"
-#include "vision.hpp"
+#include "./include/vision/camera.hpp"
+#include "./include/vision/vision.hpp"
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
@@ -18,11 +18,12 @@ int main() {
     }
 
     // Extract the red mask
+    redVision.updateFrame(frame);
     cv::Mat redMask;
-    redVision.extractColoredMask(frame, redMask);
+    redVision.extractColoredMask(frame);
 
     // Display the mask as ASCII output
-    redVision.displayMaskAsASCII(redMask);
+    redVision.displayMaskAsASCII(frame);
 
     return 0;
 }

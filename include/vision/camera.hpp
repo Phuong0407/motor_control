@@ -1,38 +1,54 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
+#include "vision.hpp"
+
 #include <lccv.hpp>
 #include <libcamera_app.hpp>
 #include <opencv2/opencv.hpp>
-#include <iostream>
+#include <stdio.h>
 
 class CameraController{
 private:
-    cv::Mat image;
     lccv::PiCamera cam;
+    Vision v;
 
 public:
     CameraController(
-        int photo_width = 640,
-        int photo_height = 480,
+        int frame_width = 640,
+        int frame_height = 480,
+        int framerate = 30,
         bool verbose = false
     ) {
         cam.options->photo_width = photo_width;
         cam.options->photo_height = photo_height;
+        cam.options->framefrate;
         cam.options->verbose = verbose;
-        std::cout << "[INFO] Camera initialized successfully with resolution "
-                  << photo_width << "x" << photo_height << ".\n";
+        printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", photo_width, photo_height);
     }
 
     ~CameraController() {
         cam.stopVideo();
-        std::cout << "[INFO] Camera stopped.\n";
+        printf("[INFO] Camera stopped.\n");
     }
 
     bool getFrame(cv::Mat& frame) {
-        if(!cam.capturePhoto(image)) {
-            std::cerr<<"[ERROR] Camera error.\n";
-            return false;
+        cam.startVideo();
+        printf("Camera starts recording video.\n");
+        cv::namedWindown("Video", cv::WINDOW_NORMAL);
+        cv::Mat image(cam.options->video_width, cam.options->video_height, CV_8UC3);
+
+        int char = 0;
+        // PRESS ESC KEY TO STOP
+        while (ch != 27) {
+            if (!cam.getVideoFrame(image, 1000)) {
+                printf("[ERROR] Timeout while grabbing frame.\n");
+                return false;
+            }
+            // TODO 
+            cv::Mat<RedHSV> mask;
+            v.extractColoredMask(image, mask);
+            v.displayMaskAsASCII(mask);
         }
         return true;
     }
