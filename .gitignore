@@ -4,3 +4,4 @@ libcamera/
 build/
 _makefile
 LFR_Demo.py
+LFR_Demo.cpp
