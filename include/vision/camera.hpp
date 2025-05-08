@@ -1,8 +1,9 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include <opencv2/opencv.hpp>
 #include <lccv.hpp>
+#include <libcamera_app.hpp>
+#include <opencv2/opencv.hpp>
 #include <iostream>
 
 class CameraController{
@@ -28,16 +29,11 @@ public:
         std::cout << "[INFO] Camera stopped.\n";
     }
 
-    bool getFrame(/*cv::Mat& frame*/) {
-        cv::namedWindow("Image",cv::WINDOW_NORMAL);
+    bool getFrame(cv::Mat& frame) {
         if(!cam.capturePhoto(image)) {
-            std::cout<<"[ERROR] Camera error.\n";
+            std::cerr<<"[ERROR] Camera error.\n";
             return false;
         }
-        cv::imshow("Image",image);
-        cv::waitKey(30);
-        cv::waitKey();
-        cv::destroyWindow("Image");
         return true;
     }
 };
