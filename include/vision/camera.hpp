@@ -1,13 +1,10 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include "vision.hpp"
-
 #include <lccv.hpp>
 #include <libcamera_app.hpp>
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
-#include <thread>
 
 class Camera{
 private:
