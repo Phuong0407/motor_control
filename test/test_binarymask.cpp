@@ -16,12 +16,8 @@ int main() {
         vision.extractPath(binary_mask, pathImage, waypoints);
         cv::imshow("Binary Mask", binary_mask);
         cv::imshow("Path with Centerline", pathImage);
-        std::cout << "Waypoints:" << std::endl;
-        for (const auto &wp : waypoints) {
-            std::cout << "(" << wp.x << ", " << wp.y << ")" << std::endl;
-        }
         printf("end one waypoints.\n");
-        cv::waitKey(1);
+        cv::waitKey(0);
         counter++;
     }
 }

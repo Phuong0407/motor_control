@@ -48,12 +48,12 @@ public:
         mask = red_mask | blue_mask;
     }
     
-    void extractPath(const cv::Mat &mask, cv::Mat &path, std::vector<cv::Point> &waypoints) {
+    void extractPath(const cv::Mat &mask, cv::Mat &path) {
         CV_Assert(mask.type() == CV_8UC1);
     
         cv::Mat processed = mask.clone();
-    
         cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
+
         cv::morphologyEx(processed, processed, cv::MORPH_CLOSE, kernel);
         cv::morphologyEx(processed, processed, cv::MORPH_OPEN, kernel);
     
