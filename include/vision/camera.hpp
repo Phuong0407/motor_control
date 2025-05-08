@@ -35,7 +35,6 @@ public:
     bool captureFrame(cv::Mat &image, int timeout = 1000) {
         if (!cam.getVideoFrame(image, timeout)) {
             printf("[ERROR] Timeout while grabbing frame.\n");
-            cam.stopVideo();
             return false;
         }
         return true;
