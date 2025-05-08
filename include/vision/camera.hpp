@@ -30,7 +30,7 @@ public:
         cam.stopVideo();
         printf("[INFO] Camera stops recording video.\n");
     }
-    bool captureFrame(cv::Mat &image, int timeout = 1000) {
+    bool captureFrame(cv::Mat &image, int timeout) {
         if (!cam.getVideoFrame(image, timeout)) {
             printf("[ERROR] Timeout while grabbing frame.\n");
             return false;

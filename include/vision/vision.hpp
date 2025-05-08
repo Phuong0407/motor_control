@@ -1,33 +1,44 @@
 #ifndef VISION_HPP
 #define VISION_HPP
 
-#include "camera.hpp"
-#include "color_extractor.hpp"
-
+#include <lccv.hpp>
+#include <libcamera_app.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/ximgproc.hpp>
 #include <vector>
+#include <stdio.h>
+
+
+struct RedHSV{
+    static inline const cv::Scalar lower = cv::Scalar(0, 100, 100);
+    static inline const cv::Scalar upper = cv::Scalar(10, 255, 255);
+};
+
+struct RedHSV{
+    static inline const cv::Scalar lower = cv::Scalar(100, 150, 0);
+    static inline const cv::Scalar upper = cv::Scalar(140, 255, 255);
+};
+
 
 
 class Vision {
 private:
     cv::Mat image;
-    Camera camera;
-    ColorExtractor<RedHSV>  red_extractor;
-    ColorExtractor<BlueHSV> blue_extractor;
+    lccv::PiCamera cam;
 public:
     Vision(
-        int frame_width = 800,
-        int frame_height = 640,
+        int frame_width = 640,
+        int frame_height = 480,
         int framerate = 30,
         bool verbose = false
-    ) :
-    camera(frame_width, frame_height, framerate, verbose),
-    red_extractor(),
-    blue_extractor()
-    {
-        cv::Mat image(frame_width, frame_height, CV_8UC3);
+    ) {
+        cam.options->video_width = frame_width;
+        cam.options->video_height = frame_height;
+        cam.options->framerate = framerate;
+        cam.options->verbose = verbose;
+        cv::Mat image(frame_height, frame_width, CV_8UC3);
         camera.startVideo();
+        cv::namedWindow("Video", cv::WINDOW_NORMAL);
     }
     ~Vision() {
         camera.stopVideo();
@@ -39,8 +50,6 @@ public:
     void extrackRouteBinaryMap(cv::Mat& mask, int timeout = 1000) {
         if (!camera.captureFrame(image, timeout))
             printf("[ERROR] The program stops now!\n");
-
-        cv::imshow("FRAME", image);
         
         cv::Mat red_mask, blue_mask;
         red_extractor.extractColoredMask(image, red_mask);
@@ -74,12 +83,12 @@ public:
                 }
             }
 
-            Moments M = moments(c);
+            cv::Moments M = moments(c);
             if (M.m00 != 0) {
                 int cx = int(M.m10 / M.m00);
                 int cy = int(M.m01 / M.m00);
 
-                cout << "CX: " << cx << " CY: " << cy << endl;
+                printf("CX: %d \t CY: %d \n", cx, cy);
 
                 if (cx >= 120) {
                     // mov6eLeft();
@@ -89,7 +98,7 @@ public:
                     // moveRight();
                 }
 
-                circle(frame, Point(cx, cy), 5, Scalar(255, 255, 255), -1);
+                cv::circle(mask, cv::Point(cx, cy), 5, cv::Scalar(255, 255, 255), -1);
             }
         }
     }
