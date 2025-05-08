@@ -20,7 +20,7 @@ public:
     ) {
         cam.options->video_width = frame_width;
         cam.options->video_height = frame_height;
-        cam.options->framerate;
+        cam.options->framerate = framerate;
         cam.options->verbose = verbose;
         printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", frame_width, frame_height);
     }
