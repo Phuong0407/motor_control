@@ -27,6 +27,14 @@ public:
         cam.options->verbose = verbose;
         printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", frame_width, frame_height);
     }
+    void startVideo() {
+        cam.startVideo();
+        printf("[INFO] Camera starts recording video.\n");
+    }
+    void stopVideo() {
+        cam.stopVideo();
+        printf("[INFO] Camera stops recording video.\n");
+    }
     bool captureFrame(cv::Mat &image, int timeout = 1000) {
         if (!cam.getVideoFrame(image, timeout)) {
             printf("[ERROR] Timeout while grabbing frame.\n");
@@ -35,6 +43,7 @@ public:
         }
         return true;
     }
+    
 };
 
 
