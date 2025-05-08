@@ -10,7 +10,7 @@ int main() {
     int timeout = 1000;
     int ch = 0;
     while(ch != 27) {
-        if (camera.captureFrame(image, timeout)) {
+        if (!camera.captureFrame(image, timeout)) {
             printf("[ERROR] The program stops now!\n");
         }
         cv::Mat mask;
