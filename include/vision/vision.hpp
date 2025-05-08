@@ -58,37 +58,40 @@ public:
         cv::morphologyEx(processed, processed, cv::MORPH_OPEN, kernel);
     
         std::vector<std::vector<cv::Point>> contours;
-        std::vector<cv::Vec4i> hierarchy;
-        cv::findContours(processed, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+        cv::findContours(processed, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
     
         path = cv::Mat::zeros(mask.size(), CV_8UC3);
     
-        for (const auto &contour : contours) {
-            double area = cv::contourArea(contour);
-            if (area > 100) {
-                cv::drawContours(path, std::vector<std::vector<cv::Point>>{contour}, -1, cv::Scalar(0, 255, 0), 2);
-            }
-        }
-    
-        cv::Mat binaryPath;
-        cv::cvtColor(path, binaryPath, cv::COLOR_BGR2GRAY);
-        cv::threshold(binaryPath, binaryPath, 1, 255, cv::THRESH_BINARY);
-    
-        cv::Mat skeleton;
-        cv::ximgproc::thinning(binaryPath, skeleton, cv::ximgproc::THINNING_ZHANGSUEN);
-    
-        waypoints.clear();
-        for (int y = 0; y < skeleton.rows; y++) {
-            for (int x = 0; x < skeleton.cols; x++) {
-                if (skeleton.at<uchar>(y, x) == 255) {
-                    waypoints.push_back(cv::Point(x, y));
-                    cv::circle(path, cv::Point(x, y), 1, cv::Scalar(0, 0, 255), -1);  // Draw waypoint
+        if (!contours.empty()) {
+            std::vector<cv::Point> c = contours[0];
+            double maxArea = contourArea(c);
+
+            for (auto &contour : contours) {
+                double area = contourArea(contour);
+                if (area > maxArea) {
+                    maxArea = area;
+                    c = contour;
                 }
             }
+
+            Moments M = moments(c);
+            if (M.m00 != 0) {
+                int cx = int(M.m10 / M.m00);
+                int cy = int(M.m01 / M.m00);
+
+                cout << "CX: " << cx << " CY: " << cy << endl;
+
+                if (cx >= 120) {
+                    // mov6eLeft();
+                } else if (cx < 120 && cx > 40) {
+                    // moveForward();
+                } else {
+                    // moveRight();
+                }
+
+                circle(frame, Point(cx, cy), 5, Scalar(255, 255, 255), -1);
+            }
         }
-    
-        cv::imshow("Path with Centerline", path);
-        cv::waitKey(0);
     }
 
 };
