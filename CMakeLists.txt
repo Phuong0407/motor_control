@@ -14,8 +14,8 @@ include_directories(
 )
 
 add_executable(
-    test_mask
-    ${CMAKE_SOURCE_DIR}/test/test_mask.cpp
+    test_binarymask
+    ${CMAKE_SOURCE_DIR}/test/test_binarymask.cpp
 )
 
-target_link_libraries(test_mask -llccv ${OpenCV_LIBS})
+target_link_libraries(test_binarymask -llccv ${OpenCV_LIBS})

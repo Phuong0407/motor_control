@@ -41,6 +41,6 @@ public:
         blue_extractor.extractColoredMask(image, blue_mask);
         mask = red_mask | blue_mask;
     }
-}
+};
 
 #endif // VISION_HPP

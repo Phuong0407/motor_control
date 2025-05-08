@@ -7,7 +7,7 @@
 #include <vector>
 
 struct RedHSV {
-    static inline const cv::Scalar lower = cv::Scalar(0, 120, 50);
+    static inline const cv::Scalar lower = cv::Scalar(0, 100, 100);
     static inline const cv::Scalar upper = cv::Scalar(10, 255, 255);
 };
 
