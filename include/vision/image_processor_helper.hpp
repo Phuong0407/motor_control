@@ -6,10 +6,12 @@
 #include <iostream>
 
 class ImageProcessorHelper {
-public:
+private:
     cv::Mat image;
-
-    void SlicePart(const cv::Mat& im, std::vector<ImageProcessorHelper>& images, int slices) {
+    
+public:
+    ImageProcessorHelper() = default;
+    void slicePart(const cv::Mat& im, std::vector<ImageProcessorHelper>& images, int slices) {
         int height = im.rows;
         int width = im.cols;
         int sl = height / slices;
@@ -25,7 +27,7 @@ public:
         }
     }
 
-    cv::Mat RepackImages(const std::vector<ImageProcessorHelper>& images) {
+    cv::Mat repackImages(const std::vector<ImageProcessorHelper>& images) {
         cv::Mat img = images[0].image.clone();
 
         for (size_t i = 1; i < images.size(); i++) {
@@ -35,7 +37,7 @@ public:
         return img;
     }
 
-    cv::Point Center(const cv::Moments& moments) {
+    cv::Point computeCenter(const cv::Moments& moments) {
         if (moments.m00 == 0)
             return cv::Point(0, 0);
 
@@ -45,7 +47,7 @@ public:
         return cv::Point(x, y);
     }
 
-    cv::Mat RemoveBackground(const cv::Mat& image, bool removeBackground) {
+    cv::Mat removeBackground(const cv::Mat& image, bool removeBackground) {
         int up = 100;
 
         if (removeBackground) {

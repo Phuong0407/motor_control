@@ -10,12 +10,12 @@ pkg_check_modules(LIBCAMERA REQUIRED libcamera)
 include_directories(
     ${LIBCAMERA_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
-    ${CMAKE_SOURCE_DIR}/include/camera
+    ${CMAKE_SOURCE_DIR}/include/vision
 )
 
 add_executable(
-    test_binarymask
-    ${CMAKE_SOURCE_DIR}/test/test_binarymask.cpp
+    testcontour
+    ${CMAKE_SOURCE_DIR}/test/testcontour.cpp
 )
 
-target_link_libraries(test_binarymask -llccv ${OpenCV_LIBS})
+target_link_libraries(testcontour -llccv ${OpenCV_LIBS})

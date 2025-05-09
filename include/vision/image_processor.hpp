@@ -7,12 +7,46 @@
 #include <cmath>
 
 class ImageProcessor {
-public:
+private:
     cv::Mat image;
     int contour_centerX;
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Point> main_contour;
 
+    cv::Point getContourCenter(const std::vector<cv::Point>& contour) {
+        cv::Moments M = cv::moments(contour);
+        if (M.m00 == 0) {
+            return cv::Point(-1, -1);
+        }
+        int x = static_cast<int>(M.m10 / M.m00);
+        int y = static_cast<int>(M.m01 / M.m00);
+        return cv::Point(x, y);
+    }
+
+    double getContourExtent(const std::vector<cv::Point>& contour) {
+        double area = cv::contourArea(contour);
+        cv::Rect boundingRect = cv::boundingRect(contour);
+        double rectArea = boundingRect.width * boundingRect.height;
+        if (rectArea > 0) {
+            return area / rectArea;
+        }
+        return 0.0;
+    }
+
+    void correctMainContour(int prevCenterX) {
+        for (const auto& contour : contours) {
+            cv::Point center = getContourCenter(contour);
+            if (center.x != -1) {
+                if (std::abs(a - b) < 5.0) {
+                    main_contour = contour;
+                    contour_centerX = center.x;
+                    break;
+                }
+            }
+        }
+    }
+
+public:
     ImageProcessor() {
         contour_centerX = 0;
     }
@@ -72,40 +106,6 @@ public:
                 cv::putText(image, "Extent: " + std::to_string(extent), 
                             cv::Point(contourCenterX + 20, middleY + 30), 
                             cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(200, 0, 200), 1);
-            }
-        }
-    }
-
-private:
-    cv::Point getContourCenter(const std::vector<cv::Point>& contour) {
-        cv::Moments M = cv::moments(contour);
-        if (M.m00 == 0) {
-            return cv::Point(-1, -1);
-        }
-        int x = static_cast<int>(M.m10 / M.m00);
-        int y = static_cast<int>(M.m01 / M.m00);
-        return cv::Point(x, y);
-    }
-
-    double getContourExtent(const std::vector<cv::Point>& contour) {
-        double area = cv::contourArea(contour);
-        cv::Rect boundingRect = cv::boundingRect(contour);
-        double rectArea = boundingRect.width * boundingRect.height;
-        if (rectArea > 0) {
-            return area / rectArea;
-        }
-        return 0.0;
-    }
-
-    void correctMainContour(int prevCenterX) {
-        for (const auto& contour : contours) {
-            cv::Point center = getContourCenter(contour);
-            if (center.x != -1) {
-                if (std::abs(a - b) < 5.0) {
-                    main_contour = contour;
-                    contour_centerX = center.x;
-                    break;
-                }
             }
         }
     }

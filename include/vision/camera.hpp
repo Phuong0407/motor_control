@@ -20,16 +20,25 @@ public:
         cam.options->video_height = frame_height;
         cam.options->framerate = framerate;
         cam.options->verbose = verbose;
-        printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", frame_width, frame_height);
+
+        int ret_code = cam.startVideo();
+        if (ret_code)
+            printf("[ERROR] Failed to initialize camera with error code: %d\n", ret_code);
+        else
+            printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", frame_width, frame_height);
+
     }
+
     void startVideo() {
         cam.startVideo();
         printf("[INFO] Camera starts recording video.\n");
     }
+
     void stopVideo() {
         cam.stopVideo();
         printf("[INFO] Camera stops recording video.\n");
     }
+
     bool captureFrame(cv::Mat &image, int timeout) {
         if (!cam.getVideoFrame(image, timeout)) {
             printf("[ERROR] Timeout while grabbing frame.\n");
@@ -37,7 +46,6 @@ public:
         }
         return true;
     }
-    
 };
 
 
