@@ -68,7 +68,7 @@ public:
     
             double omega1, omega2, omega3;
             kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
-            motor.controlAngularVelocity(omega1, omega2, omega3);
+            motor.controlAngularVelocity(0.625, 0.625, 0.625);
         }
     }
 };
