@@ -11,31 +11,31 @@ private:
     
 public:
     ImageProcessorHelper() = default;
-    void slicePart(const cv::Mat& im, std::vector<ImageProcessorHelper>& images, int slices) {
-        int height = im.rows;
-        int width = im.cols;
-        int sl = height / slices;
+    // void slicePart(const cv::Mat& im, std::vector<ImageProcessorHelper>& images, int slices) {
+    //     int height = im.rows;
+    //     int width = im.cols;
+    //     int sl = height / slices;
 
-        for (int i = 0; i < slices; i++) {
-            int part = sl * i;
+    //     for (int i = 0; i < slices; i++) {
+    //         int part = sl * i;
 
-            int sliceHeight = (i == slices - 1) ? (height - part) : sl;
-            cv::Mat crop_img = im(cv::Rect(0, part, width, sliceHeight)).clone();
+    //         int sliceHeight = (i == slices - 1) ? (height - part) : sl;
+    //         cv::Mat crop_img = im(cv::Rect(0, part, width, sliceHeight)).clone();
 
-            images[i].image = crop_img;
-            images[i].Process();
-        }
-    }
+    //         images[i].image = crop_img;
+    //         images[i].Process();
+    //     }
+    // }
 
-    cv::Mat repackImages(const std::vector<ImageProcessorHelper>& images) {
-        cv::Mat img = images[0].image.clone();
+    // cv::Mat repackImages(const std::vector<ImageProcessorHelper>& images) {
+    //     cv::Mat img = images[0].image.clone();
 
-        for (size_t i = 1; i < images.size(); i++) {
-            cv::vconcat(img, images[i].image, img);
-        }
+    //     for (size_t i = 1; i < images.size(); i++) {
+    //         cv::vconcat(img, images[i].image, img);
+    //     }
 
-        return img;
-    }
+    //     return img;
+    // }
 
     cv::Point computeCenter(const cv::Moments& moments) {
         if (moments.m00 == 0)
