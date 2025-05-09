@@ -31,9 +31,8 @@ public:
         double L2,
         double r,
         double cam_offset
-        double base_speed
     ) :
-    vx(base_speed),
+    vx(vx),
     cam_offset(cam_offset),
     kp_vy(kp_vy),
     kp_omega(0.0),
