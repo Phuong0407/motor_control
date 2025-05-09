@@ -10,7 +10,7 @@
 
 class Vision{
 private:
-    std::vector<Image> n_slices;
+    std::vector<Image> slices;
     Image image_processor;
 
     cv::Point Center(cv::Moments moments) {
@@ -51,16 +51,16 @@ public:
     Vision() : n_slices(N_SLICES) {}
 
     void getOutputVision(const cv::Mat& input, cv::Mat& output) {
-        image_processor = input;
+        image_processor.image = input;
         image_processor.detectAndDrawContour();
-        slicePart(input, n_slices, N_SLICES);
+        slicePart(input, slices, N_SLICES);
         repackImages(slices, output);
     }
 
     std::vector<cv::Point> getAllCentroids() {
         std::vector<cv::Point> all_centroids;
         for (const auto& slice : n_slices) {
-            all_centroids.insert(allCentroids.end(), slice.centroids.begin(), slice.centroids.end());
+            all_centroids.insert(all_centroids.end(), slice.centroids.begin(), slice.centroids.end());
         }
         return all_centroids;
     }
