@@ -17,8 +17,8 @@ private:
     double kp_vy, kp_omega;
     
     Vision vision;
-    OrientationPID orientation_y;
-    OrientationPID orientation_omega;
+    // OrientationPID orientation_y;
+    // OrientationPID orientation_omega;
     KinematicModel kinemator;
     MotorDriver motor;
 
@@ -26,7 +26,7 @@ public:
     Navigation(
         double vx,
         double kp_vy,
-        double kp_omega,
+        // double kp_omega,
         double L1,
         double L2,
         double r,
@@ -34,34 +34,25 @@ public:
     ) :
     vx(vx),
     cam_offset(cam_offset),
-    orientation_y(kp_vy, 0.0, 0.0, 10.0, 2.0),
-    orientation_omega(kp_omega, 0.0, 0.0, 10.0, 2.0),
+    kp_vy(kp_vy),
+    kp_omega(0.0),
+    // orientation_y(kp_vy, 0.0, 0.0, 10.0, 2.0),
+    // orientation_omega(kp_omega, 0.0, 0.0, 10.0, 2.0),
     kinemator(L1, L2, r),
     motor(2.0, 0.01, 0.5, 0.1, 0.7 * 0.5 / 0.1, 0x0f, 0x0d)
-    { }
+    {}
 
-    void Navigation::updateNavigation(const cv::Mat& frame) {
-        double contourX = vision.
-        std::vector<cv::Point2f> deviationPoints = vision.getDeviationPoints(frame);
+    void navigate(const cv::Mat& frame) {
+        cv::Mat image2(480, 640, CV_8UC3);
+        vision.getOutputVision(image1, image2);
+        double contourX = vision.getCentroidXFirstSlices();
 
-        cv::Point2f avgDeviation(0.0f, 0.0f);
-        for (const auto& point : deviationPoints) {
-            avgDeviation += point;
-        }
-        avgDeviation.x /= deviationPoints.size();
-        avgDeviation.y /= deviationPoints.size();
-    
-        float vy = -kp_vy * avgDeviation.x;
-        float vx = base_speed;
+        double vy = kp_vy * (contourX - cam_offset);
+        double vx = base_speed;
 
-        float omega = -kp_omega * avgDeviation.x;
-    
         double omega1, omega2, omega3;
-        kinematic.computeWheelVelocityFromRobotVelocity(vx, vy, omega, omega1, omega2, omega3);
-    
-        motor.setTargetSpeed(0, omega1);
-        motor.setTargetSpeed(1, omega2);
-        motor.setTargetSpeed(2, omega3);
+        kinematic.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
+        motor.controlAngularVelocity(omega1, omega2, omega3);
     }
 };
 
