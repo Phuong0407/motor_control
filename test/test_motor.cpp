@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     MotorDriver motor_driver(kp, ki, kd, smpl_itv, cutoff_freq, 0x0f, 0x0d);
 
     auto t_start = std::chrono::steady_clock::now();
-    motor_driver.controlAngularVelocity(0.62, 0.62, 0.0);
+    motor_driver.controlAngularVelocity(0.625, 0.625, 0.0);
 
     motor_driver.stop_motor();
     cleanupEncoders();
