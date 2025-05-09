@@ -6,8 +6,6 @@ int main() {
     cam.options->video_height = 480;
     cam.options->framerate = 30;
     cam.options->verbose = true;
-    cam.startVideo();
-    cv::namedWindow("Video", cv::WINDOW_NORMAL);
     cv::Mat image(480, 640, CV_8UC3);
 
     ImageProcessor a;
