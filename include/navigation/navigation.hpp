@@ -62,11 +62,11 @@ public:
             double contourX = vision.getCentroidXFirstSlices();
             cv::imshow("Raw", image1);
             cv::imshow("Processed", image2);
-            // printf("x = %f", contourX);
-            // double vy = kp_vy * (contourX - cam_offset);
+            printf("x = %f", contourX);
+            double vy = kp_vy * (contourX - cam_offset);
     
-            // double omega1, omega2, omega3;
-            // kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
+            double omega1, omega2, omega3;
+            kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
             // motor.controlAngularVelocity(omega1, omega2, omega3);
             ch = cv::waitKey(5);
         }
