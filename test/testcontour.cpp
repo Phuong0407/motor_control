@@ -1,6 +1,10 @@
 #include "../include/vision/image_processor_helper.hpp"
 #include "../include/vision/image_processor.hpp"
 
+#include <lccv.hpp>
+#include <libcamera_app.hpp>
+#include <opencv2/opencv.hpp>
+#include <stdio.h>
 
 int main() {
     lccv::PiCamera cam;
@@ -20,7 +24,7 @@ int main() {
         printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", frame_width, frame_height);
 
     while (true) {
-        if (!cam.getVideoFrame(image, timeout)) {
+        if (!cam.getVideoFrame(image, 1000)) {
             printf("[ERROR] Timeout while grabbing frame.\n");
             break;
         }
