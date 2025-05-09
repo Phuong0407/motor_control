@@ -11,6 +11,8 @@ include_directories(
     ${LIBCAMERA_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/include/vision
+    ${CMAKE_SOURCE_DIR}/include/motor
+    ${CMAKE_SOURCE_DIR}/include/line_follower
 )
 
 add_executable(
@@ -18,4 +20,10 @@ add_executable(
     ${CMAKE_SOURCE_DIR}/test/test_imageprocessor.cpp
 )
 
+add_executable(
+    test_motor
+    ${CMAKE_SOURCE_DIR}/test/test_motor.cpp
+)
+
 target_link_libraries(test_imageprocessor -llccv ${OpenCV_LIBS})
+target_link_libraries(test_motor -lwiringPi)

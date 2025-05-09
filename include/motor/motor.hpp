@@ -2,7 +2,7 @@
 #define MOTOR_HPP
 
 #include "encoder.hpp"
-#include "pid.hpp"
+#include "motor_pid.hpp"
 
 #include <cmath>
 #include <chrono>
@@ -25,7 +25,7 @@ class MotorDriver {
 private:
     int i2c_fd[2];
     double smpl_intv;
-    PID pid1, pid2, pid3;
+    MotorPID pid1, pid2, pid3;
 
     inline void initMotor(int driver1_addr, int driver2_addr) {
         i2c_fd[0] = wiringPiI2CSetup(driver1_addr);

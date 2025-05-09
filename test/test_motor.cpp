@@ -1,5 +1,5 @@
 #define NOLOADED_RUN
-#include "motor_driver.hpp"
+#include "../include/motor/motor.hpp"
 
 int main(int argc, char* argv[]) {
     if (argc < 5)
@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
     double run_itv  = std::stod(argv[4]);
     double smpl_itv = std::stod(argv[5]);
 
-    double cutoff_freq = 20.0;
+    double cutoff_freq = 1/(2 * smpl_itv) * 0.80;
 
     MotorDriver motor_driver(kp, ki, kd, smpl_itv, cutoff_freq, 0x0f, 0x0d);
 
