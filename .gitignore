@@ -10,6 +10,5 @@ _makefile
 LFR_Demo.py
 LFR_Demo.cpp
 include/image/camera.hpp
-include/image/color_extractor.hpp
 include/image/vision.hpp
 include/image/image_processor_helper.hpp
