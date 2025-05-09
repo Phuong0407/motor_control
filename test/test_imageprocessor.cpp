@@ -1,5 +1,7 @@
 #include "../include/vision/image_processor.hpp"
 
+#define N_SLICES 4
+
 int main() {
     lccv::PiCamera cam;
     cam.options->video_width = 640;
