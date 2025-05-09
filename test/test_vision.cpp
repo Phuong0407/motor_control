@@ -1,6 +1,8 @@
 #include "../include/navigation/vision.hpp"
 #include <opencv2/opencv.hpp>
 
+#include <iostream>
+
 int main() {
     lccv::PiCamera cam;
     cam.options->video_width = 640;
@@ -21,6 +23,10 @@ int main() {
             continue;
         }
         vision.getOutputVision(image1, image2);
+        std::vector<cv::Point> centroids = vision.getAllCentroids();
+        for (const auto& point : centroids) {
+            std::cout << "(" << point.x << ", " << point.y << ")" << std::endl;
+        }
         cv::imshow("Processed", image2);
         ch = cv::waitKey(5);
     }

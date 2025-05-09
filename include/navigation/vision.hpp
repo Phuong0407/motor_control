@@ -57,13 +57,14 @@ public:
         repackImages(slices, output);
     }
 
-    // std::vector<cv::Point> getAllCentroids() {
-    //     std::vector<cv::Point> all_centroids;
-    //     for (const auto& slice : slices) {
-    //         all_centroids.insert(all_centroids.end(), slice.centroids.begin(), slice.centroids.end());
-    //     }
-    //     return all_centroids;
-    // }
+    std::vector<cv::Point> getAllCentroids() {
+        std::vector<cv::Point> all_centroids;
+        all_centroids.reserve(N_SLICES);
+        for (const auto& slice : slices) {
+            all_centroids.push_back(cv::Point(slice.contour_centerX, slice.middleY));
+        }
+        return all_centroids;
+    }
 };
 
 
