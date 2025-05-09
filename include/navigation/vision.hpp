@@ -51,6 +51,7 @@ public:
     Vision() : slices(N_SLICES) {}
 
     void getOutputVision(const cv::Mat& input, cv::Mat& output) {
+        printf("enter get output vision\n");
         image_processor.image = input;
         image_processor.detectAndDrawContour();
         slicePart(input, slices, N_SLICES);
