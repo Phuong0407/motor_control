@@ -82,29 +82,29 @@ public:
             int middleX = width / 2;
             int middleY = height / 2;
 
-            int prevCenterX = contourCenterX;
+            int prevCenterX = contour_centerX;
             cv::Point center = getContourCenter(mainContour);
 
             if (center.x != -1) {
-                contourCenterX = center.x;
+                contour_centerX = center.x;
 
-                if (std::abs(prevCenterX - contourCenterX) > 5) {
+                if (std::abs(prevCenterX - contour_centerX) > 5) {
                     correctMainContour(prevCenterX);
                 }
 
                 double extent = getContourExtent(mainContour);
-                int direction = static_cast<int>((middleX - contourCenterX) * extent);
+                int direction = static_cast<int>((middleX - contour_centerX) * extent);
 
                 cv::drawContours(image, std::vector<std::vector<cv::Point>>{mainContour}, -1, cv::Scalar(0, 255, 0), 2);
-                cv::circle(image, cv::Point(contourCenterX, middleY), 7, cv::Scalar(0, 255, 255), -1);
+                cv::circle(image, cv::Point(contour_centerX, middleY), 7, cv::Scalar(0, 255, 255), -1);
                 cv::circle(image, cv::Point(middleX, middleY), 3, cv::Scalar(0, 0, 255), -1);
 
-                cv::putText(image, "Offset: " + std::to_string(middleX - contourCenterX), 
-                            cv::Point(contourCenterX + 20, middleY), 
+                cv::putText(image, "Offset: " + std::to_string(middleX - contour_centerX), 
+                            cv::Point(contour_centerX + 20, middleY), 
                             cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(200, 0, 200), 2);
 
                 cv::putText(image, "Extent: " + std::to_string(extent), 
-                            cv::Point(contourCenterX + 20, middleY + 30), 
+                            cv::Point(contour_centerX + 20, middleY + 30), 
                             cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(200, 0, 200), 1);
             }
         }
