@@ -43,17 +43,30 @@ public:
     {}
 
     void navigate(const cv::Mat& frame) {
+        lccv::PiCamera cam;
+        cam.options->video_width = 640;
+        cam.options->video_height = 480;
+        cam.options->framerate = 30;
+        cam.options->verbose = true;
+        cam.startVideo();
+        
+        cv::Mat image1(480, 640, CV_8UC3);
         cv::Mat image2(480, 640, CV_8UC3);
-        vision.getOutputVision(frame, image2);
-        double contourX = vision.getCentroidXFirstSlices();
-        cv::imshow("Processed", image2);
-        ch = cv::waitKey(5);
-        printf("x = %f", contourX);
-        double vy = kp_vy * (contourX - cam_offset);
 
-        double omega1, omega2, omega3;
-        kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
-        motor.controlAngularVelocity(omega1, omega2, omega3);
+        int ch = 0;
+        while (ch != 27) {
+            cam.getVideoFrame(image1, 1000);
+            vision.getOutputVision(frame, image2);
+            double contourX = vision.getCentroidXFirstSlices();
+            cv::imshow("Processed", image2);
+            ch = cv::waitKey(5);
+            printf("x = %f", contourX);
+            double vy = kp_vy * (contourX - cam_offset);
+    
+            double omega1, omega2, omega3;
+            kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
+            motor.controlAngularVelocity(omega1, omega2, omega3);
+        }
     }
 };
 
