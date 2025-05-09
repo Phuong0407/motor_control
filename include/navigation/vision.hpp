@@ -59,7 +59,7 @@ public:
 
     std::vector<cv::Point> getAllCentroids() {
         std::vector<cv::Point> all_centroids;
-        for (const auto& slice : n_slices) {
+        for (const auto& slice : slices) {
             all_centroids.insert(all_centroids.end(), slice.centroids.begin(), slice.centroids.end());
         }
         return all_centroids;
