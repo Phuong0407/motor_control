@@ -1,7 +1,7 @@
 #ifndef IMAGE_HPP
 #define IMAGE_HPP
 
-// #include "color_extractor.hpp"
+#include "color_extractor.hpp"
 
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
