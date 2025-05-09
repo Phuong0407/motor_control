@@ -130,7 +130,7 @@ public:
             int startY = sliceHeight * i;
             cv::Rect sliceRect(0, startY, width, sliceHeight);
             images[i].image = im(sliceRect).clone();
-            images[i].Process();
+            images[i].detectAndDrawContour();
         }
     }
     
