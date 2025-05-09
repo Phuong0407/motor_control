@@ -1,7 +1,7 @@
 #ifndef VISION_HPP
 #define VISION_HPP
 
-#include "../include/image/image.hpp"
+#include "../image/image.hpp"
 
 #include <vector>
 #include <stdio.h>
