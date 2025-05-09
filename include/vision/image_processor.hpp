@@ -2,110 +2,111 @@
 #define IMAGE_PROCESSOR_HPP
 
 #include <opencv2/opencv.hpp>
-#include <iostream>
+#include <stdio.h>
 #include <vector>
 #include <cmath>
 
 class ImageProcessor {
-private:
-    cv::Mat image;
-    int contour_centerX;
-    std::vector<std::vector<cv::Point>> contours;
-    std::vector<cv::Point> main_contour;
-
-    cv::Point getContourCenter(const std::vector<cv::Point>& contour) {
-        cv::Moments M = cv::moments(contour);
-        if (M.m00 == 0) {
-            return cv::Point(-1, -1);
-        }
-        int x = static_cast<int>(M.m10 / M.m00);
-        int y = static_cast<int>(M.m01 / M.m00);
-        return cv::Point(x, y);
-    }
-
-    double getContourExtent(const std::vector<cv::Point>& contour) {
-        double area = cv::contourArea(contour);
-        cv::Rect boundingRect = cv::boundingRect(contour);
-        double rectArea = boundingRect.width * boundingRect.height;
-        if (rectArea > 0) {
-            return area / rectArea;
-        }
-        return 0.0;
-    }
-
-    void correctmain_contour(int prevCenterX) {
-        for (const auto& contour : contours) {
-            cv::Point center = getContourCenter(contour);
-            if (center.x != -1) {
-                if (std::abs(a - b) < 5.0) {
-                    main_contour = contour;
-                    contour_centerX = center.x;
-                    break;
-                }
-            }
-        }
-    }
-
 public:
-    ImageProcessor() {
-        contour_centerX = 0;
-    }
+    cv::Mat image;
+    int contourCenterX = 0;
+    int middleX = 0;
+    int middleY = 0;
+    int dir = 0;
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Point> MainContour;
+    std::vector<cv::Point> prev_MC;
 
-    void analyzeContours() {
+    void detectContours() {
         if (image.empty()) {
-            printf("[ERROR] Empty binary mask!\n");
+            printf("[ERROR] Image not loaded!");
             return;
         }
 
-        cv::Mat gray;
-        cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
-
+        cv::Mat imgray;
+        cv::cvtColor(image, imgray, cv::COLOR_BGR2GRAY);
         cv::Mat thresh;
-        cv::threshold(gray, thresh, 100, 255, cv::THRESH_BINARY_INV);
+        cv::threshold(imgray, thresh, 100, 255, cv::THRESH_BINARY_INV);
 
-        std::vector<cv::Vec4i> hierarchy;
-        cv::findContours(thresh, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+        cv::findContours(thresh, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+
+        prev_MC = MainContour;
 
         if (!contours.empty()) {
-            main_contour = *std::max_element(
-                                contours.begin(),
-                                contours.end(),
-                                []( const std::vector<cv::Point>& a,
-                                    const std::vector<cv::Point>& b ) {
-                                        return cv::contourArea(a) < cv::contourArea(b);
-                                    }
-                                );
+            MainContour = *std::max_element(contours.begin(), contours.end(), 
+                                            [](const std::vector<cv::Point>& a, const std::vector<cv::Point>& b) {
+                                                return cv::contourArea(a) < cv::contourArea(b);
+                                            });
 
             int height = image.rows;
             int width = image.cols;
 
-            int middleX = width / 2;
-            int middleY = height / 2;
+            middleX = width / 2;
+            middleY = height / 2;
 
-            int prevCenterX = contour_centerX;
-            cv::Point center = getContourCenter(main_contour);
+            int prev_cX = contourCenterX;
+            cv::Point center = getContourCenter(MainContour);
 
-            if (center.x != -1) {
-                contour_centerX = center.x;
+            if (center.x != 0) {
+                contourCenterX = center.x;
 
-                if (std::abs(prevCenterX - contour_centerX) > 5) {
-                    correctmain_contour(prevCenterX);
+                if (std::abs(prev_cX - contourCenterX) > 5) {
+                    correctMainContour(prev_cX);
                 }
+            } else {
+                contourCenterX = 0;
+            }
 
-                double extent = getContourExtent(main_contour);
-                int direction = static_cast<int>((middleX - contour_centerX) * extent);
+            float extent = getContourExtent(MainContour);
+            dir = static_cast<int>((middleX - contourCenterX) * extent);
 
-                cv::drawContours(image, std::vector<std::vector<cv::Point>>{main_contour}, -1, cv::Scalar(0, 255, 0), 2);
-                cv::circle(image, cv::Point(contour_centerX, middleY), 7, cv::Scalar(0, 255, 255), -1);
-                cv::circle(image, cv::Point(middleX, middleY), 3, cv::Scalar(0, 0, 255), -1);
+            cv::drawContours(image, std::vector<std::vector<cv::Point>>{MainContour}, -1, cv::Scalar(0, 255, 0), 3);
+            cv::circle(image, cv::Point(contourCenterX, middleY), 7, cv::Scalar(255, 255, 255), -1);
+            cv::circle(image, cv::Point(middleX, middleY), 3, cv::Scalar(0, 0, 255), -1);
 
-                cv::putText(image, "Offset: " + std::to_string(middleX - contour_centerX), 
-                            cv::Point(contour_centerX + 20, middleY), 
-                            cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(200, 0, 200), 2);
+            cv::putText(image, std::to_string(middleX - contourCenterX), 
+                        cv::Point(contourCenterX + 20, middleY), 
+                        cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(200, 0, 200), 2);
+            
+            cv::putText(image, "Weight:" + std::to_string(extent), 
+                        cv::Point(contourCenterX + 20, middleY + 35), 
+                        cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(200, 0, 200), 1);
+        }
+    }
 
-                cv::putText(image, "Extent: " + std::to_string(extent), 
-                            cv::Point(contour_centerX + 20, middleY + 30), 
-                            cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(200, 0, 200), 1);
+private:
+    cv::Point getContourCenter(const std::vector<cv::Point>& contour) {
+        cv::Moments M = cv::moments(contour);
+
+        if (M.m00 == 0) {
+            return cv::Point(0, 0);
+        }
+
+        int x = static_cast<int>(M.m10 / M.m00);
+        int y = static_cast<int>(M.m01 / M.m00);
+
+        return cv::Point(x, y);
+    }
+
+    float getContourExtent(const std::vector<cv::Point>& contour) {
+        double area = cv::contourArea(contour);
+        cv::Rect boundingRect = cv::boundingRect(contour);
+        double rectArea = static_cast<double>(boundingRect.width) * boundingRect.height;
+
+        return (rectArea > 0) ? static_cast<float>(area / rectArea) : 0.0f;
+    }
+
+    void correctMainContour(int prev_cx) {
+        for (const auto& contour : contours) {
+            cv::Point center = getContourCenter(contour);
+            if (center.x != 0) {
+                int tmp_cx = center.x;
+
+                if (std::abs(tmp_cx - prev_cx) < 5.0) {
+                    MainContour = contour;
+                    contourCenterX = tmp_cx;
+                    break;
+                }
             }
         }
     }
