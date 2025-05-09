@@ -50,7 +50,7 @@ private:
         cv::Mat red_mask, blue_mask;
         red_extractor.extractColoredMask(image, red_mask);
         blue_extractor.extractColoredMask(image, blue_mask);
-        mask = red_mask | blue_mask;
+        bin_mask = red_mask | blue_mask;
     }
 
 public:
@@ -72,7 +72,7 @@ public:
 
         cv::Mat bin_mask;
         extractBinaryMask(image, bin_mask);
-        cv::findContour(thresh, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+        cv::findContour(bin_mask, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 
         prev_MC = main_contour;
         if (!contours.empty()) {
@@ -107,7 +107,7 @@ public:
             double extent = getContourExtent(main_contour);
             dir = static_cast<int>((middleX - contour_centerX) * extent);
 
-            cv::drawContour(image, std::vector<std::vector<cv::Point>>{main_contour}, -1, cv::Scalar(0, 255, 0), 3);
+            cv::drawContours(image, std::vector<std::vector<cv::Point>>{main_contour}, -1, cv::Scalar(0, 255, 0), 3);
             cv::circle(image, cv::Point(contour_centerX, middleY), 7, cv::Scalar(255, 255, 255), -1);
             cv::circle(image, cv::Point(middleX, middleY), 3, cv::Scalar(0, 0, 255), -1);
 
