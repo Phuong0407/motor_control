@@ -31,8 +31,9 @@ public:
         double L2,
         double r,
         double cam_offset
+        double base_speed
     ) :
-    vx(vx),
+    vx(base_speed),
     cam_offset(cam_offset),
     kp_vy(kp_vy),
     kp_omega(0.0),
@@ -44,14 +45,14 @@ public:
 
     void navigate(const cv::Mat& frame) {
         cv::Mat image2(480, 640, CV_8UC3);
-        vision.getOutputVision(image1, image2);
+        vision.getOutputVision(frame, image1);
         double contourX = vision.getCentroidXFirstSlices();
 
         double vy = kp_vy * (contourX - cam_offset);
         double vx = base_speed;
 
         double omega1, omega2, omega3;
-        kinematic.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
+        kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
         motor.controlAngularVelocity(omega1, omega2, omega3);
     }
 };
