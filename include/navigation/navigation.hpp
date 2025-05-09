@@ -45,8 +45,9 @@ public:
     void navigate(const cv::Mat& frame) {
         cv::Mat image1(480, 640, CV_8UC3);
         vision.getOutputVision(frame, image1);
+        cv::imshow("Processed", image1);
         double contourX = vision.getCentroidXFirstSlices();
-
+        printf("x = %f", contourX);
         double vy = kp_vy * (contourX - cam_offset);
 
         double omega1, omega2, omega3;
