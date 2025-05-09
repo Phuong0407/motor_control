@@ -9,7 +9,6 @@ int main() {
     cam.startVideo();
     
     cv::Mat image1(480, 640, CV_8UC3);
-    cv::Mat image2(480, 640, CV_8UC3);
 
     Navigation naviation(1.0, 2.0, 0.08, 0.08, 0.05, 0.02);
 
