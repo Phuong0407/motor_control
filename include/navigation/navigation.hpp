@@ -42,7 +42,7 @@ public:
     motor(2.0, 0.01, 0.5, 0.1, 0.7 * 0.5 / 0.1, 0x0f, 0x0d)
     {}
 
-    void navigate(const cv::Mat& frame) {
+    void navigate() {
         lccv::PiCamera cam;
         cam.options->video_width = 640;
         cam.options->video_height = 480;
