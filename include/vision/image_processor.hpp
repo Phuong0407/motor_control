@@ -72,7 +72,6 @@ public:
 
         cv::Mat bin_mask;
         extractBinaryMask(image, bin_mask);
-        cv::imshow("Bin_mask", bin_mask);
         cv::findContours(bin_mask, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 
         prev_MC = main_contour;
