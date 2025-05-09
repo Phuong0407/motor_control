@@ -1,5 +1,5 @@
-#ifndef IMAGE_PROCESSOR_HPP
-#define IMAGE_PROCESSOR_HPP
+#ifndef IMAGE_HPP
+#define IMAGE_HPP
 
 #include "color_extractor.hpp"
 
@@ -8,7 +8,7 @@
 #include <vector>
 #include <cmath>
 
-class ImageProcessor {
+class Image {
 private:
     ColorExtractor<RedHSV>  red_extractor;
     ColorExtractor<BlueHSV> blue_extractor;
@@ -146,7 +146,7 @@ public:
         }
     }
 
-    ImageProcessor() = default;
+    Image() = default;
 };
 
 #endif // IMAGE_PROCESSOR_HPP
