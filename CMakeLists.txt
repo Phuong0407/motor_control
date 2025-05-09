@@ -12,7 +12,7 @@ include_directories(
     ${OpenCV_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/include/vision
     ${CMAKE_SOURCE_DIR}/include/motor
-    ${CMAKE_SOURCE_DIR}/include/line_follower
+    ${CMAKE_SOURCE_DIR}/include/navigation
 )
 
 add_executable(
