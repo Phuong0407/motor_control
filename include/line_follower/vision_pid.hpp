@@ -1,10 +1,10 @@
-#ifndef PID_HPP
-#define PID_HPP
+#ifndef VISION_PID_HPP
+#define VISION_PID_HPP
 
 #include <cmath>
 #include <algorithm>
 
-class PID {
+class VisionPID {
 private:
     double kp, ki, kd, Alpha, smpl_intv;
     double intgr, prev_fltrerr;
@@ -18,7 +18,7 @@ private:
     }
 
 public:
-    PID(
+    VisionPID(
         double kp,
         double ki,
         double kd,
@@ -46,4 +46,4 @@ public:
     }
 };
 
-#endif // PID_HPP
+#endif // VISION_PID_HPP
