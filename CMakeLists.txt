@@ -15,21 +15,21 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/include/navigation
 )
 
-add_executable(
-    test_vision
-    ${CMAKE_SOURCE_DIR}/test/test_vision.cpp
-)
+# add_executable(
+#     test_vision
+#     ${CMAKE_SOURCE_DIR}/test/test_vision.cpp
+# )
 
-add_executable(
-    test_motor
-    ${CMAKE_SOURCE_DIR}/test/test_motor.cpp
-)
+# add_executable(
+#     test_motor
+#     ${CMAKE_SOURCE_DIR}/test/test_motor.cpp
+# )
 
 add_executable(
     main
     ${CMAKE_SOURCE_DIR}/main.cpp
 )
 
-target_link_libraries(test_vision -llccv ${OpenCV_LIBS})
-target_link_libraries(test_motor -lwiringPi)
+# target_link_libraries(test_vision -llccv ${OpenCV_LIBS})
+# target_link_libraries(test_motor -lwiringPi)
 target_link_libraries(main -llccv ${OpenCV_LIBS} -lwiringPi)
