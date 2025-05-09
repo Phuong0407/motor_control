@@ -14,8 +14,8 @@ include_directories(
 )
 
 add_executable(
-    testcontour
-    ${CMAKE_SOURCE_DIR}/test/testcontour.cpp
+    test_imageprocessor
+    ${CMAKE_SOURCE_DIR}/test/test_imageprocessor.cpp
 )
 
-target_link_libraries(testcontour -llccv ${OpenCV_LIBS})
+target_link_libraries(test_imageprocessor -llccv ${OpenCV_LIBS})
