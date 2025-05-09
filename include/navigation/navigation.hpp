@@ -48,7 +48,6 @@ public:
         double contourX = vision.getCentroidXFirstSlices();
 
         double vy = kp_vy * (contourX - cam_offset);
-        double vx = base_speed;
 
         double omega1, omega2, omega3;
         kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
