@@ -121,31 +121,6 @@ public:
         }
     }
 
-    void slicePart(const cv::Mat& im, std::vector<Image>& images, int slices) {
-        int height = im.rows;
-        int width = im.cols;
-        int sliceHeight = height / slices;
-    
-        for (int i = 0; i < slices; i++) {
-            int startY = sliceHeight * i;
-            cv::Rect sliceRect(0, startY, width, sliceHeight);
-            images[i].image = im(sliceRect).clone();
-            images[i].detectAndDrawContour();
-        }
-    }
-    
-    void repackImages(const std::vector<Image>& images, cv::Mat& output) {
-        if (images.empty()) {
-            output.release();
-            return;
-        }
-    
-        output = images[0].image.clone();
-        for (size_t i = 1; i < images.size(); i++) {
-            cv::vconcat(output, images[i].image, output);
-        }
-    }
-
     Image() = default;
 };
 
