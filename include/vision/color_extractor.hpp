@@ -16,14 +16,14 @@ struct BlueHSV {
     static inline const cv::Scalar upper = cv::Scalar(140, 255, 255);
 };
 
-template<typename RGBColor>
+template<typename HSVColor>
 class ColorExtractor {
 public:
     ColorExtractor() = default;
     void extractColoredMask(const cv::Mat& image, cv::Mat &mask) {
         cv::Mat hsv_image;
         cv::cvtColor(image, hsv_image, cv::COLOR_BGR2HSV);
-        cv::inRange(hsv_image, RGBColor::lower, RGBColor::upper, mask);
+        cv::inRange(hsv_image, HSVColor::lower, HSVColor::upper, mask);
     }
 };
 

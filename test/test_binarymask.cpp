@@ -13,7 +13,6 @@ int main() {
     while (ch != 27) {
         vision.extrackRouteBinaryMap(binary_mask, timeout);
         vision.extractPath(binary_mask, pathImage);
-//        cv::imshow("Binary Mask", binary_mask);
         cv::imshow("Path with Centerline", pathImage);
         printf("end one waypoints.\n");
         ch = cv::waitKey(0);
