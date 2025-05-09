@@ -56,7 +56,7 @@ public:
         int ch = 0;
         while (ch != 27) {
             cam.getVideoFrame(image1, 1000);
-            vision.getOutputVision(frame, image2);
+            vision.getOutputVision(image1, image2);
             double contourX = vision.getCentroidXFirstSlices();
             cv::imshow("Processed", image2);
             ch = cv::waitKey(5);
