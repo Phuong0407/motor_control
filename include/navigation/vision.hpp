@@ -6,7 +6,7 @@
 #include <vector>
 #include <stdio.h>
 
-#define N_SLICES 1
+#define N_SLICES 4
 
 class Vision{
 private:
@@ -51,7 +51,10 @@ public:
     Vision() : slices(N_SLICES) {}
 
     void getOutputVision(const cv::Mat& input, cv::Mat& output) {
-        printf("enter get output vision\n");
+        if (input.empty()) {
+            std::cerr << "Input image is empty in getOutputVision()" << std::endl;
+            return;
+        }
         image_processor.image = input;
         image_processor.detectAndDrawContour();
         slicePart(input, slices, N_SLICES);
