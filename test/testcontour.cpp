@@ -21,7 +21,7 @@ int main() {
     if (ret_code)
         printf("[ERROR] Failed to initialize camera with error code: %d\n", ret_code);
     else
-        printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", frame_width, frame_height);
+        printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", 640, 480);
 
     while (true) {
         if (!cam.getVideoFrame(image, 1000)) {
