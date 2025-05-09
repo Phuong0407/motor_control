@@ -121,7 +121,7 @@ public:
         }
     }
 
-    void SlicePart(const cv::Mat& im, std::vector<Image>& images, int slices) {
+    void slicePart(const cv::Mat& im, std::vector<Image>& images, int slices) {
         int height = im.rows;
         int width = im.cols;
         int sliceHeight = height / slices;
@@ -134,7 +134,7 @@ public:
         }
     }
     
-    void RepackImages(const std::vector<Image>& images, cv::Mat& output) {
+    void repackImages(const std::vector<Image>& images, cv::Mat& output) {
         if (images.empty()) {
             output.release();
             return;

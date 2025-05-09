@@ -1,9 +1,4 @@
 #include "../include/vision/image_processor.hpp"
-#include <lccv.hpp>
-#include <opencv2/opencv.hpp>
-#include <iostream>
-
-#define N_SLICES 4
 
 int main() {
     lccv::PiCamera cam;
@@ -12,25 +7,23 @@ int main() {
     cam.options->framerate = 30;
     cam.options->verbose = true;
     cam.startVideo();
-
     cv::Mat image(480, 640, CV_8UC3);
-    cv::Mat processedImage;
+
+    ImageProcessor a;
     std::vector<Image> slices(N_SLICES);
 
     int ch = 0;
-
     while (ch != 27) {
+        
         if (!cam.getVideoFrame(image, 1000)) {
-            printf("[Error] Timeout error while grabbing frame.");
+            std::cout << "Timeout error while grabbing frame." << std::endl;
             continue;
         }
-
-        SlicePart(image, slices, N_SLICES);
+        a.image = image;
+        a.detectAndDrawContour();
+        a.slicePart(image, slices, N_SLICES);
         RepackImages(slices, processedImage);
         cv::imshow("Processed", processedImage);
         ch = cv::waitKey(5);
     }
-
-    cam.stopVideo();
-    return 0;
 }
