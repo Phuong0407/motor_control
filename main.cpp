@@ -1,3 +1,4 @@
+#define NOLOADED_RUN
 #include "./include/navigation/navigation.hpp"
 
 int main() {
