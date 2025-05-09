@@ -34,7 +34,6 @@ public:
 
     double compute(double ref, double curr) {
         double error = ref - curr;
-
         intgr += error * smpl_intv;
         double derivative = (error - prev_err) / smpl_intv;
         double output = (kp * error) + (ki * intgr) + (kd * derivative);
