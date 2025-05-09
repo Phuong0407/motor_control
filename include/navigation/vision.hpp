@@ -6,7 +6,7 @@
 #include <vector>
 #include <stdio.h>
 
-#define N_SLICES 4
+#define N_SLICES 1
 
 class Vision{
 private:
@@ -64,6 +64,10 @@ public:
             all_centroids.push_back(cv::Point(slice.contour_centerX, slice.middleY));
         }
         return all_centroids;
+    }
+
+    double getCentroidXFirstSlices() {
+        return slices[0].contour_centerX;
     }
 };
 
