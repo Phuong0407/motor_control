@@ -33,7 +33,7 @@ private:
         return 0.0;
     }
 
-    void correctMainContour(int prevCenterX) {
+    void correctmain_contour(int prevCenterX) {
         for (const auto& contour : contours) {
             cv::Point center = getContourCenter(contour);
             if (center.x != -1) {
@@ -67,7 +67,7 @@ public:
         cv::findContours(thresh, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 
         if (!contours.empty()) {
-            mainContour = *std::max_element(
+            main_contour = *std::max_element(
                                 contours.begin(),
                                 contours.end(),
                                 []( const std::vector<cv::Point>& a,
@@ -83,19 +83,19 @@ public:
             int middleY = height / 2;
 
             int prevCenterX = contour_centerX;
-            cv::Point center = getContourCenter(mainContour);
+            cv::Point center = getContourCenter(main_contour);
 
             if (center.x != -1) {
                 contour_centerX = center.x;
 
                 if (std::abs(prevCenterX - contour_centerX) > 5) {
-                    correctMainContour(prevCenterX);
+                    correctmain_contour(prevCenterX);
                 }
 
-                double extent = getContourExtent(mainContour);
+                double extent = getContourExtent(main_contour);
                 int direction = static_cast<int>((middleX - contour_centerX) * extent);
 
-                cv::drawContours(image, std::vector<std::vector<cv::Point>>{mainContour}, -1, cv::Scalar(0, 255, 0), 2);
+                cv::drawContours(image, std::vector<std::vector<cv::Point>>{main_contour}, -1, cv::Scalar(0, 255, 0), 2);
                 cv::circle(image, cv::Point(contour_centerX, middleY), 7, cv::Scalar(0, 255, 255), -1);
                 cv::circle(image, cv::Point(middleX, middleY), 3, cv::Scalar(0, 0, 255), -1);
 
