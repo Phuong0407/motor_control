@@ -10,7 +10,8 @@
 
 class Vision{
 private:
-    std::vector<Image> slices;
+    std::vector<Image> n_slices;
+    Image image_processor;
 
     cv::Point Center(cv::Moments moments) {
         if (moments.m00 == 0) {
@@ -21,12 +22,12 @@ private:
         return cv::Point(x, y);
     }
 
-    void slicePart(const cv::Mat& im, std::vector<Image>& images, int slices) {
+    void slicePart(const cv::Mat& im, std::vector<Image>& images, int n_slices) {
         int height = im.rows;
         int width = im.cols;
-        int sliceHeight = height / slices;
+        int sliceHeight = height / n_slices;
     
-        for (int i = 0; i < slices; i++) {
+        for (int i = 0; i < n_slices; i++) {
             int startY = sliceHeight * i;
             cv::Rect sliceRect(0, startY, width, sliceHeight);
             images[i].image = im(sliceRect).clone();
@@ -47,10 +48,22 @@ private:
     }
 
 public:
-    Vision() : slices(N_SLICES)
-    {}
+    Vision() : n_slices(N_SLICES) {}
 
-    void getOutputVision()
+    void getOutputVision(const cv::Mat& input, cv::Mat& output) {
+        image_processor = input;
+        image_processor.detectAndDrawContour();
+        slicePart(input, n_slices, N_SLICES);
+        repackImages(slices, output);
+    }
+
+    std::vector<cv::Point> getAllCentroids() {
+        std::vector<cv::Point> all_centroids;
+        for (const auto& slice : n_slices) {
+            all_centroids.insert(allCentroids.end(), slice.centroids.begin(), slice.centroids.end());
+        }
+        return all_centroids;
+    }
 };
 
 
