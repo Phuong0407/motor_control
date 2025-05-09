@@ -16,8 +16,8 @@ include_directories(
 )
 
 add_executable(
-    test_imageprocessor
-    ${CMAKE_SOURCE_DIR}/test/test_imageprocessor.cpp
+    test_vision
+    ${CMAKE_SOURCE_DIR}/test/test_vision.cpp
 )
 
 add_executable(
@@ -25,5 +25,5 @@ add_executable(
     ${CMAKE_SOURCE_DIR}/test/test_motor.cpp
 )
 
-target_link_libraries(test_imageprocessor -llccv ${OpenCV_LIBS})
+target_link_libraries(test_vision -llccv ${OpenCV_LIBS})
 target_link_libraries(test_motor -lwiringPi)
