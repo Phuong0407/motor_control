@@ -72,7 +72,7 @@ public:
 
         cv::Mat bin_mask;
         extractBinaryMask(image, bin_mask);
-        cv::findContour(bin_mask, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+        cv::findContours(bin_mask, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 
         prev_MC = main_contour;
         if (!contours.empty()) {
