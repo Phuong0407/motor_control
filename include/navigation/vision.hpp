@@ -48,7 +48,7 @@ private:
     }
 
 public:
-    Vision() : n_slices(N_SLICES) {}
+    Vision() : slices(N_SLICES) {}
 
     void getOutputVision(const cv::Mat& input, cv::Mat& output) {
         image_processor.image = input;
