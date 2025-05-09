@@ -17,6 +17,7 @@ int main() {
     while (ch != 27) {
         cam.getVideoFrame(image1, 1000);
         naviation.navigate(image1);
+        cv::imshow("Processed", image1);
         ch = cv::waitKey(5);
     }
 }
