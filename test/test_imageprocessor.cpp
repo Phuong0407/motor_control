@@ -22,8 +22,8 @@ int main() {
         a.image = image;
         a.detectAndDrawContour();
         a.slicePart(image, slices, N_SLICES);
-        RepackImages(slices, processedImage);
-        cv::imshow("Processed", processedImage);
+        a.repackImages(slices, image);
+        cv::imshow("Processed", image);
         ch = cv::waitKey(5);
     }
 }
