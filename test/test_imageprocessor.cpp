@@ -9,7 +9,7 @@ int main() {
     cam.startVideo();
     cv::Mat image(480, 640, CV_8UC3);
 
-    ImageProcessor a;
+    Image a;
     std::vector<Image> slices(N_SLICES);
 
     int ch = 0;
