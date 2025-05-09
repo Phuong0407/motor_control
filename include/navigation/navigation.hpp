@@ -40,7 +40,9 @@ public:
     // orientation_omega(kp_omega, 0.0, 0.0, 10.0, 2.0),
     kinemator(L1, L2, r),
     motor(2.0, 0.01, 0.5, 0.1, 0.7 * 0.5 / 0.1, 0x0f, 0x0d)
-    {}
+    {
+        vision;
+    }
 
     void navigate() {
         lccv::PiCamera cam;
