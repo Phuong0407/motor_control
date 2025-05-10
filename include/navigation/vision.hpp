@@ -51,10 +51,6 @@ public:
     Vision() : slices(N_SLICES) {}
 
     void getOutputVision(const cv::Mat& input, cv::Mat& output) {
-        if (input.empty()) {
-            std::cerr << "Input image is empty in getOutputVision()" << std::endl;
-            return;
-        }
         image_processor.image = input;
         image_processor.detectAndDrawContour();
         slicePart(input, slices, N_SLICES);
@@ -70,8 +66,11 @@ public:
         return all_centroids;
     }
 
-    double getCentroidXFirstSlices() {
-        return slices[0].contour_centerX;
+    double getAvgCentroids() {
+        double centroids = 0.0;
+        for (const auto& slice : slices)
+            centroids += slice.contour_centerX;
+        return centroids;
     }
 };
 
