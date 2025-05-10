@@ -123,13 +123,6 @@ public:
             setLeftRightMotorNormalized(norm_rps1, norm_rps2);
             setFrontMotorNormalized(norm_rps3);
 
-            printf(
-                "Measured RPS: %.3f\t%.3f\t%.3f\t"
-                "Computed RPS: %.3f\t%.3f\t%.3f\n",
-                omega1, omega2, omega3,
-                norm_rps1 * MAX_RPS, norm_rps2 * MAX_RPS, norm_rps3 * MAX_RPS
-            );
-
             bool stable = (lerror < l_thresh) && (rerror < r_thresh) && (ferror < f_thresh);
             if (stable) {
                 stable_cycle_count++;
@@ -140,10 +133,7 @@ public:
             auto current_time = std::chrono::steady_clock::now();
             double elapsed_time = std::chrono::duration<double>(current_time - start_time).count();
     
-            if (stable_cycle_count >= STABLE_CYCLES_REQUIRED) {
-                printf("[INFO] Motor control stabilized after %.10f seconds.\n", elapsed_time);
-                break;
-            }
+            if (stable_cycle_count >= STABLE_CYCLES_REQUIRED) break;
             if (elapsed_time >= timeout_seconds) {
                 printf("[WARNING] Motor control timed out after %.1f seconds.\n", timeout_seconds);
                 break;
