@@ -50,7 +50,7 @@ public:
 
 
     void updateCounter() {
-        volatile int64_t current_time = micros();
+        uint64_t current_time = micros();
         if ((current_time - last_time) >= DEBOUNCE_TIME_US) {
             bool H2_STATE = digitalRead(H2);
             counter += (H2_STATE ? 1 : -1); 
