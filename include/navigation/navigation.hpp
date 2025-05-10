@@ -4,6 +4,7 @@
 #include "vision.hpp"
 #include "kinematic_model.hpp"
 #include "../motor/motor.hpp"
+
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
 #include <vector>
