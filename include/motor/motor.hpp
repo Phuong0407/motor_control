@@ -123,6 +123,13 @@ public:
             setLeftRightMotorNormalized(norm_rps1, norm_rps2);
             setFrontMotorNormalized(norm_rps3);
 
+            printf(
+                "Measured RPS: %.3f\t%.3f\t%.3f\t"
+                "Computed RPS: %.3f\t%.3f\t%.3f\n",
+                omega1, omega2, omega3,
+                norm_rps1 * MAX_RPS, norm_rps2 * MAX_RPS, norm_rps3 * MAX_RPS
+            );    
+
             bool stable = (lerror < l_thresh) && (rerror < r_thresh) && (ferror < f_thresh);
             if (stable) {
                 stable_cycle_count++;
