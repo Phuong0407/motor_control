@@ -5,15 +5,13 @@
 #include <wiringPiI2C.h>
 
 #include <memory>
-#include <stdexcept>
-#include <iostream>
+#include <stdio.h>
 #include <vector>
-#include <string>
 
-constexpr int NUM_ENCODERS              = 3;
-static constexpr double COUNTER_PER_REV = 144.0;
-static constexpr double ANGLE_PER_TICK  = 2.5;
-static constexpr uint32_t DEBOUNCE_TIME_US = 828;
+constexpr int NUM_ENCODERS                  = 3;
+static constexpr double COUNTER_PER_REV     = 144.0;
+static constexpr double ANGLE_PER_TICK      = 2.5;
+static constexpr uint32_t DEBOUNCE_TIME_US  = 828;
 
 class MotorEncoder {
 private:
