@@ -141,7 +141,7 @@ public:
             double elapsed_time = std::chrono::duration<double>(current_time - start_time).count();
     
             if (stable_cycle_count >= STABLE_CYCLES_REQUIRED) {
-                printf("[INFO] Motor control stabilized after %.1f seconds.\n", elapsed_time);
+                printf("[INFO] Motor control stabilized after %.10f seconds.\n", elapsed_time);
                 break;
             }
             if (elapsed_time >= timeout_seconds) {
