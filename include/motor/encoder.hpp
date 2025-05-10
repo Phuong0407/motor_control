@@ -16,7 +16,7 @@ static constexpr uint64_t DEBOUNCE_TIME_US  = 900;
 class MotorEncoder {
 private:
     int H1, H2;
-    volatile int64_t counter, last_time;
+    volatile int64_t counter;
 
     void initEncoder(int i2c_addr) {
         if (wiringPiSetup() == -1) {
@@ -43,19 +43,15 @@ private:
 
 public:
     MotorEncoder(int H1, int H2, int i2c_addr = 0x0f) :
-    H1(H1), H2(H2), counter(0), last_time(0)
+    H1(H1), H2(H2), counter(0)
     {
         initEncoder(i2c_addr);
     }
 
 
     void updateCounter() {
-        uint64_t current_time = micros();
-        if ((current_time - last_time) >= DEBOUNCE_TIME_US) {
-            bool H2_STATE = digitalRead(H2);
-            counter += (H2_STATE ? 1 : -1); 
-            last_time = current_time;
-        }
+        bool H2_STATE = digitalRead(H2);
+        counter += (H2_STATE ? 1 : -1); 
     }
 
     void resetCounter() {
