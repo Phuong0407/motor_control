@@ -12,6 +12,7 @@ class Image {
 private:
     ColorExtractor<RedHSV>  red_extractor;
     ColorExtractor<BlueHSV> blue_extractor;
+    ColorExtractor<YellowHSV> yellow_extractor;
 
     cv::Point getContourCenter(const std::vector<cv::Point>& contour) {
         cv::Moments M = cv::moments(contour);
@@ -47,10 +48,11 @@ private:
     }
 
     void extractBinaryMask(const cv::Mat &image, cv::Mat &bin_mask) {
-        cv::Mat red_mask, blue_mask;
+        cv::Mat red_mask, blue_mask, yellow_mask;
         red_extractor.extractColoredMask(image, red_mask);
         blue_extractor.extractColoredMask(image, blue_mask);
-        bin_mask = red_mask | blue_mask;
+        blue_extractor.extractColoredMask(image, yellow_mask);
+        bin_mask = red_mask | blue_mask | yellow_mask;
     }
 
 public:

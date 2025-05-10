@@ -16,6 +16,11 @@ struct BlueHSV {
     static inline const cv::Scalar upper = cv::Scalar(140, 255, 255);
 };
 
+struct YellowHSV {
+    static inline const cv::Scalar lower = cv::Scalar(150, 100, 127);
+    static inline const cv::Scalar upper = cv::Scalar(160, 255, 217);
+};
+
 template<typename HSVColor>
 class ColorExtractor {
 public:
