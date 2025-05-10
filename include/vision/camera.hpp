@@ -56,6 +56,8 @@ public:
         return true;
     }
 
+    inline int getVideoWidth() const { return cam.options->video_width; }
+    inline int getVideoHeight() const { return cam.options->video_height; }
 };
 
 #endif // CAMERA_HPP
