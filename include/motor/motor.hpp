@@ -140,7 +140,10 @@ public:
             auto current_time = std::chrono::steady_clock::now();
             double elapsed_time = std::chrono::duration<double>(current_time - start_time).count();
     
-            if (stable_cycle_count >= STABLE_CYCLES_REQUIRED) break;
+            if (stable_cycle_count >= STABLE_CYCLES_REQUIRED) {
+                printf("[INFO] Motor control stabilized after %.1f seconds.\n", elapsed_time);
+                break;
+            }
             if (elapsed_time >= timeout_seconds) {
                 printf("[WARNING] Motor control timed out after %.1f seconds.\n", timeout_seconds);
                 break;
