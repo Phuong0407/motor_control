@@ -101,14 +101,14 @@ public:
         double ref_rps3,
         double timeout_seconds
     ) {
-        double lerror = 0.0, rerror = 0.0, ferror = 0.0;
-        int stable_cycle_count = 0;
-        constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
         constexpr double MIN_ERROR_RPS = 0.08;
+        constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
         constexpr int STABLE_CYCLES_REQUIRED = 5;
-
+        int stable_cycle_count = 0;
+        
+        double lerror = 0.0, rerror = 0.0, ferror = 0.0;
+        
         uint64_t start_time = millis();
-    
         while (true) {
             uint64_t loop_start = millis();
             double omega1, omega2, omega3;
@@ -122,23 +122,19 @@ public:
             double r_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps2), MIN_ERROR_RPS);
             double f_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps3), MIN_ERROR_RPS);
     
-            bool need_control_left = (lerror >= l_thresh);
-            bool need_control_right = (rerror >= r_thresh);
-            bool need_control_front = (ferror >= f_thresh);
-    
-            double norm_rps1 = need_control_left ? pid1.compute(ref_rps1 / MAX_RPS, omega1 / MAX_RPS) : omega1 / MAX_RPS;
-            double norm_rps2 = need_control_right ? pid2.compute(ref_rps2 / MAX_RPS, omega2 / MAX_RPS) : omega2 / MAX_RPS;
-            double norm_rps3 = need_control_front ? pid3.compute(ref_rps3 / MAX_RPS, omega3 / MAX_RPS) : omega3 / MAX_RPS;
+            double norm_rps1 = (lerror >= l_thresh) ? pid1.compute(ref_rps1 / MAX_RPS, omega1 / MAX_RPS) : omega1 / MAX_RPS;
+            double norm_rps2 = (rerror >= r_thresh) ? pid2.compute(ref_rps2 / MAX_RPS, omega2 / MAX_RPS) : omega2 / MAX_RPS;
+            double norm_rps3 = (ferror >= f_thresh) ? pid3.compute(ref_rps3 / MAX_RPS, omega3 / MAX_RPS) : omega3 / MAX_RPS;
     
             setLeftRightMotorNormalized(norm_rps1, norm_rps2);
             setFrontMotorNormalized(norm_rps3);
         
-            printf(
-                "Measured RPS: %.3f\t%.3f\t%.3f\t"
-                "Computed RPS: %.3f\t%.3f\t%.3f\n",
-                omega1, omega2, omega3,
-                norm_rps1 * MAX_RPS, norm_rps2 * MAX_RPS, norm_rps3 * MAX_RPS
-            );
+            // printf(
+            //     "Measured RPS: %.3f\t%.3f\t%.3f\t"
+            //     "Computed RPS: %.3f\t%.3f\t%.3f\n",
+            //     omega1, omega2, omega3,
+            //     norm_rps1 * MAX_RPS, norm_rps2 * MAX_RPS, norm_rps3 * MAX_RPS
+            // );
     
             bool stable = (lerror < l_thresh) && (rerror < r_thresh) && (ferror < f_thresh);
     
