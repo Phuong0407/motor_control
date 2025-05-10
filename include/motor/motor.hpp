@@ -82,7 +82,7 @@ public:
         double ref_rps1,
         double ref_rps2,
         double ref_rps3,
-        double timeout_seconds = 2.0
+        double timeout_seconds
     )
     {
         constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
