@@ -116,13 +116,20 @@ public:
             double omega_norm2 = omega2 / MAX_RPS;
             double omega_norm3 = omega3 / MAX_RPS;
     
-            double norm_rps1 = (lerror >= l_thresh) ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
-            double norm_rps2 = (rerror >= r_thresh) ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
-            double norm_rps3 = (ferror >= f_thresh) ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
+            bool need_control_left = (lerror >= l_thresh);
+            bool need_control_right = (rerror >= r_thresh);
+            bool need_control_front = (ferror >= f_thresh);
 
-            setLeftRightMotorNormalized(norm_rps1, norm_rps2);
-            setFrontMotorNormalized(norm_rps3);
+            double norm_rps1 = need_control_left ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
+            double norm_rps2 = need_control_right ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
+            double norm_rps3 = need_control_front ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
 
+            if (need_control_left || need_control_right)
+                setLeftRightMotorNormalized(norm_rps1, norm_rps2);
+            
+            if (need_control_front)
+                setFrontMotorNormalized(norm_rps3);
+        
             printf(
                 "Measured RPS: %.3f\t%.3f\t%.3f\t"
                 "Computed RPS: %.3f\t%.3f\t%.3f\n",
