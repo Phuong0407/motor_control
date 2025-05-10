@@ -57,17 +57,17 @@ public:
 
         int ch = 0;
         while (ch != 27) {
-            cam.getVideoFrame(image1, 1000);
-            vision.getOutputVision(image1, image2);
-            double contourX = vision.getCentroidXFirstSlices();
-            cv::imshow("Raw", image1);
-            cv::imshow("Processed", image2);
-            ch = cv::waitKey(5);
-            printf("x = %f", contourX);
-            double vy = kp_vy * (contourX - cam_offset);
+            // cam.getVideoFrame(image1, 1000);
+            // vision.getOutputVision(image1, image2);
+            // double contourX = vision.getCentroidXFirstSlices();
+            // cv::imshow("Raw", image1);
+            // cv::imshow("Processed", image2);
+            // ch = cv::waitKey(5);
+            // printf("x = %f", contourX);
+            // double vy = kp_vy * (contourX - cam_offset);
     
-            double omega1, omega2, omega3;
-            kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
+            // double omega1, omega2, omega3;
+            // kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, 0.0, omega1, omega2, omega3);
             motor.controlAngularVelocity(0.625, 0.625, 0.625, 1.0);
         }
     }
