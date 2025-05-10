@@ -8,7 +8,7 @@
 #include <chrono>
 #include <thread>
 #include <algorithm>
-#include <iostream>
+#include <stdio.h>
 #include <iomanip>
 #include <fstream>
 
@@ -81,65 +81,68 @@ public:
     void controlAngularVelocity(
         double ref_rps1,
         double ref_rps2,
-        double ref_rps3
+        double ref_rps3,
+        double timeout_seconds = 2.0
     )
     {
         constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
         constexpr double MIN_ERROR_RPS = 0.08;
         constexpr int STABLE_CYCLES_REQUIRED = 5;
-        int stable_cycle_count = 0;
+        
         double lerror = 0.0, rerror = 0.0, ferror = 0.0;
+        int stable_cycle_count = 0;
+        
+        auto start_time = std::chrono::steady_clock::now();
     
         while (true) {
-            auto start = std::chrono::steady_clock::now();
-    
+            auto loop_start = std::chrono::steady_clock::now();
+            
             double omega1, omega2, omega3;
             measureAngularVelocity(omega1, omega2, omega3, smpl_intv);
     
             lerror = std::abs(ref_rps1 - omega1);
             rerror = std::abs(ref_rps2 - omega2);
             ferror = std::abs(ref_rps3 - omega3);
-   
+        
             double l_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps1), MIN_ERROR_RPS);
             double r_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps2), MIN_ERROR_RPS);
             double f_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps3), MIN_ERROR_RPS);
-
+        
             double ref_norm1 = ref_rps1 / MAX_RPS;
             double ref_norm2 = ref_rps2 / MAX_RPS;
             double ref_norm3 = ref_rps3 / MAX_RPS;
-    
+        
             double omega_norm1 = omega1 / MAX_RPS;
             double omega_norm2 = omega2 / MAX_RPS;
             double omega_norm3 = omega3 / MAX_RPS;
     
-            double norm_rps1 = lerror >= l_thresh ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
-            double norm_rps2 = rerror >= r_thresh ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
-            double norm_rps3 = ferror >= f_thresh ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
-
-            std::cout << std::fixed << std::setprecision(3)
-                      << "measured rps" << "\t" << omega1 << "\t" << omega2 << "\t"
-                      << "computed rps" << "\t" << norm_rps1 << "\t" << norm_rps2 << "\t"
-                      << "error " << lerror / ref_rps1 * 100.0 << "%" << "\t"
-                      << rerror / ref_rps2 * 100.0 << "%" << "\n";
+            double norm_rps1 = (lerror >= l_thresh) ? pid1.compute(ref_norm1, omega_norm1) : omega_norm1;
+            double norm_rps2 = (rerror >= r_thresh) ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
+            double norm_rps3 = (ferror >= f_thresh) ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
 
             setLeftRightMotorNormalized(norm_rps1, norm_rps2);
             setFrontMotorNormalized(norm_rps3);
-    
-            bool stable =   lerror < l_thresh && 
-                            rerror < r_thresh &&
-                            ferror < f_thresh;
-    
-            if (stable)
+
+            bool stable = (lerror < l_thresh) && (rerror < r_thresh) && (ferror < f_thresh);
+            if (stable) {
                 stable_cycle_count++;
-            else
+            } else {
                 stable_cycle_count = 0;
+            }
     
-            if (stable_cycle_count >= STABLE_CYCLES_REQUIRED)
+            auto current_time = std::chrono::steady_clock::now();
+            double elapsed_time = std::chrono::duration<double>(current_time - start_time).count();
+    
+            if (stable_cycle_count >= STABLE_CYCLES_REQUIRED) {
+                printf("[INFO] Motor control stabilized after %.1f seconds.\n", elapsed_time);
                 break;
-    
-            std::this_thread::sleep_until(start + std::chrono::duration<double>(smpl_intv));
+            }
+            if (elapsed_time >= timeout_seconds) {
+                printf("[WARNING] Motor control timed out after %.1f seconds.\n", timeout_seconds);
+                break;
+            }
         }
-    }
+    }    
 
     void measureAngularVelocity(double &omega1, double &omega2, double &omega3, double smpl_itv) {
         int64_t prev_ticks0, prev_ticks1, prev_ticks2;
@@ -158,10 +161,6 @@ public:
         omega1 = static_cast<double>(prev_ticks0 - curr_ticks0) / smpl_itv / COUNTER_PER_REV;
         omega2 = static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv / COUNTER_PER_REV;
         omega3 = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv / COUNTER_PER_REV;
-
-        std::ofstream outFile("omega_output.txt", std::ios::app);
-        outFile     << std::setprecision(3) << omega1 << "\t" << omega2 << "\t" << omega3 << "\n";
-        outFile.close();
     }
 
     void set_motor_pwm(int pwm1, int pwm2, int pwm3) {
