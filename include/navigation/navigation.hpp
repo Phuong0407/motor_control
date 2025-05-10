@@ -51,11 +51,11 @@ public:
         int ch = 0;
         while (ch != 27) {
             cam.getVideoFrame(frame, 1000);
-            double avg_centroids = vision.getCentroids();
+            double avg_centroids = vision.getAvgCentroids();
             cv::imshow("Processed Frame", frame);
             ch = cv::waitKey(5);
             
-            double y_error = avg_centroid_x - cam_offset;
+            double y_error = avg_centroids - cam_offset;
             double vy = kp_vy * y_error;
             double omega = kp_omega * y_error;
 
