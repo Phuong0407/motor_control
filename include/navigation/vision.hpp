@@ -16,7 +16,7 @@ private:
     cv::Point Center(cv::Moments moments) {
         if (moments.m00 == 0) {
             return cv::Point(0, 0);
-        }   
+        }
         int x = static_cast<int>(moments.m10 / moments.m00);
         int y = static_cast<int>(moments.m01 / moments.m00);
         return cv::Point(x, y);
@@ -26,7 +26,6 @@ private:
         int height = im.rows;
         int width = im.cols;
         int sliceHeight = height / n_slices;
-    
         for (int i = 0; i < n_slices; i++) {
             int startY = sliceHeight * i;
             cv::Rect sliceRect(0, startY, width, sliceHeight);
@@ -36,15 +35,9 @@ private:
     }
     
     void repackImages(const std::vector<Image>& images, cv::Mat& output) {
-        if (images.empty()) {
-            output.release();
-            return;
-        }
-    
         output = images[0].image.clone();
-        for (size_t i = 1; i < images.size(); i++) {
+        for (size_t i = 1; i < images.size(); i++)
             cv::vconcat(output, images[i].image, output);
-        }
     }
 
 public:
@@ -57,13 +50,18 @@ public:
         repackImages(slices, output);
     }
 
-    std::vector<cv::Point> getAllCentroids() {
-        std::vector<cv::Point> all_centroids;
-        all_centroids.reserve(N_SLICES);
+    std::vector<cv::Point> getCentroidPoints() {
+        std::vector<cv::Point> centroid_points;
+        centroid_points.reserve(N_SLICES);
+        printf("\nPRINT CENTROIDS\n");
         for (const auto& slice : slices) {
-            all_centroids.push_back(cv::Point(slice.contour_centerX, slice.middleY));
+            int x_centroid = slice.contour_centerX;
+            int y_centroid = slice.middleY;
+            centroid_points.emplace_back(x_centroid, y_centroid);
+            print("(%d,\t%d)\t", x_centroid, y_centroid);
         }
-        return all_centroids;
+        printf("\n");
+        return centroid_points;
     }
 
     double getAvgCentroids() {
