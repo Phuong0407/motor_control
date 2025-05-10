@@ -124,11 +124,8 @@ public:
             double norm_rps2 = need_control_right ? pid2.compute(ref_norm2, omega_norm2) : omega_norm2;
             double norm_rps3 = need_control_front ? pid3.compute(ref_norm3, omega_norm3) : omega_norm3;
 
-            if (need_control_left || need_control_right)
-                setLeftRightMotorNormalized(norm_rps1, norm_rps2);
-            
-            if (need_control_front)
-                setFrontMotorNormalized(norm_rps3);
+            setLeftRightMotorNormalized(norm_rps1, norm_rps2);
+            setFrontMotorNormalized(norm_rps3);
         
             printf(
                 "Measured RPS: %.3f\t%.3f\t%.3f\t"
