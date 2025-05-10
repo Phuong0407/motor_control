@@ -2,6 +2,6 @@
 #include "./include/navigation/navigation.hpp"
 
 int main() {
-    Navigation naviation(1.0, 2.0, 0.08, 0.08, 0.05, 0.02);
+    Navigation naviation(0.1155, 0.1155, 0.026, 0.0215, 1.0, 2.0, 2.0, );
     naviation.navigate();
 }

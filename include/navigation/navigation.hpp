@@ -29,7 +29,7 @@ public:
         
         double vx,
         double kp_vy,
-        double kp_omega,
+        double kp_omega
     ) :
     vx(vx),
     kp_vy(kp_vy),
