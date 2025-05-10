@@ -39,12 +39,11 @@ public:
     motor(2.0, 0.01, 0.5, 0.1, 0.7 * 0.5 / 0.1, 0x0f, 0x0d)
     {}
 
-    double calculateAverageCentroidX(const std::vector<cv::Point>& centroids) {
-        if (centroids.empty()) return cam_offset;
-        double sum_x = std::accumulate(centroids.begin(), centroids.end(), 0.0,
-                                       [](double sum, const cv::Point& pt) {
-                                           return sum + pt.x;
-                                       });
+    double calculateAverageCentroidX(const std::vector<double>& centroids) {
+        if (centroids.empty())
+            return x_ref;
+
+        double sum_x = std::accumulate(centroids.begin(), centroids.end(), 0.0);
         return sum_x / centroids.size();
     }
 
@@ -59,7 +58,7 @@ public:
         int ch = 0;
         while (ch != 27) {
             cam.getVideoFrame(frame, 1000);
-            std::vector<cv::Point> centroids = vision.getCentroids();
+            std::vector<double> centroids = vision.getCentroids();
             cv::imshow("Processed Frame", frame);
             ch = cv::waitKey(5);
             
