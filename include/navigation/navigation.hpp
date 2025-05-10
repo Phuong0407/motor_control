@@ -39,14 +39,6 @@ public:
     motor(2.0, 0.01, 0.5, 0.1, 0.7 * 0.5 / 0.1, 0x0f, 0x0d)
     {}
 
-    double calculateAverageCentroidX(const std::vector<double>& centroids) {
-        if (centroids.empty())
-            return x_ref;
-
-        double sum_x = std::accumulate(centroids.begin(), centroids.end(), 0.0);
-        return sum_x / centroids.size();
-    }
-
     void followLine() {
         lccv::PiCamera cam;
         cam.options->video_width = 640;
@@ -58,11 +50,10 @@ public:
         int ch = 0;
         while (ch != 27) {
             cam.getVideoFrame(frame, 1000);
-            std::vector<double> centroids = vision.getCentroids();
+            double avg_centroids = vision.getCentroids();
             cv::imshow("Processed Frame", frame);
             ch = cv::waitKey(5);
             
-            double avg_centroid_x = calculateAverageCentroidX(centroids);
             double y_error = avg_centroid_x - cam_offset;
             double vy = kp_vy * y_error;
             double omega = kp_omega * y_error;
