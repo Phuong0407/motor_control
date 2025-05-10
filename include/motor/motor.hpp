@@ -152,15 +152,12 @@ public:
                 printf("[INFO] Motor control stabilized after %.1f seconds.\n", elapsed_time);
                 break;
             }
-    
             if (elapsed_time >= timeout_seconds) {
                 printf("[WARNING] Motor control timed out after %.1f seconds.\n", timeout_seconds);
                 break;
             }
     
-            int loop_duration = millis() - loop_start;
-            int remaining_delay = static_cast<int>(smpl_intv * 1000) - loop_duration;
-    
+            int remaining_delay = static_cast<int>(smpl_intv * 1000) - millis() + loop_start;
             if (remaining_delay > 0) {
                 delay(remaining_delay);
             }
