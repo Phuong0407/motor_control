@@ -70,7 +70,7 @@ public:
         double centroids = 0.0;
         for (const auto& slice : slices) {
             centroids += slice.contour_centerX;
-            printf("conoutr_centerX %.3f", slice.contour_centerX);
+            printf("contour_centerX %.3f\t", slice.contour_centerX);
         }
         printf("%d");
         return centroids;
