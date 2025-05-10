@@ -78,6 +78,8 @@ public:
         cv::bitwise_or(red_mask, blue_mask, mask);
         cv::bitwise_or(mask, yellow_mask, mask);
     }
+
+    BinaryMaskExtractor() = default;
 };
 
 #endif // IMAGE_PREPROCESSOR_HPP
