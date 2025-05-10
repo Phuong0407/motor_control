@@ -48,11 +48,16 @@ public:
         cam.startVideo();
 
         cv::Mat frame(480, 640, CV_8UC3);
+        cv::Mat image(480, 640, CV_8UC3);
+
         int ch = 0;
         while (ch != 27) {
             cam.getVideoFrame(frame, 1000);
+            vision.getOutputVision(frame, image);
             double avg_centroids = vision.getAvgCentroids();
-            cv::imshow("Processed Frame", frame);
+
+            cv::namedWindow("Processed Frame", cv::WINDOW_NORMAL);
+            cv::imshow("Processed Frame", image);
             ch = cv::waitKey(5);
             
             double y_error = avg_centroids - cam_offset;
@@ -64,6 +69,7 @@ public:
 
             double omega1, omega2, omega3;
             kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, omega, omega1, omega2, omega3);
+            printf("%.3f\t%.3f\t%.3f\n", omega1, omega2, omega3);
             motor.controlAngularVelocity(omega1, omega2, omega3, 20.0);
         }
         motor.stop_motor();
