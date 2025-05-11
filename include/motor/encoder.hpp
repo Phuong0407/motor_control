@@ -64,7 +64,12 @@ inline MotorEncoder* encoders[NUM_ENCODERS] = { nullptr };
 
 static void isr0() { if (encoders[0]) encoders[0]->updateCounter(); }
 static void isr1() { if (encoders[1]) encoders[1]->updateCounter(); }
-static void isr2() { if (encoders[2]) encoders[2]->updateCounter(); }
+static void isr2() {
+    if (encoders[2]) {
+        printf("[DEBUG] ISR for Motor 3 triggered. Current counter: %ld\n", encoders[2]->getCounter());        
+        encoders[2]->updateCounter();
+    }
+}
 
 typedef void (*IsrFunc)();
 static IsrFunc isr_functions[NUM_ENCODERS] = {
