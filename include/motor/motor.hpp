@@ -113,7 +113,10 @@ public:
             uint64_t loop_start = millis();
             double omega1, omega2, omega3;
             measureAngularVelocity(omega1, omega2, omega3, smpl_intv);
-    
+            printf(
+                "Measured RPS: %.3f\t%.3f\t%.3f\t",
+                omega1, omega2, omega3,
+            );
             lerror = std::abs(ref_rps1 - omega1);
             rerror = std::abs(ref_rps2 - omega2);
             ferror = std::abs(ref_rps3 - omega3);
