@@ -50,8 +50,7 @@ public:
 
 
     void updateCounter() {
-        bool H2_STATE = digitalRead(H2);
-        counter += (H2_STATE ? 1 : -1); 
+        digitalRead(H2) ? ++counter : --counter;
     }
 
     void resetCounter() {
