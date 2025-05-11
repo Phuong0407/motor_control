@@ -115,7 +115,7 @@ public:
             measureAngularVelocity(omega1, omega2, omega3, smpl_intv);
             printf(
                 "Measured RPS: %.3f\t%.3f\t%.3f\t",
-                omega1, omega2, omega3,
+                omega1, omega2, omega3
             );
             lerror = std::abs(ref_rps1 - omega1);
             rerror = std::abs(ref_rps2 - omega2);
