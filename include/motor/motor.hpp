@@ -65,8 +65,8 @@ void initEncoder(int i2c_addr, int H1, int H2, int &i2c_fd) {
     printf("[INFO] Encoder initialized on pins H1 = %d, H2 = %d.\n", H1, H2);
 }
 
-void updateCounter1() { digitalRead(MOTOR1_H2) ? ++counter1 : --counter1; }
-void updateCounter2() { digitalRead(MOTOR2_H2) ? ++counter2 : --counter2; }
+void updateCounter1() { printf("enter encoder 1\n."); digitalRead(MOTOR1_H2) ? ++counter1 : --counter1; }
+void updateCounter2() { printf("enter encoder 2\n."); digitalRead(MOTOR2_H2) ? ++counter2 : --counter2; }
 void updateCounter3() { printf("enter encoder 3\n."); digitalRead(MOTOR3_H2) ? ++counter3 : --counter3; }
 
 void getTicks(int64_t &ticks1, int64_t &ticks2, int64_t &ticks3) {
