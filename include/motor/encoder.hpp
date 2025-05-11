@@ -74,7 +74,7 @@ static IsrFunc isr_functions[NUM_ENCODERS] = {
 static const int encoder_pin_table[NUM_ENCODERS][2] = {
     {21, 22},
     {3 , 4 },
-    {27, 0 },
+    {27, 0 }
 };
 
 inline void declareEncoders(int driver1_addr, int driver2_addr) {
