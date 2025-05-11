@@ -69,9 +69,9 @@ public:
         int driver2_addr
     ) :
     smpl_intv(smpl_intv),
-    pid1(kp, kd, ki, MAX_RPS, cutoff_freq, smpl_intv),
-    pid2(kp, kd, ki, MAX_RPS, cutoff_freq, smpl_intv),
-    pid3(kp, kd, ki, MAX_RPS, cutoff_freq, smpl_intv)
+    pid1(kp, kd, ki, 1.0, cutoff_freq, smpl_intv),
+    pid2(kp, kd, ki, 1.0, cutoff_freq, smpl_intv),
+    pid3(kp, kd, ki, 1.0, cutoff_freq, smpl_intv)
     {
         declareEncoders(driver1_addr, driver2_addr);
         attachEncoderInterrupts();
