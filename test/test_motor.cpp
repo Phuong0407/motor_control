@@ -3,7 +3,7 @@
 #include <iostream>
 
 int main(int argc, char* argv[]) {
-    if (argc < 5)
+    if (argc < 3)
         return 0;
     
     double omega1 = std::stod(argv[1]);
