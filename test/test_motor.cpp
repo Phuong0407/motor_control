@@ -9,6 +9,8 @@ int main(int argc, char* argv[]) {
     double omega1 = std::stod(argv[1]);
     double omega2 = std::stod(argv[2]);
     double omega3 = std::stod(argv[3]);
+    
+    startEncoders();
     controlAngularVelocity(0.625, 0.625, 0.625);
     stop_motor();
     return 0;
