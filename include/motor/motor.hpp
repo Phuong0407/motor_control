@@ -1,3 +1,8 @@
+/**
+ * @file motor.hpp
+ * @brief measure rps, PID, and motor commands.
+ */
+
 #ifndef MOTOR_CONTROL_HPP
 #define MOTOR_CONTROL_HPP
 
@@ -9,6 +14,10 @@
 #include <vector>
 #include <stdio.h>
 
+
+/**
+ * @brief calibration result
+ */
 #ifdef NOLOADED_RUN
 #define MAX_RPS 0.8681
 #else // LOADED_RUN
@@ -29,9 +38,13 @@ int i2c_fd2;
 #ifndef ENCODER_PARAMETER
 #define ENCODER_PARAMETER
 
-static constexpr int    NUM_ENCODERS    = 3;
 static constexpr double COUNTER_PER_REV = 144.0;
 
+/**
+ * @brief Dock      D5          D24             D16
+ * @brief BCM       5   6       24      25      16      17
+ * @brief wPi       21  22      3       4       27      0
+ */
 static constexpr int MOTOR1_H1 = 21;
 static constexpr int MOTOR1_H2 = 22;
 
@@ -65,9 +78,9 @@ void initEncoder(int i2c_addr, int H1, int H2, int &i2c_fd) {
     printf("[INFO] Encoder initialized on pins H1 = %d, H2 = %d.\n", H1, H2);
 }
 
-void updateCounter1() { printf("enter encoder 1\n."); digitalRead(MOTOR1_H2) ? ++counter1 : --counter1; }
-void updateCounter2() { printf("enter encoder 2\n."); digitalRead(MOTOR2_H2) ? ++counter2 : --counter2; }
-void updateCounter3() { printf("enter encoder 3\n."); digitalRead(MOTOR3_H2) ? ++counter3 : --counter3; }
+void updateCounter1() { digitalRead(MOTOR1_H2) ? ++counter1 : --counter1; }
+void updateCounter2() { digitalRead(MOTOR2_H2) ? ++counter2 : --counter2; }
+void updateCounter3() { digitalRead(MOTOR3_H2) ? ++counter3 : --counter3; }
 
 void getTicks(int64_t &ticks1, int64_t &ticks2, int64_t &ticks3) {
     ticks1 = counter1; ticks2 = counter2; ticks3 = counter3;
@@ -96,6 +109,14 @@ void startEncoders() {
     attachEncoderInterrupts();
 }
 
+
+/**
+ * @brief Measures angular velocity for all motors.
+ * @param omega1 Reference to store angular velocity for motor 1.
+ * @param omega2 Reference to store angular velocity for motor 2.
+ * @param omega3 Reference to store angular velocity for motor 3.
+ * @param smpl_itv Sampling interval in seconds.
+ */
 void measureAngularVelocity(double &omega1, double &omega2, double &omega3, double smpl_itv) {
     int64_t prev_ticks1, prev_ticks2, prev_ticks3;
     int64_t curr_ticks1, curr_ticks2, curr_ticks3;
