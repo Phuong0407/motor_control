@@ -4,7 +4,12 @@
 volatile int count = 0;
 
 void testISR() {
-    count++;
+    if (digitalRead(0)) {
+        count++;
+    } else {
+        count--;
+    }
+
     printf("Interrupt Triggered! Count: %d\n", count);
 }
 
