@@ -18,27 +18,24 @@ public:
         double omega1,
         double omega2,
         double omega3,
-        double &vx,
-        double &vy,
+        double &v,
         double &omega
     )
     {
-        vx = (r / 2.0) * (omega1 + omega2);
-        vy = r * omega3;
-        omega = (r / (L1 + L2)) * (-omega1 + omega2);
+        v = (r / 2.0) * (omega1 + omega2);
+        omega = omega * L2 / r;
     }
     inline void computeWheelVelocityFromRobotVelocity(
-        double vx,
-        double vy,
+        double v,
         double omega,
         double &omega1,
         double &omega2,
         double &omega3
     )
     {
-        omega1 = (1.0 / r) * (vx - L1 * omega);
-        omega2 = (1.0 / r) * (vx + L2 * omega);
-        omega3 = (1.0 / r) * vy;
+        omega1 = (1.0 / r) * (v - L1 * omega);
+        omega2 = (1.0 / r) * (v + L1 * omega);
+        omega3 = (1.0 / r) * omega * L2;
     }
 };
 
