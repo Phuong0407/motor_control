@@ -1,5 +1,5 @@
-#ifndef IMAGE_POSTPROCESSOR_HPP
-#define IMAGE_POSTPROCESSOR_HPP
+#ifndef IMAGE_PROCESSOR_HPP
+#define IMAGE_PROCESSOR_HPP
 
 #include "contour_analyzer.hpp"
 
@@ -7,12 +7,12 @@
 #include <vector>
 
 /**
- * @class ImagePostprocessor
+ * @class ImageProcessor
  * @brief Processes an image to produce multiple vertical slices.
  * @tparam n_slices Number of vertical slices to divide the image into. Must be greater than 0.
  */
 template<unsigned int n_slices>
-class ImagePostprocessor {
+class ImageProcessor {
     static_assert(n_slices > 0, "Number of slices must be greater than 0.");
 
 private:
@@ -70,7 +70,7 @@ private:
 
 public:
 
-    ImagePostprocessor() : slices(n_slices) {} 
+    ImageProcessor() : slices(n_slices) {} 
 
     /**
      * @brief Slices the input image, calculates the accumulated direction offset, and repacks the slices.
@@ -107,4 +107,4 @@ public:
     }
 };
 
-#endif // IMAGE_POSTPROCESSOR_HPP
+#endif // IMAGE_PROCESSOR_HPP
