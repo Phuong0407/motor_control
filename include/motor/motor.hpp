@@ -142,15 +142,15 @@ void measureAngularVelocity(double &omega1, double &omega2, double &omega3, doub
 #ifndef PID_CONTROL_SAMPLING
 #define PID_CONTROL_SAMPLING
 static constexpr double smpl_itv    = 0.1;
-static constexpr double cutoff_freq = 1/(2 * smpl_itv) * 0.7;
+static constexpr double cutoff_freq = 4.0;
 #endif // PID_CONTROL_SAMPLING
 
 #ifndef PID_PARAMETER
 #define PID_PARAMETER
 
-static constexpr double kp = 2.0;
-static constexpr double ki = 0.01;
-static constexpr double kd = 0.5;
+static constexpr double kp = 6.0;
+static constexpr double ki = 3.0;
+static constexpr double kd = 0.015;
 static constexpr double max_out = 1.0;
 
 #endif // PID_PARAMETER
@@ -162,7 +162,7 @@ static constexpr double max_out = 1.0;
 
 PID pid1(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
 PID pid2(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
-PID pid3(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
+PID pid3(6.0, 2.5, 0.015, max_out, 0.0, smpl_itv);
 
 #endif // PID_SETTING
 #endif // PID_CONTROLLER
