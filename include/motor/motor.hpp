@@ -20,9 +20,13 @@
  * @brief calibration result
  */
 #ifdef NOLOADED_RUN
-#define MAX_RPS 0.8681
+#define MAX_RPS1 0.859
+#define MAX_RPS2 0.820
+#define MAX_RPS3 0.853
 #else // LOADED_RUN
-#define MAX_RPS 0.6250
+#define MAX_RPS1 0.6250
+#define MAX_RPS2 0.6250
+#define MAX_RPS3 0.6250
 #endif
 
 #ifndef I2C_FD_ADDRESS
@@ -261,9 +265,9 @@ void controlAngularVelocity(
         double r_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps2), MIN_ERROR_RPS);
         double f_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps3), MIN_ERROR_RPS);
 
-        double norm_rps1 = (lerror >= l_thresh) ? pid1.compute(ref_rps1 / MAX_RPS, omega1 / MAX_RPS) : omega1 / MAX_RPS;
-        double norm_rps2 = (rerror >= r_thresh) ? pid2.compute(ref_rps2 / MAX_RPS, omega2 / MAX_RPS) : omega2 / MAX_RPS;
-        double norm_rps3 = (ferror >= f_thresh) ? pid3.compute(ref_rps3 / MAX_RPS, omega3 / MAX_RPS) : omega3 / MAX_RPS;
+        double norm_rps1 = (lerror >= l_thresh) ? pid1.compute(ref_rps1 / MAX_RPS1, omega1 / MAX_RPS1) : omega1 / MAX_RPS1;
+        double norm_rps2 = (rerror >= r_thresh) ? pid2.compute(ref_rps2 / MAX_RPS2, omega2 / MAX_RPS2) : omega2 / MAX_RPS2;
+        double norm_rps3 = (ferror >= f_thresh) ? pid3.compute(ref_rps3 / MAX_RPS3, omega3 / MAX_RPS3) : omega3 / MAX_RPS3;
 
         setLeftRightMotorNormalized(norm_rps1, norm_rps2);
         setFrontMotorNormalized(norm_rps3);
@@ -272,7 +276,7 @@ void controlAngularVelocity(
             "Measured RPS: %.3f\t%.3f\t%.3f\t"
             "Computed RPS: %.3f\t%.3f\t%.3f\n",
             omega1, omega2, omega3,
-            norm_rps1 * MAX_RPS, norm_rps2 * MAX_RPS, norm_rps3 * MAX_RPS
+            norm_rps1 * MAX_RPS1, norm_rps2 * MAX_RPS2, norm_rps3 * MAX_RPS3
         );
 
         bool stable = (lerror < l_thresh) && (rerror < r_thresh) && (ferror < f_thresh);
