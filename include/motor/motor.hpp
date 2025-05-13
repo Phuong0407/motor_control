@@ -24,9 +24,9 @@
 #define MAX_RPS2 0.820
 #define MAX_RPS3 0.853
 #else // LOADED_RUN
-#define MAX_RPS1 0.6250
-#define MAX_RPS2 0.6250
-#define MAX_RPS3 0.6250
+#define MAX_RPS1 0.630
+#define MAX_RPS2 0.623
+#define MAX_RPS3 0.742
 #endif
 
 #ifndef I2C_FD_ADDRESS
