@@ -16,7 +16,7 @@
  */
 class Navigation {
 private:
-    double vx;                      ///< Linear velocity in the X direction.
+    double v;                      ///< Linear velocity in the X direction.
     double kp_vy;                   ///< Proportional gain for lateral velocity correction.
     double kp_omega;                ///< Proportional gain for angular velocity correction.
     double pixel_offset;            ///< Camera offset for calibration.
@@ -34,11 +34,11 @@ private:
     /**
      * @brief Computes the line residual for a given contour and fitted line.
      * @param contour The contour points to evaluate.
-     * @param line Fitted line parameters (vx, vy, x0, y0).
+     * @param line Fitted line parameters (v, vy, x0, y0).
      * @return Average residual distance of contour points from the fitted line.
      */
     double computeLineResidual(const std::vector<cv::Point>& contour, const cv::Vec4f& line) {
-        double vx = line[0];
+        double v = line[0];
         double vy = line[1];
         double x0 = line[2];
         double y0 = line[3];
@@ -47,7 +47,7 @@ private:
         for (const auto& pt : contour) {
             double dx = pt.x - x0;
             double dy = pt.y - y0;
-            double distance = std::abs(vy * dx - vx * dy) / std::sqrt(vx * vx + vy * vy);
+            double distance = std::abs(vy * dx - v * dy) / std::sqrt(v * v + vy * vy);
             residual_sum += distance;
         }
         return residual_sum / contour.size();
@@ -112,7 +112,7 @@ public:
      * @param wheel_radius Radius of the wheels.
      * @param pixel_offset Offset of the camera from the robot's center axis.
      *        pixel_offset = (cam_offset_cm*focal_length_px​)/distance_to_ground
-     * @param vx Desired linear velocity.
+     * @param v Desired linear velocity.
      * @param kp_vy Proportional gain for lateral velocity control.
      * @param kp_omega Proportional gain for angular velocity control.
      */
@@ -125,11 +125,11 @@ public:
         int frame_height,
         int frame_rate,
         bool verbos,
-        double vx,
+        double v,
         double kp_vy,
         double kp_omega
     ) :
-    vx(vx),
+    v(v),
     kp_vy(kp_vy),
     kp_omega(kp_omega),
     pixel_offset(pixel_offset),
@@ -177,13 +177,12 @@ public:
 
             direction = imager.postProcessImage(binaryMask, image);
             double error = direction - adjusted_center_x;
-            double vy = kp_vy * error;
             double omega = kp_omega * error;
             vy = std::clamp(vy, -1.0, 1.0);
             omega = std::clamp(omega, -1.0, 1.0);
 
             double omega1, omega2, omega3;
-            kinemator.computeWheelVelocityFromRobotVelocity(vx, vy, omega, omega1, omega2, omega3);
+            kinemator.computeWheelVelocityFromRobotVelocity(v, omega, omega1, omega2, omega3);
             motor.controlAngularVelocity(omega1, omega2, omega3, 20.0);
             cv::imshow("PROCESS IMAGE", image);
             ch = cv::waitKey(1);
