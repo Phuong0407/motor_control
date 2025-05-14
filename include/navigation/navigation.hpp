@@ -80,7 +80,6 @@ public:
         int direction = 0;
         int ch = 0;
         while (ch != 27) {
-            printf("\nFUCK YOU\n");
             if (!camera.captureFrame(frame, 1000)) {
                 printf("[ERROR] Failed to capture frame.\n");
                 continue;
@@ -88,6 +87,8 @@ public:
                 printf("[ERROR] Empty frame captured.\n");
                 continue;
             }
+
+            printf("\nFUCK YOU\n");
 
             direction = imager.postProcessImage(binaryMask, frame);
             double omega = kp_omega * direction;
