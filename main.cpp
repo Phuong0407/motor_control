@@ -1,5 +1,8 @@
 // #define NOLOADED_RUN
+#define LOADED_RUN
 #include "./include/navigation/navigation.hpp"
+
+#include <string>
 
 int main(int argc, char *argv[]) {
     double kp_omega = stod(argv[1]);
