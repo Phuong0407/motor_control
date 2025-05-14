@@ -99,14 +99,14 @@ public:
 
             direction = imager.postProcessImage(frame, image);
             printf("Direction: %d\n", direction);
-            displayImage(image, "PROCESS IMAGE");
+            cv::imshow("PROCESS IMAGE", image);
+            ch = cv::waitKey(1);
             double omega = kp_omega * direction;
             omega = std::clamp(omega, -1.0, 1.0);
 
             double omega1, omega2, omega3;
             kinemator.computeWheelVelocityFromRobotVelocity(v, omega, omega1, omega2, omega3);
             controlAngularVelocity(omega1, omega2, omega3);
-            ch = cv::waitKey(1);
         }
         cv::destroyAllWindows();
         stop_motor();
