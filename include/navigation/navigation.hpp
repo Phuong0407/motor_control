@@ -20,7 +20,7 @@ private:
     double kp_omega;                ///< Proportional gain for angular velocity correction.
 
     Camera camera;                  ///< Camera interface object.
-    ImagePostprocessor<4> imager;   ///< Image processing object with 4 slices.
+    ImageProcessor<4> imager;       ///< Image processing object with 4 slices.
     KinematicModel kinemator;       ///< Kinematic model for robot control.
     MotorDriver motor;              ///< Motor control interface.
 
