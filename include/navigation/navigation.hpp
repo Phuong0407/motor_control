@@ -1,8 +1,8 @@
 #ifndef NAVIGATION_HPP
 #define NAVIGATION_HPP
 
-#include "./include/vision/camera.hpp"
-#include "./include/vision/image_processor.hpp"
+#include "/include/vision/camera.hpp"
+#include "/include/vision/image_processor.hpp"
 #include "kinematic_model.hpp"
 #include "../motor/motor.hpp"
 
