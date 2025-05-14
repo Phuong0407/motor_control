@@ -2,6 +2,7 @@
 #define CONTOUR_ANALYZER_HPP
 
 #include "image_preprocessor.hpp"
+#include "motor.hpp"
 
 #include <opencv2/opencv.hpp>
 
