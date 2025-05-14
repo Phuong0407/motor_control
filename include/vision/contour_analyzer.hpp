@@ -113,6 +113,38 @@ public:
         binaryExtractor.extractColoredMask(image, binaryMask);
 
         cv::findContours(binaryMask, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+        
+        if (contours.empty()) {
+            printf("[INFO] No line detected. Stopping motors.\n");
+            stop_motor();
+            directionOffset = 0;  // Reset direction offset
+            return;
+        }
+
+        // Parameters for contour validation
+        constexpr double MIN_CONTOUR_AREA = 100.0;   // Adjust as necessary
+        constexpr double MAX_EXTENT_RATIO = 0.7;     // Adjust as necessary
+
+        mainContour.clear();  // Reset main contour
+
+        // Iterate through contours to find a valid line contour
+        for (const auto& contour : contours) {
+            double area = cv::contourArea(contour);
+            double extent = computeContourExtent(contour);
+
+            if (area >= MIN_CONTOUR_AREA && extent <= MAX_EXTENT_RATIO) {
+                mainContour = contour;
+                break;
+            }
+        }
+
+        if (mainContour.empty()) {
+            printf("[INFO] No valid line contour detected. Stopping motors.\n");
+            stop_motor();
+            directionOffset = 0;  // Reset direction offset
+            return;
+        }
+                
         previousContour = mainContour;
 
         if (!contours.empty()) {
