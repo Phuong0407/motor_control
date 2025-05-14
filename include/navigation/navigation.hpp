@@ -90,13 +90,13 @@ public:
             printf("\nFUCK YOU\n");
 
             direction = imager.postProcessImage(frame, image);
+            cv::imshow("PROCESS IMAGE", image);
             double omega = kp_omega * direction;
             omega = std::clamp(omega, -1.0, 1.0);
 
             double omega1, omega2, omega3;
             kinemator.computeWheelVelocityFromRobotVelocity(v, omega, omega1, omega2, omega3);
             controlAngularVelocity(omega1, omega2, omega3);
-            cv::imshow("PROCESS IMAGE", image);
             ch = cv::waitKey(1);
         }
         cv::destroyAllWindows();
