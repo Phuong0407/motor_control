@@ -23,15 +23,6 @@ struct BlueHSV {
 };
 
 /**
- * @struct YellowHSV
- * @brief Defines the HSV color range for detecting yellow color.
- */
-struct YellowHSV {
-    static inline const cv::Scalar lower = cv::Scalar(150, 100, 127);
-    static inline const cv::Scalar upper = cv::Scalar(160, 255, 217);
-};
-
-/**
  * @class ColorExtractor
  * @brief Template class for extracting a specific color mask from a precomputed HSV image.
  * @tparam HSVColor The HSV color struct defining the lower and upper HSV bounds for color detection.
@@ -57,7 +48,6 @@ class BinaryMaskExtractor {
 private:
     ColorExtractor<RedHSV>    red_extractor;
     ColorExtractor<BlueHSV>   blue_extractor;
-    ColorExtractor<YellowHSV> yellow_extractor;
 
 public:
     /**
@@ -70,13 +60,11 @@ public:
         cv::Mat hsv_image;
         cv::cvtColor(image, hsv_image, cv::COLOR_BGR2HSV);
 
-        cv::Mat red_mask, blue_mask, yellow_mask;
+        cv::Mat red_mask, blue_mask;
         red_extractor.extractMask(hsv_image, red_mask);
         blue_extractor.extractMask(hsv_image, blue_mask);
-        yellow_extractor.extractMask(hsv_image, yellow_mask);
 
         cv::bitwise_or(red_mask, blue_mask, mask);
-        cv::bitwise_or(mask, yellow_mask, mask);
     }
 
     BinaryMaskExtractor() = default;
