@@ -95,7 +95,7 @@ public:
 
             double omega1, omega2, omega3;
             kinemator.computeWheelVelocityFromRobotVelocity(v, omega, omega1, omega2, omega3);
-            controlAngularVelocity(omega1, omega2, omega3, 20.0);
+            controlAngularVelocity(omega1, omega2, omega3);
             cv::imshow("PROCESS IMAGE", image);
             ch = cv::waitKey(1);
         }
