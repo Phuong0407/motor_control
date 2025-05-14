@@ -75,7 +75,6 @@ public:
         const int height = camera.getVideoHeight();
         cv::Mat frame(height, width, CV_8UC3);
         cv::Mat image(height, width, CV_8UC3);
-        cv::Mat binaryMask(height, width, CV_8UC1);
 
         int direction = 0;
         int ch = 0;
@@ -90,7 +89,7 @@ public:
 
             printf("\nFUCK YOU\n");
 
-            direction = imager.postProcessImage(frame, binaryMask);
+            direction = imager.postProcessImage(frame, image);
             double omega = kp_omega * direction;
             omega = std::clamp(omega, -1.0, 1.0);
 
