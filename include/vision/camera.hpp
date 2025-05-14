@@ -29,7 +29,10 @@ public:
         cam.options->verbose = verbose;
 
         int ret_code = cam.startVideo();
-        if (ret_code) printf("[ERROR] Failed to initialize camera with error code: %d\n", ret_code);
+        if (!ret_code) {
+            printf("[ERROR] Failed to initialize camera with error code: %d\n", ret_code);
+            return;
+        }
         else printf("[INFO] Camera initialized successfully with resolution %dx%d.\n", frame_width, frame_height);
     }
 
