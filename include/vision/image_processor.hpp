@@ -87,9 +87,7 @@ public:
         sliceImageToPart(input, slices);
         for (std::size_t i = 1; i < slices.size() - 1; ++i) {
             accumulatedDirection += slices[i].getDirectionOffset();
-            printf("Accumulated direction offset: %d\n", accumulatedDirection);
         }
-        printf("\n");
         repackSlicesToImage(slices, output);
         return accumulatedDirection;
     }
