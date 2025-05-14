@@ -3,6 +3,14 @@
 
 #include <iostream>
 
+void displayImage(const cv::Mat& image, const std::string& windowName) {
+    cv::namedWindow(windowName, cv::WINDOW_NORMAL);
+    cv::resizeWindow(windowName, , 600);
+    cv::imshow(windowName, image);
+    cv::waitKey(0);
+    cv::destroyWindow(windowName);
+}
+
 int main() {
     lccv::PiCamera cam;
     cam.options->video_width = 640;
@@ -23,7 +31,7 @@ int main() {
             continue;
         }
         vision.postProcessImage(image1, image2);
-        cv::imshow("Processed", image2);
+        displayImage(image2, "Processed Image");
         ch = cv::waitKey(5);
     }
 }
