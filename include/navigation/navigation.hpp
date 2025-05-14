@@ -81,15 +81,15 @@ public:
 
         int ch = 0;
         while (ch != 27) {
-            if (!camera.captureFrame(image, 1000)) {
+            if (!camera.captureFrame(frame, 1000)) {
                 printf("[ERROR] Failed to capture frame.\n");
                 continue;
-            } if (image.empty()) {
+            } if (frame.empty()) {
                 printf("[ERROR] Empty frame captured.\n");
                 continue;
             }
 
-            direction = imager.postProcessImage(binaryMask, image);
+            direction = imager.postProcessImage(binaryMask, frame);
             double omega = kp_omega * direction;
             omega = std::clamp(omega, -1.0, 1.0);
 
