@@ -78,7 +78,7 @@ public:
         cv::Mat binaryMask(height, width, CV_8UC1);
 
         int direction = 0;
-
+        printf("\nFUCK YOU\n");
         int ch = 0;
         while (ch != 27) {
             if (!camera.captureFrame(frame, 1000)) {
