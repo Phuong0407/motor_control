@@ -90,7 +90,7 @@ public:
 
             printf("\nFUCK YOU\n");
 
-            direction = imager.postProcessImage(binaryMask, frame);
+            direction = imager.postProcessImage(frame, binaryMask);
             double omega = kp_omega * direction;
             omega = std::clamp(omega, -1.0, 1.0);
 
