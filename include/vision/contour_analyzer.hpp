@@ -2,7 +2,6 @@
 #define CONTOUR_ANALYZER_HPP
 
 #include "image_preprocessor.hpp"
-#include "motor.hpp"
 
 #include <opencv2/opencv.hpp>
 
@@ -117,7 +116,6 @@ public:
         
         if (contours.empty()) {
             printf("[INFO] No line detected. Stopping motors.\n");
-            stop_motor();
             directionOffset = 0;  // Reset direction offset
             return;
         }
@@ -141,7 +139,6 @@ public:
 
         if (mainContour.empty()) {
             printf("[INFO] No valid line contour detected. Stopping motors.\n");
-            stop_motor();
             directionOffset = 0;  // Reset direction offset
             return;
         }
