@@ -90,6 +90,7 @@ public:
             printf("\nFUCK YOU\n");
 
             direction = imager.postProcessImage(frame, image);
+            printf("Direction: %d\n", direction);
             cv::imshow("PROCESS IMAGE", image);
             double omega = kp_omega * direction;
             omega = std::clamp(omega, -1.0, 1.0);

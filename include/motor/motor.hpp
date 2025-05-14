@@ -236,7 +236,7 @@ void stop_motor() {
 #ifndef MOTOR_CONTROL_ALGO
 #define MOTOR_CONTROL_ALGO
 
-static double constexpr timeout_seconds = 20.0;
+static double constexpr timeout_seconds = 1.0;
 
 void controlAngularVelocity(
     double ref_rps1,
