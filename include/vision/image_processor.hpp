@@ -85,7 +85,7 @@ public:
     int postProcessImage(const cv::Mat& input, cv::Mat& output) {
         int accumulatedDirection = 0;
         sliceImageToPart(input, slices);
-        for (size_t i = 1; i < slices.size(); ++i)
+        for (std::size_t i = 1; i < slices.size(); ++i)
             accumulatedDirection += slices[i].getDirectionOffset();
         repackSlicesToImage(slices, output);
         printf("Accumulated direction offset: %d\n", accumulatedDirection);
