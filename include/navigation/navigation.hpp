@@ -59,7 +59,6 @@ public:
      * @brief Captures video frames from the camera.
      * @brief Extracts binary mask using image processing.
      * @brief Identifies contours and computes centroids.
-     * @brief Computes velocity adjustments based on contour alignment.
      * @brief Applies motor control using kinematic model calculations.
      * @brief Executes the line-following behavior using camera input and motor control.
      * @brief Captures video frames from the camera.
@@ -78,7 +77,6 @@ public:
         cv::Mat image(height, width, CV_8UC3);
         cv::Mat binaryMask(height, width, CV_8UC1);
 
-        double adjusted_center_x = (width / 2.0) + cam_offset;
         int direction = 0;
 
         int ch = 0;
@@ -97,7 +95,7 @@ public:
 
             double omega1, omega2, omega3;
             kinemator.computeWheelVelocityFromRobotVelocity(v, omega, omega1, omega2, omega3);
-            motor.controlAngularVelocity(omega1, omega2, omega3, 20.0);
+            controlAngularVelocity(omega1, omega2, omega3, 20.0);
             cv::imshow("PROCESS IMAGE", image);
             ch = cv::waitKey(1);
         }
