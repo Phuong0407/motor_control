@@ -1,4 +1,4 @@
-#include "../include/navigation/vision.hpp"
+#include "image_processor.hpp"
 #include <opencv2/opencv.hpp>
 
 #include <iostream>
@@ -14,7 +14,7 @@ int main() {
     cv::Mat image1(480, 640, CV_8UC3);
     cv::Mat image2(480, 640, CV_8UC3);
 
-    Vision vision;
+    ImageProcessor<4> vision;
 
     int ch = 0;
     while (ch != 27) {
@@ -22,11 +22,7 @@ int main() {
             std::cout << "Timeout error while grabbing frame." << std::endl;
             continue;
         }
-        vision.getOutputVision(image1, image2);
-        std::vector<cv::Point> centroids = vision.getAllCentroids();
-        for (const auto& point : centroids) {
-            std::cout << "(" << point.x << ", " << point.y << ")" << std::endl;
-        }
+        vision.postProcessImage(image1, image2);
         cv::imshow("Processed", image2);
         ch = cv::waitKey(5);
     }
