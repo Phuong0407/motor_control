@@ -5,6 +5,6 @@ int main(int argc, char *argv[]) {
     double kp_omega = stod(argv[1]);
 
     Navigation naviation(0.1155, 0.245, 0.0273, 640, 240, 30, false, 1.0, 0.0001);
-    naviation.followLine();
+    naviation.followLine(20);
     return 0;
 }
