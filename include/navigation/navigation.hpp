@@ -18,7 +18,6 @@ class Navigation {
 private:
     double v;                      ///< Linear velocity in the X direction.
     double kp_omega;                ///< Proportional gain for angular velocity correction.
-    double pixel_offset;            ///< Camera offset for calibration.
 
     Camera camera;                  ///< Camera interface object.
     ImagePostprocessor<4> imager;   ///< Image processing object with 4 slices.
@@ -41,17 +40,15 @@ public:
         double L1,
         double L2,
         double wheel_radius,
-        int pixel_offset,
         int frame_width,
         int frame_height,
         int frame_rate,
-        bool verbos,
+        bool verbose,
         double v,
         double kp_omega
     ) :
     v(v),
     kp_omega(kp_omega),
-    pixel_offset(pixel_offset),
     camera(frame_width, frame_height, frame_rate, verbose),
     kinemator(L1, L2, wheel_radius),
     motor(2.0, 0.01, 0.5, 0.1, 0.7 * 0.5 / 0.1, 0x0f, 0x0d) {}
