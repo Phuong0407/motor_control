@@ -7,7 +7,6 @@ void displayImage(const cv::Mat& image, const std::string& windowName) {
     cv::namedWindow(windowName, cv::WINDOW_NORMAL);
     cv::resizeWindow(windowName, 640, 480);
     cv::imshow(windowName, image);
-    cv::waitKey(0);
     cv::destroyWindow(windowName);
 }
 
