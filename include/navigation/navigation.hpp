@@ -22,7 +22,6 @@ private:
     Camera camera;                  ///< Camera interface object.
     ImageProcessor<4> imager;       ///< Image processing object with 4 slices.
     KinematicModel kinemator;       ///< Kinematic model for robot control.
-    MotorDriver motor;              ///< Motor control interface.
 
 public:
     /**
@@ -50,8 +49,9 @@ public:
     v(v),
     kp_omega(kp_omega),
     camera(frame_width, frame_height, frame_rate, verbose),
-    kinemator(L1, L2, wheel_radius),
-    motor(2.0, 0.01, 0.5, 0.1, 0.7 * 0.5 / 0.1, 0x0f, 0x0d) {}
+    kinemator(L1, L2, wheel_radius) {
+        startEncoders();
+    }
 
     /**
      * @brief Executes the line-following behavior using camera input and motor control.
@@ -71,7 +71,7 @@ public:
      * 
      * @param timeout Time in milliseconds to wait for a frame capture.
      */
-    void followLine(int timeout) {
+    void followLine() {
         const int width = camera.getVideoWidth();
         const int height = camera.getVideoHeight();
         cv::Mat frame(height, width, CV_8UC3);
@@ -83,7 +83,7 @@ public:
 
         int ch = 0;
         while (ch != 27) {
-            if (!camera.captureFrame(image, timeout)) {
+            if (!camera.captureFrame(image, 1000)) {
                 printf("[ERROR] Failed to capture frame.\n");
                 continue;
             } if (image.empty()) {
@@ -92,8 +92,7 @@ public:
             }
 
             direction = imager.postProcessImage(binaryMask, image);
-            double error = direction - adjusted_center_x;
-            double omega = kp_omega * error;
+            double omega = kp_omega * direction;
             omega = std::clamp(omega, -1.0, 1.0);
 
             double omega1, omega2, omega3;
