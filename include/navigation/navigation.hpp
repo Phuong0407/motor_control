@@ -101,7 +101,6 @@ public:
         }
         cv::destroyAllWindows();
         stop_motor();
-        cleanupEncoders();
     }
 
 };
