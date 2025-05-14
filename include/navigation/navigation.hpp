@@ -100,7 +100,7 @@ public:
             ch = cv::waitKey(1);
         }
         cv::destroyAllWindows();
-        motor.stop_motor();
+        stop_motor();
         cleanupEncoders();
     }
 
