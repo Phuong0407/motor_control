@@ -23,6 +23,14 @@ private:
     ImageProcessor<4> imager;       ///< Image processing object with 4 slices.
     KinematicModel kinemator;       ///< Kinematic model for robot control.
 
+    void displayImage(const cv::Mat& image, const std::string& windowName) {
+        cv::namedWindow(windowName, cv::WINDOW_NORMAL);
+        cv::resizeWindow(windowName, camera.getVideoWidth(), camera.getVideoHeight());
+        cv::imshow(windowName, image);
+        cv::waitKey(0);
+        cv::destroyWindow(windowName);
+    }
+
 public:
     /**
      * @brief Constructor for the Navigation class.
@@ -91,7 +99,7 @@ public:
 
             direction = imager.postProcessImage(frame, image);
             printf("Direction: %d\n", direction);
-            cv::imshow("PROCESS IMAGE", image);
+            displayImage(image, "PROCESS IMAGE");
             double omega = kp_omega * direction;
             omega = std::clamp(omega, -1.0, 1.0);
 
