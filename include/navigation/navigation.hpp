@@ -4,7 +4,7 @@
 #include "camera.hpp"
 #include "image_processor.hpp"
 #include "kinematic_model.hpp"
-#include "../motor/motor.hpp"
+#include "motor.hpp"
 
 #include <numeric>
 #include <vector>
@@ -16,12 +16,12 @@
  */
 class Navigation {
 private:
-    double v;                      ///< Linear velocity in the X direction.
-    double kp_omega;                ///< Proportional gain for angular velocity correction.
+    double v;                           ///< Linear velocity in the X direction.
+    double kp_omega;                    ///< Proportional gain for angular velocity correction.
 
-    Camera camera;                  ///< Camera interface object.
-    ImageProcessor<4> imager;       ///< Image processing object with 4 slices.
-    KinematicModel kinemator;       ///< Kinematic model for robot control.
+    Camera camera;                      ///< Camera interface object.
+    ImageProcessor<4> image_analyzer;   ///< Image processing object with 4 slices.
+    KinematicModel kinemator;           ///< Kinematic model for robot control.
 
     void displayImage(const cv::Mat& image, const std::string& windowName) {
         cv::namedWindow(windowName, cv::WINDOW_NORMAL);
@@ -95,9 +95,7 @@ public:
                 continue;
             }
 
-            printf("\nFUCK YOU\n");
-
-            direction = imager.postProcessImage(frame, image);
+            direction = image_analyzer.postProcessImage(frame, image);
             printf("Direction: %d\n", direction);
             cv::imshow("PROCESS IMAGE", image);
             ch = cv::waitKey(1);
