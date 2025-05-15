@@ -1,7 +1,7 @@
 #define NOLOADED_RUN
-//#define EACH_ENCODER_HPP
+#define EACH_ENCODER_HPP
 
-#define THREE_ENCODER_HPP
+// #define THREE_ENCODER_HPP
 
 #include "../include/motor/motor.hpp"
 
@@ -15,7 +15,7 @@ int main() {
     printf("Motor started\n");
     printf("%d\t%d\t%d\n", counter1, counter2, counter3);
     delay(25000);
-    stop_motor();
+    stopMotors();
 
     printf("%" PRId64 "\t%" PRId64 "\t%" PRId64 "\n", counter1, counter2, counter3);
 
