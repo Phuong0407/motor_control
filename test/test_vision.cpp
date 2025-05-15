@@ -24,7 +24,7 @@ int main() {
         }
         vision.processImage(image1, image2);
         int direction = vision.calculateDirectionOffset();
-        if (direcion > 0)
+        if (direction > 0)
             printf("TURN LEFT\n");
         else if (direction < 0)
             printf("TURN RIGHT\n");
