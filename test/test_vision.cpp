@@ -23,9 +23,9 @@ int main() {
             continue;
         }
         int direction = vision.processImage(image1, image2);
-        if (direction > 0)
+        if (direction * 0.001 > 5)
             printf("TURN LEFT\n");
-        else if (direction < 0)
+        else if (direction *0.001 < -5)
             printf("TURN RIGHT\n");
         else
             printf("GO STRAIGHT\n");
