@@ -105,7 +105,7 @@ public:
 
             double omega1, omega2, omega3;
             kinemator.computeWheelVelocityFromRobotVelocity(v, omega, omega1, omega2, omega3);
-            controlAngularVelocity(omega1, omega2, omega3);
+            motor.controlAngularVelocity(omega1, omega2, omega3);
         }
         cv::destroyAllWindows();
         stopMotors();
