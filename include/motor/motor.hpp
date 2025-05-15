@@ -135,7 +135,7 @@ private:
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps), MIN_ERROR_RPS);
         if (err > err_thres) {
             double norm_rps = pid[motor_id].compute(ref_rps / MAX_RPS[motor_id], omega / MAX_RPS[motor_id]);
-            printf("[INFO] Motor %d: ref_rps=%.3f,\tomega=%.3f,\tcomputed=%.3f\n", motor_id + 1, ref_rps, omega, norm_rps * MAX_RPS[motor_id]);
+            printf("[INFO] Motor %d:\tomega=%.3f,\tcomputed=%.3f\t", motor_id + 1, ref_rps, omega, norm_rps * MAX_RPS[motor_id]);
             pwm = computePWMFromNormedRPS(norm_rps);
             if (norm_rps < 0) dir = BACKWARD;
             else dir = FORWARD;
@@ -194,6 +194,7 @@ public:
             for (int i = 0; i < 3; i++) {
                 stble[i] = computeMotorState(i, ref_rps[i], omega[i], pwm[i], dir[i]);
             }
+            printf("\n");
             setThreeMotors(pwm[0], dir[0], pwm[1], dir[1], pwm[2], dir[2]);
 
             uint64_t current_time = millis();
