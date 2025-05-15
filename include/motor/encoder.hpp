@@ -11,7 +11,7 @@
 #include <inttypes.h>
 
 constexpr int encoder_addr1 = 0x0f;
-constexpr int encoder_addr1 = 0x0d;
+constexpr int encoder_addr2 = 0x0d;
 int i2c_fd1;
 int i2c_fd2;
 
