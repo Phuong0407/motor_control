@@ -23,6 +23,13 @@ int main() {
             continue;
         }
         vision.processImage(image1, image2);
+        int direction = vision.calculateDirectionOffset();
+        if (direcion > 0)
+            printf("TURN LEFT\n");
+        else if (direction < 0)
+            printf("TURN RIGHT\n");
+        else
+            printf("GO STRAIGHT\n");
         cv::imshow("processed", image2);
         ch = cv::waitKey(5);
     }
