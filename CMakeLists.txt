@@ -30,12 +30,12 @@ add_executable(
 #     ${CMAKE_SOURCE_DIR}/main.cpp
 # )
 
-# add_executable(
-#     test_encoder3
-#     ${CMAKE_SOURCE_DIR}/test/test_encoder3.cpp
-# )
+add_executable(
+    test_encoder3
+    ${CMAKE_SOURCE_DIR}/test/test_encoder3.cpp
+)
 
 # target_link_libraries(test_vision -llccv ${OpenCV_LIBS} ${LIBCAMERA_LIBRARIES})
 # target_link_libraries(main -llccv ${OpenCV_LIBS} ${LIBCAMERA_LIBRARIES} -lwiringPi)
 target_link_libraries(test_motor -lwiringPi)
-# target_link_libraries(test_encoder3 -lwiringPi)
+target_link_libraries(test_encoder3 -lwiringPi)
