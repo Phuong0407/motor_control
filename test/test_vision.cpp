@@ -22,7 +22,7 @@ int main() {
             std::cout << "Timeout error while grabbing frame." << std::endl;
             continue;
         }
-        vision.postProcessImage(image1, image2);
+        vision.processImage(image1, image2);
         cv::imshow("processed", image2);
         ch = cv::waitKey(5);
     }

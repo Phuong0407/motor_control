@@ -13,9 +13,9 @@
 constexpr double MIN_CONTOUR_AREA = 100.0;
 constexpr double MAX_EXTENT_RATIO = 0.7;
 constexpr int CONTOUR_OFFSET_THRESHOLD = 5;
-constexpr cv::Scalar CONTOUR_COLOR = cv::Scalar(0, 255, 0);
-constexpr cv::Scalar IMAGE_CENTER_COLOR = cv::Scalar(0, 0, 255);
-constexpr cv::Scalar TEXT_COLOR = cv::Scalar(200, 0, 200);
+const     cv::Scalar CONTOUR_COLOR = cv::Scalar(0, 255, 0);
+const     cv::Scalar IMAGE_CENTER_COLOR = cv::Scalar(0, 0, 255);
+const     cv::Scalar TEXT_COLOR = cv::Scalar(200, 0, 200);
 constexpr int MARKER_RADIUS = 5;
 constexpr int TEXT_OFFSET_Y = 30;
 
