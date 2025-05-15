@@ -23,10 +23,10 @@ int main() {
             continue;
         }
         int direction = vision.processImage(image1, image2);
-        if (direction * 0.2 > 5.0)
-            printf("TURN LEFT\n");
-        else if (direction * 0.2 < -5.0)
+        if (direction * 0.2 > -5.0)
             printf("TURN RIGHT\n");
+        else if (direction * 0.2 < 5.0)
+            printf("TURN LEFT\n");
         else
             printf("GO STRAIGHT\n");
         cv::imshow("processed", image2);
