@@ -125,10 +125,10 @@ public:
     }
 
     const cv::Mat& getImage() const { return image; }
-    int getContourCenterX() const { return contourCenterX; }
-    int getImageCenterX() const { return imageCenterX; }
-    int getImageCenterY() const { return imageCenterY; }
-    int getDirectionOffset() const { return directionOffset; }
+    inline int getContourCenterX() const { return contourCenterX; }
+    inline int getImageCenterX() const { return imageCenterX; }
+    inline int getImageCenterY() const { return imageCenterY; }
+    inline int getDirectionOffset() const { return directionOffset; }
     const std::vector<std::vector<cv::Point>>& getContours() const { return contours; }
     const std::vector<cv::Point>& getMainContour() const { return mainContour; }
     const std::vector<cv::Point>& getPreviousContour() const { return previousContour; }
