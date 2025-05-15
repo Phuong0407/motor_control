@@ -30,19 +30,19 @@ void setMotors(int fd1, int fd2, int leftSpeed, int rightSpeed, int frontSpeed) 
     uint8_t dir = 0x00;
 
     if (leftSpeed < 0 && rightSpeed < 0) {
-        dir = 0x09;  // both reverse
+        dir = 0x06;  // both reverse
     } else if (leftSpeed > 0 && rightSpeed > 0) {
         dir = 0x06;  // both forward
     } else if (leftSpeed < 0 && rightSpeed > 0) {
         dir = 0x06;  // left forward, right reverse (spin left)
     } else if (leftSpeed > 0 && rightSpeed < 0) {
-        dir = 0x09;  // left reverse, right forward (spin right)
+        dir = 0x06;  // left reverse, right forward (spin right)
     } else if (leftSpeed == 0 && rightSpeed == 0) {
         dir = 0x00;  // stop
     } else if (leftSpeed == 0 && rightSpeed < 0) {
-        dir = 0x05;  // only right forward
+        dir = 0x09;  // only right forward
     } else if (leftSpeed == 0 && rightSpeed > 0) {
-        dir = 0x0a;  // only right reverse
+        dir = 0x06;  // only right reverse
     } else if (leftSpeed < 0 && rightSpeed == 0) {
         dir = 0x06;  // only left forward
     } else if (leftSpeed > 0 && rightSpeed == 0) {
@@ -54,9 +54,9 @@ void setMotors(int fd1, int fd2, int leftSpeed, int rightSpeed, int frontSpeed) 
     if (leftSpeed == rightSpeed) {
 		dir2 = 0x00;
 	} else if (leftSpeed > rightSpeed) {
-		dir2 = 0x09;
-	} else {
 		dir2 = 0x06;
+	} else {
+		dir2 = 0x09;
 	}
 
     // Write directi
@@ -125,25 +125,24 @@ int main() {
         int width = redBinary.cols;
 
         // Focus only on lower two horizontal strips of the image
-        cv::Mat roi_bottom = redBinary(cv::Rect(0, height * 5 / 6, width, height / 12));
-        cv::Mat roi_top    = redBinary(cv::Rect(0, height * 4 / 6, width, height / 12));
+        cv::Mat roi_bottom = redBinary(cv::Rect(0, height * 3 / 6, width, height / 12));
+        cv::Mat roi_top    = redBinary(cv::Rect(0, height * 2 / 6, width, height/ 12));
 
         cv::Moments M_bot = cv::moments(roi_bottom, true);
         cv::Moments M_top = cv::moments(roi_top, true);
 
         if (M_bot.m00 > 0 && M_top.m00 > 0) {
             // Line detected in both regions
-            cv::Point2f pt_bot(M_bot.m10 / M_bot.m00, height * 5 / 6 + height / 24);
-            cv::Point2f pt_top(M_top.m10 / M_top.m00, height * 4 / 6 + height / 24);
+            cv::Point2f pt_bot(M_bot.m10 / M_bot.m00, height * 3 / 6 + height / 12);
+            cv::Point2f pt_top(M_top.m10 / M_top.m00, height * 2 / 6 + height / 12);
 
             float dx = pt_bot.x - pt_top.x;
             float dy = pt_bot.y - pt_top.y;
-            float angle = std::atan2(dy, dx) * 180.0 / CV_PI;
+            float angle = -atan2(dx, dy) * 180.0 / CV_PI;
 
-            std::cout << "Line angle: " << angle << " degrees" << std::endl;
 
             // ======== Motion Control Logic ========
-            float Kp = 0.6; // Try increasing Kp for tighter turns
+            float Kp = std::abs( angle) / 90; // Try increasing Kp for tighter turns
             float correction = Kp * angle;
 
             int baseSpeed = 200; // Bump this up for stronger movement
