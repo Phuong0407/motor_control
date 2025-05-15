@@ -22,8 +22,7 @@ int main() {
             std::cout << "Timeout error while grabbing frame." << std::endl;
             continue;
         }
-        vision.processImage(image1, image2);
-        int direction = vision.calculateDirectionOffset();
+        int direction = vision.processImage(image1, image2);
         if (direction > 0)
             printf("TURN LEFT\n");
         else if (direction < 0)
