@@ -89,6 +89,11 @@ void startEncoders() {
     attachEncoderInterrupts();
 }
 
+void clearEncoders() {
+    counter1 = 0;
+    counter2 = 0;
+    counter3 = 0;
+}
 
 /**
  * @brief Measures angular velocity for all motors.

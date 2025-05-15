@@ -18,6 +18,8 @@ private:
     }
 
 public:
+PID() = default;
+
 PID(
         double kp,
         double ki,

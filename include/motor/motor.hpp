@@ -64,7 +64,7 @@ void setThreeMotors(int pwm1, int dir1, int pwm2, int dir2, int pwm3, int dir3) 
     wiringPiI2CWriteReg16(i2c_fd2, 0xaa, dir3);
 }
 
-void stopMotor() {
+void stopMotors() {
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0x0000);
     wiringPiI2CWriteReg16(i2c_fd2, 0x82, 0x0000);
 }
@@ -89,7 +89,7 @@ static constexpr double cutoff_freq = 4.0;
 #ifndef MOTOR_CONTROL_ALGO
 #define MOTOR_CONTROL_ALGO
 
-static double constexpr timeout_seconds = 1.0;
+static double constexpr TIMEOUT_SECS = 1.0;
 
 class MotorState {
 private:
@@ -97,107 +97,129 @@ private:
     int dir;
 
 public:
-    MotorState() = default;
+    MotorState() {
+        pwm = 0;
+        dir = FORWARD;
+    }
+
     inline int getPWM() const { return pwm; }
-    inline int getDirection() const { return dir; }
+    inline int getDir() const { return dir; }
     inline void setPWM(int pwm) { this->pwm = pwm; }
     inline void setDir(int pwm) { this->dir = dir; }
+    inline void setMotorState(int pwm, int dir) {
+        this->pwm = pwm;
+        this->dir = dir;
+    }
 };
 
 
+static constexpr double MIN_ERROR_RPS           = 0.08;
+static constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
+static constexpr int STABLE_CYCLES_REQUIRED     = 3;
 
 class Motor {
 private:
-    MotorState motor1;
-    MotorState motor2;
-    MotorState motor3;
+    double MAX_RPS[3] = {MAX_RPS1, MAX_RPS2, MAX_RPS3};
+    PID pid[3];
+    MotorState motor[3];
 
-    PID pid1;
-    PID pid2;
-    PID pid3;
-public:
-    Motor() = default;
-    void setPIDParameters(double kp, double ki, double kd, double max_out) {
-        pid1 = PID(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
-        pid2 = PID(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
-        pid3 = PID(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
+    bool computeMotorState(
+        int motor_id,
+        double ref_rps,
+        double omega,
+        int &pwm,
+        int &dir
+    )
+    {
+        double err = std::abs(ref_rps - omega);
+        double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps), MIN_ERROR_RPS);
+        if (err > err_thres) {
+            double norm_rps = pid[motor_id].compute(ref_rps / MAX_RPS1, omega / MAX_RPS1);
+            pwm = computePWMFromNormedRPS(norm_rps);
+            if (norm_rps < 0) dir = BACKWARD;
+            else dir = FORWARD;
+            return false;
+        } else {
+            pwm = motor[motor_id].getPWM();
+            dir = motor[motor_id].getDir();
+            return true;
+        }
+        return true;
     }
 
-    int controlAngularVelocity(
-        double ref_rps1,
-        double ref_rps2,
-        double ref_rps3
-    ) {
-        constexpr double MIN_ERROR_RPS = 0.08;
-        constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
-        constexpr int STABLE_CYCLES_REQUIRED = 5;
-        int stable_cycle_count = 0;
+    void updateStblCycCounter(int motor_id, bool stble, int *StbleCycCount) {
+        if (stble)
+            StbleCycCount++;
+        else
+            StbleCycCount = 0;
+    }
 
-        int pwm1, pwm2, pwm3;
-        double omega1, omega2, omega3;
-        double norm_rps1, norm_rps2, norm_rps3;
+    void printStableLog(int motor_id, int &stblCycCount, double &stble_time, double elapsed_time, bool &logged) {
+        if (stblCycCount == STABLE_CYCLES_REQUIRED && !logged) {
+            stble_time = elapsed_time;
+            printf("[INFO] Motor %d stabilized after %.1f seconds.\n", motor_id + 1, stble_time);
+            logged = true;
+        }
+    }
 
-        double lerror, rerror, ferror;
+public:
+    Motor() { startEncoders(); }
+
+    void setPIDParameters(double kp, double ki, double kd, double max_out) {
+        pid[0] = PID(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
+        pid[1] = PID(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
+        pid[2] = PID(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
+    }
+
+    bool controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3) {
+        double omega[3];
+        int pwm[3], dir[3];
+
+        int StbleCycCount[3] = {0, 0, 0};
+        bool stble[3] = {false, false, false};
+        double ref_rps[3] = {ref_rps1, ref_rps2, ref_rps3};
+        double stble_time[3] = {0.0, 0.0, 0.0};
+        bool logState[3] = {false, false, false};
+
         uint64_t start_time = millis();
-        while (true) {
+        while (
+            StbleCycCount[0] < STABLE_CYCLES_REQUIRED ||
+            StbleCycCount[1] < STABLE_CYCLES_REQUIRED ||
+            StbleCycCount[2] < STABLE_CYCLES_REQUIRED)
+        {
             uint64_t loop_start = millis();
-            measureAngularVelocity(omega1, omega2, omega3, smpl_itv);
-        
-            lerror = std::abs(ref_rps1 - omega1);
-            rerror = std::abs(ref_rps2 - omega2);
-            ferror = std::abs(ref_rps3 - omega3);
-        
-            double l_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps1), MIN_ERROR_RPS);
-            double r_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps2), MIN_ERROR_RPS);
-            double f_thresh = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps3), MIN_ERROR_RPS);
-            int dir1, dir2, dir3;
-            if (lerror >= l_thresh) {
-                norm_rps1 = pid1.compute(ref_rps1 / MAX_RPS1, omega1 / MAX_RPS1);
-                if (norm_rps1 < 0) dir1 = BACKWARD;
-                else dir1 = FORWARD;
-                pwm1 = computePWMFromNormedRPS(norm_rps1);
-            } else pwm1 = motor1.getPWM();
 
-            if (rerror >= r_thresh) {
-                norm_rps2 = pid2.compute(ref_rps2 / MAX_RPS2, omega2 / MAX_RPS2);
-                if (norm_rps2 < 0) dir2 = BACKWARD;
-                else dir2 = FORWARD;
-                pwm2 = computePWMFromNormedRPS(norm_rps2);
-            } else pwm2 = motor2.getPWM();
-
-            if (ferror >= f_thresh) {
-                norm_rps3 = pid3.compute(ref_rps3 / MAX_RPS3, omega3 / MAX_RPS3);
-                if (norm_rps3 < 0) dir3 = BACKWARD;
-                else dir3 = FORWARD;
-                pwm3 = computePWMFromNormedRPS(norm_rps3);
-            } else pwm3 = motor3.getPWM();
-
-            motor1.setPWM(pwm1); motor2.setPWM(pwm2); motor3.setPWM(pwm3);
-            setThreeMotors(pwm1, dir1, pwm2, dir2, pwm3, dir3);
-
-            bool stable = (lerror < l_thresh) && (rerror < r_thresh) && (ferror < f_thresh);
-
-            if (stable) stable_cycle_count++;
-            else stable_cycle_count = 0;
+            measureAngularVelocity(omega[0], omega[1], omega[2], smpl_itv);
+            for (int i = 0; i < 3; i++) {
+                stble[i] = computeMotorState(i, ref_rps[i], omega[i], pwm[i], dir[i]);
+            }
+            setThreeMotors(pwm[0], dir[0], pwm[1], dir[1], pwm[2], dir[2]);
 
             uint64_t current_time = millis();
             double elapsed_time = (current_time - start_time) / 1000.0;
-
-            if (stable_cycle_count >= STABLE_CYCLES_REQUIRED) {
-                printf("[INFO] Motor control stabilized after %.1f seconds.\n", elapsed_time);
-                break;
+            
+            for (int i = 0; i < 3; i++) {
+                updateStblCycCounter(i, stble[i], &StbleCycCount[i]);
+                if (StbleCycCount[i] == STABLE_CYCLES_REQUIRED) {
+                    motor[i].setMotorState(pwm[i], dir[i]);
+                }
+                printStableLog(i, StbleCycCount[i], stble_time[i], elapsed_time, logState[i]);
             }
-            if (elapsed_time >= timeout_seconds) {
-                printf("[WARNING] Motor control timed out after %.1f seconds.\n", timeout_seconds);
+            if (elapsed_time >= TIMEOUT_SECS) {
+                printf("[WARNING] Motor control timed out after %.1f seconds.\n", TIMEOUT_SECS);
                 return false;
             }
-
             int remaining_delay = static_cast<int>(smpl_itv * 1000) - millis() + loop_start;
             if (remaining_delay > 0) {
+                printf("[INFO] Remaining delay: %d ms\n", remaining_delay);
                 delay(remaining_delay);
             }
         }
         return true;
+    }
+    ~Motor() {
+        stopMotors();
+        clearEncoders();
     }
 };
 
