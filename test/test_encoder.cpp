@@ -1,41 +1,58 @@
-#include "encoder.hpp"
+#define NOLOADED_RUN
+#define EACH_ENCODER_HPP
+
+// #define THREE_ENCODER_HPP
+
+#include "../include/motor/motor.hpp"
 
 #include <wiringPi.h>
+#include <stdio.h>
+
+#ifdef THREE_ENCODER_HPP
+int main() {
+    startEncoders();
+    setMotorPWM(0xff, 0x00, 0x00);
+    printf("Motor started\n");
+    printf("%d\t%d\t%d\n", counter1, counter2, counter3);
+    delay(25000);
+    stopMotors();
+
+    printf("%" PRId64 "\t%" PRId64 "\t%" PRId64 "\n", counter1, counter2, counter3);
+
+    return 0;
+}
+#endif
+
+#ifdef EACH_ENCODER_HPP
+
 #include <wiringPiI2C.h>
+#include <inttypes.h>
 
-#include <iostream>
-#include <string>
+volatile int64_t counter = 0;
 
-void setMotorCommand(int ms = 1000, int speed = 0xffff) {
-    int i2c_fd1 = wiringPiI2CSetup(0x0f);
-    int i2c_fd2 = wiringPiI2CSetup(0x0d);
+int H1 = 3;
+int H2 = 4;
 
-    std::cout << i2c_fd1 << "\t" << i2c_fd2 << "\n";
-
-    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xffff);
-    delay(1);
-    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x09);
-    delay(1);
-    wiringPiI2CWriteReg16(i2c_fd2, 0x82, 0xffff);
-    delay(1);
-    wiringPiI2CWriteReg16(i2c_fd2, 0xaa, 0x06);
-
-    delay(ms);
-
-    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0x0000);
-    wiringPiI2CWriteReg16(i2c_fd2, 0x82, 0x0000);
+void update() {
+    if (digitalRead(H2))
+        counter++;
+    else 
+        counter--;
 }
 
 int main() {
-    declareEncoders(0x0f, 0x0d);
-    attachEncoderInterrupts();
+    wiringPiSetup();
+    wiringPiI2CSetup(0x0f);
+    pinMode(H1, INPUT);
+    pullUpDnControl(H1, PUD_UP);
+    pinMode(H2, INPUT);
+    pullUpDnControl(H2, PUD_UP);
+    wiringPiISR(H1, INT_EDGE_RISING, update);
 
-    setMotorCommand();
+    delay(5000);
 
-    for (int i = 0; i < NUM_ENCODERS; ++i) {
-        std::cout << "ENCODER COUNTER " << (i + 1)
-                  << " = " << encoders[i]->getCounter() << "\n";
-    }
-    cleanupEncoders();
+    printf("Final Counter Value: %" PRId64 "\n", counter);
     return 0;
 }
+
+#endif
