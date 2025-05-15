@@ -135,7 +135,7 @@ private:
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps), MIN_ERROR_RPS);
         if (err > err_thres) {
             double norm_rps = pid[motor_id].compute(ref_rps / MAX_RPS[motor_id], omega / MAX_RPS[motor_id]);
-            printf("[INFO] Motor %d:\tomega=%.3f,\tcomputed=%.3f\t", motor_id + 1, ref_rps, omega, norm_rps * MAX_RPS[motor_id]);
+            printf("[INFO] Motor %d:\t%.3f,\t%.3f\t", motor_id + 1, ref_rps, omega, norm_rps * MAX_RPS[motor_id]);
             pwm = computePWMFromNormedRPS(norm_rps);
             if (norm_rps < 0) dir = BACKWARD;
             else dir = FORWARD;
