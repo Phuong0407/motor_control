@@ -17,6 +17,9 @@ int main() {
     // wiringPiI2CWriteReg16(i2c_fd2, 0xaa, 0x06);
 
     // motor.~Motor();
+    startEncoders();
+    std:: cout << i2c_fd1 << std::endl;
+    std:: cout << i2c_fd2 << std::endl;
 
     setMotorPWM(255, 255, 255);
     delay(1000);
