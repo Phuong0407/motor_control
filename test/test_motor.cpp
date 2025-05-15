@@ -12,5 +12,10 @@ int main() {
         printf("\nMotor control failure.\n");
     }
     motor.~Motor();
+
+    wiringPiI2CWriteReg16(i2c_fd2, 0x82, (255 << 8));
+    delay(1);
+    wiringPiI2CWriteReg16(i2c_fd2, 0xaa, 0x06);
+
     return 0;
 }
