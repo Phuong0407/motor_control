@@ -197,6 +197,7 @@ public:
             }
             printf("\n");
             setThreeMotors(pwm[0], dir[0], pwm[1], dir[1], pwm[2], dir[2]);
+            printf("[INFO] Motor commands: %d, %d, %d\n", motor[0].getPWM(), motor[1].getPWM(), motor[2].getPWM());
 
             uint64_t current_time = millis();
             double elapsed_time = (current_time - start_time) / 1000.0;
