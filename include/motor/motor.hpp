@@ -204,8 +204,8 @@ public:
             for (int i = 0; i < 3; i++) {
                 updateStblCycCounter(i, stble[i], &StbleCycCount[i]);
                 if (StbleCycCount[i] == STABLE_CYCLES_REQUIRED) {
+                    printStableLog(i, StbleCycCount[i], stble_time[i], elapsed_time, logState[i]);
                 }
-                printStableLog(i, StbleCycCount[i], stble_time[i], elapsed_time, logState[i]);
             }
             if (elapsed_time >= TIMEOUT_SECS) {
                 printf("[WARNING] Motor control timed out after %.1f seconds.\n", TIMEOUT_SECS);
