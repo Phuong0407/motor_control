@@ -89,7 +89,7 @@ static constexpr double cutoff_freq = 4.0;
 #ifndef MOTOR_CONTROL_ALGO
 #define MOTOR_CONTROL_ALGO
 
-static double constexpr TIMEOUT_SECS = 1.0;
+static double constexpr TIMEOUT_SECS = 20.0;
 
 class MotorState {
 private:
