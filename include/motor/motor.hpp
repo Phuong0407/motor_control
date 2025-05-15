@@ -193,6 +193,7 @@ public:
             measureAngularVelocity(omega[0], omega[1], omega[2], smpl_itv);
             for (int i = 0; i < 3; i++) {
                 stble[i] = computeMotorState(i, ref_rps[i], omega[i], pwm[i], dir[i]);
+                motor[i].setMotorState(pwm[i], dir[i]);
             }
             printf("\n");
             setThreeMotors(pwm[0], dir[0], pwm[1], dir[1], pwm[2], dir[2]);
@@ -203,7 +204,6 @@ public:
             for (int i = 0; i < 3; i++) {
                 updateStblCycCounter(i, stble[i], &StbleCycCount[i]);
                 if (StbleCycCount[i] == STABLE_CYCLES_REQUIRED) {
-                    motor[i].setMotorState(pwm[i], dir[i]);
                 }
                 printStableLog(i, StbleCycCount[i], stble_time[i], elapsed_time, logState[i]);
             }
