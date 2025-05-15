@@ -22,6 +22,7 @@ private:
     Camera camera;                      ///< Camera interface object.
     ImageProcessor<4> image_analyzer;   ///< Image processing object with 4 slices.
     KinematicModel kinemator;           ///< Kinematic model for robot control.
+    Motor motor;                        ///< Motor control object.
 
     void displayImage(const cv::Mat& image, const std::string& windowName) {
         cv::namedWindow(windowName, cv::WINDOW_NORMAL);
@@ -58,7 +59,7 @@ public:
     kp_omega(kp_omega),
     camera(frame_width, frame_height, frame_rate, verbose),
     kinemator(L1, L2, wheel_radius) {
-        startEncoders();
+        motor.setPIDParameters(6.0, 0.5, 0.01, 1.0);
     }
 
     /**
@@ -95,7 +96,7 @@ public:
                 continue;
             }
 
-            direction = image_analyzer.postProcessImage(frame, image);
+            direction = image_analyzer.processImage(frame, image);
             printf("Direction: %d\n", direction);
             cv::imshow("PROCESS IMAGE", image);
             ch = cv::waitKey(1);
@@ -107,7 +108,7 @@ public:
             controlAngularVelocity(omega1, omega2, omega3);
         }
         cv::destroyAllWindows();
-        stop_motor();
+        stopMotors();
     }
 
 };
