@@ -1,7 +1,6 @@
 line_follower_program/
 LCCV/
 libcamera/
-motor_control_v1/
 camera_control/
 light_control/
 build/
