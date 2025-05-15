@@ -53,7 +53,7 @@ int computeDirection(int dir1, int dir2) {
 }
 
 void setThreeMotors(int pwm1, int dir1, int pwm2, int dir2, int pwm3, int dir3) {
-    int dir12   = computeDirection(dir1, dir2);
+    int dir12 = computeDirection(dir1, dir2);
     
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
     delay(1);
@@ -134,7 +134,8 @@ private:
         double err = std::abs(ref_rps - omega);
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref_rps), MIN_ERROR_RPS);
         if (err > err_thres) {
-            double norm_rps = pid[motor_id].compute(ref_rps / MAX_RPS1, omega / MAX_RPS1);
+            double norm_rps = pid[motor_id].compute(ref_rps / MAX_RPS[motor_id], omega / MAX_RPS[motor_id]);
+            printf("[INFO] Motor %d: ref_rps=%.3f,\tomega=%.3f,\tcomputed=%.3f\n", motor_id + 1, ref_rps, omega, norm_rps * MAX_RPS[motor_id]);
             pwm = computePWMFromNormedRPS(norm_rps);
             if (norm_rps < 0) dir = BACKWARD;
             else dir = FORWARD;
