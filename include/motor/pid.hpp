@@ -42,7 +42,6 @@ PID(
         double new_intgr = intgr + err * smpl_intv;
         intgr = std::clamp(new_intgr, -max_intgr, max_intgr);
         double ctrl_sgnl = kp * err + ki * intgr + kd * dev;
-        printf("PID: %f %f %f\n", kp, ki, kd);
         ctrl_sgnl = std::clamp(ctrl_sgnl, -max_out, max_out);
         prev_fltrerr = fltrerr;
         return ctrl_sgnl;
