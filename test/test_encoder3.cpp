@@ -30,8 +30,8 @@ int main() {
 
 volatile int64_t counter = 0;
 
-int H1 = 27;
-int H2 = 0;
+int H1 = 3;
+int H2 = 4;
 
 void update() {
     if (digitalRead(H2))
