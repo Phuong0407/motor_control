@@ -40,6 +40,23 @@ private:
         wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir12);
     }
 
+    void setMotor2(int pwm2, int dir2) {
+        int dir12 = computeDirection12(motor1.dir, dir2);
+        printf("Motor 2: %d\t%d\n", pwm2, dir2);
+        printf("i2c_fd1: %d\n", i2c_fd1);
+        printf("i2c_fd2: %d\n", i2c_fd2);
+        wiringPiI2CWriteReg16(i2c_fd1, 0x82, (motor1.pwm << 8) | pwm2);
+        wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir12);
+    }
+
+    void setMotor3(int pwm3, int dir3) {
+        dir3 = computeDirection3(dir3);
+        printf("Motor 3: %d\t%d\n", pwm3, dir3);
+        printf("i2c_fd1: %d\n", i2c_fd1);
+        printf("i2c_fd2: %d\n", i2c_fd2);
+        wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm3 << 8));
+        wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir3);
+    }
 
 public:
     PID pid1, pid2, pid3;
@@ -73,7 +90,7 @@ public:
     void controlMotor1(double ref1) {
         int StableCycleCount = 0;
         while(StableCycleCount < STABLE_CYCLES_REQUIRED) {
-            measureAngularVelocity1(measured1);
+            measured1 = measureAngularVelocity1();
             double err1 = ref1 - measured1;
             double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref1), MIN_ERROR_RPS);
             int pwm1, pwm2, dir1, dir2;
@@ -83,6 +100,44 @@ public:
                 pwm1 = computePWMFromRPS(computed1);
                 dir1 = (computed1 > 0) ? FORWARD : BACKWARD;
                 setMotor1(pwm1, dir1);
+                StableCycleCount = 0;
+            } else
+                StableCycleCount++;
+        }
+    }
+
+    void controlMotor2(double ref2) {
+        int StableCycleCount = 0;
+        while(StableCycleCount < STABLE_CYCLES_REQUIRED) {
+            measured1 = measureAngularVelocity2();
+            double err2 = ref2 - measured1;
+            double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref2), MIN_ERROR_RPS);
+            int pwm2, pwm1, dir2, dir1;
+            if (std::abs(err2) > err_thres) {
+                computed2 = pid2.compute(err2);
+                printf("Motor 2: %.3f\t%.3f\n", measured2, computed2);
+                pwm2 = computePWMFromRPS(computed2);
+                dir2 = (computed2 > 0) ? FORWARD : BACKWARD;
+                setMotor2(pwm2, dir2);
+                StableCycleCount = 0;
+            } else
+                StableCycleCount++;
+        }
+    }
+
+    void controlMotor3(double ref3) {
+        int StableCycleCount = 0;
+        while(StableCycleCount < STABLE_CYCLES_REQUIRED) {
+            measured3 = measureAngularVelocity3();
+            double err3 = ref3 - measured3;
+            double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref3), MIN_ERROR_RPS);
+            int pwm3, dir3;
+            if (std::abs(err3) > err_thres) {
+                computed3 = pid3.compute(err3);
+                printf("Motor 2: %.3f\t%.3f\n", measured3, computed3);
+                pwm3 = computePWMFromRPS(computed3);
+                dir3 = (computed3 > 0) ? FORWARD : BACKWARD;
+                setMotor2(pwm3, dir3);
                 StableCycleCount = 0;
             } else
                 StableCycleCount++;
