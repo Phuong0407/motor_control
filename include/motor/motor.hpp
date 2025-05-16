@@ -147,7 +147,7 @@ private:
         if (err > err_thres) {
             double norm_rps = pid[motor_id].compute(ref_rps / MAX_RPS[motor_id], omega / MAX_RPS[motor_id]);
             pwm = computePWMFromNormedRPS(norm_rps);
-            printf("[INFO] Motor %d:\tomega %.3f,\terr %.3f,\tomega%f\n", motor_id + 1, ref_rps, omega, err, norm_rps * MAX_RPS[motor_id]);
+            printf("[INFO] Motor %d:\tmeasured=%.3f,\tcomputed%f\n", motor_id + 1, ref_rps, omega, norm_rps * MAX_RPS[motor_id]);
             if (norm_rps < 0) dir = BACKWARD;
             else dir = FORWARD;
             return false;
