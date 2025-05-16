@@ -21,7 +21,7 @@ int main() {
     std:: cout << i2c_fd1 << std::endl;
     std:: cout << i2c_fd2 << std::endl;
 
-    setMotorPWM(255, 255, 255);
+    setThreeMotors(255, 1, 255, 1, 255, 1);
     delay(1000);
     setMotorPWM(0, 0, 0);
 
