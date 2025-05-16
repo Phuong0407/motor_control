@@ -4,7 +4,7 @@
 
 #define TEST_PID
 
-#ifdef TEST_PID
+#ifdef TEST_MOTOR
 
 int main() {
     Motor motor;
