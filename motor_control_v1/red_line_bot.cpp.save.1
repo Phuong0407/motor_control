@@ -109,7 +109,7 @@ int main() {
     std::cout << "Red Line Following Bot Ready. Press ESC to stop. bro" << std::endl; 
 
     cv::namedWindow("Video", cv::WINDOW_NORMAL);
-    cv::Mat image(480, 640, CV_8UC3);
+    cv::Mat image(480, 640, CV_
 
     float previous_angle = 0;
 
@@ -127,7 +127,7 @@ int main() {
         int width = redBinary.cols;
 
         // Focus only on lower two horizontal strips of the image
-        cv::Mat roi_bottom = redBinary(cv::Rect(0, height * 3 / 6, width, height / 12));
+        cv::Mat roi_bottom = redBinary(cv::Rect(0, height * 4 / 6, width, height / 12));
         cv::Mat roi_top    = redBinary(cv::Rect(0, height * 2 / 6, width, height/ 12));
 
         cv::Moments M_bot = cv::moments(roi_bottom, true);
@@ -135,7 +135,7 @@ int main() {
 
         if (M_bot.m00 > 0 && M_top.m00 > 0) {
             // Line detected in both regions
-            cv::Point2f pt_bot(M_bot.m10 / M_bot.m00, height * 3 / 6 + height / 12);
+            cv::Point2f pt_bot(M_bot.m10 / M_bot.m00, height * 4 / 6 + height / 12);
             cv::Point2f pt_top(M_top.m10 / M_top.m00, height * 2 / 6 + height / 12);
 
             float dx = pt_bot.x - pt_top.x;
@@ -147,10 +147,10 @@ int main() {
             //float Kp = std::abs( angle) / 90; // Try increasing Kp for tighter turns
             float Kp = 1.2;
             float Kd = 0.4;
-            float Ke = 1.2;
+	    float Ke = 1.2;
             float derivative = angle - previous_angle;
-            float derivation = pt_bot.x - (width/2);
-            float correction = Kp * angle + Kd * derivative + Ke * derivation;
+	    float deviation = pt_bot.x - (width/2); 
+            float correction = Kp * angle + Kd * derivative + Ke * deviation;
 
             previous_angle = angle;
 
@@ -179,7 +179,7 @@ int main() {
         } else {
             std::cout << "Line not detected. Stopping motors." << std::endl;
             setMotors(fd1, fd2, 0, 0, 0); // Stop if line is lost
-        }
+        
 
         cv::imshow("Red Mask", redBinary);
         cv::imshow("Video", image);
