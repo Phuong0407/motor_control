@@ -1,5 +1,5 @@
-#ifndef MOTOR_STATE_HPP
-#define MOTOR_STATE_HPP
+#ifndef MOTORSTATE_HPP
+#define MOTORSTATE_HPP
 
 #include <cmath>
 #include <algorithm>
@@ -31,4 +31,4 @@ public:
     }
 };
 
-#endif // MOTOR_STATE_HPP
+#endif // MOTORSTATE_HPP
