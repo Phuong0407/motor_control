@@ -73,7 +73,6 @@ void setThreeMotors(int pwm1, int dir1, int pwm2, int dir2, int pwm3, int dir3) 
     wiringPiI2CWriteReg16(i2c_fd2, 0x82, (pwm3 << 8));
     delay(1);
     wiringPiI2CWriteReg16(i2c_fd2, 0xaa, dir3);
-    printf("i2c_fd1: %d, i2c_fd2: %d\n", i2c_fd1, i2c_fd2);
 }
 
 void stopMotors() {
@@ -192,7 +191,7 @@ public:
         double ref_rps[3] = {ref_rps1, ref_rps2, ref_rps3};
         double stble_time[3] = {0.0, 0.0, 0.0};
         bool logState[3] = {false, false, false};
-        printf("rps1: %.3f, rps2: %.3f, rps3: %.3f\n", ref_rps1, ref_rps2, ref_rps3);
+        
         uint64_t start_time = millis();
         while (
             StbleCycCount[0] < STABLE_CYCLES_REQUIRED ||
