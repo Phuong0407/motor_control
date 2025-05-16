@@ -178,9 +178,9 @@ public:
     Motor() { startEncoders(); }
 
     void setPIDParameters(double kp, double ki, double kd, double max_out) {
-        pid[0] = PID(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
-        pid[1] = PID(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
-        pid[2] = PID(kp, ki, kd, max_out, cutoff_freq, smpl_itv);
+        pid[0] = PID(kp, ki, kd, smpl_itv);
+        pid[1] = PID(kp, ki, kd, smpl_itv);
+        pid[2] = PID(kp, ki, kd, smpl_itv);
     }
 
     bool controlAngularVelocity(double ref_rps1, double ref_rps2, double ref_rps3) {
