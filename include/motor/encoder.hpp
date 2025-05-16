@@ -72,7 +72,7 @@ inline void measureAngularVelocity12(double &omega1, double &omega2) {
     omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv / COUNTER_PER_REV;
 }
 
-inline void measureAngularVelocity1(double &omega1) {
+inline double measureAngularVelocity1() {
     int delay_ms = static_cast<int>(smpl_itv * 1000);
     int64_t prev_ticks1, curr_ticks1;
 
@@ -80,21 +80,20 @@ inline void measureAngularVelocity1(double &omega1) {
     delay(delay_ms);
     curr_ticks1 = counter1;
 
-    omega1 = static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv / COUNTER_PER_REV;
+    return static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv / COUNTER_PER_REV;
 }
 
-inline void measureAngularVelocity2(double &omega2) {
+inline double measureAngularVelocity2() {
     int delay_ms = static_cast<int>(smpl_itv * 1000);
     int64_t prev_ticks2, curr_ticks2;
 
     prev_ticks2 = counter2;
     delay(delay_ms);
     curr_ticks2 = counter2;
-
-    omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv / COUNTER_PER_REV;
+    return static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv / COUNTER_PER_REV;
 }
 
-inline void measureAngularVelocity3(double &omega3) {
+inline double measureAngularVelocity3() {
     int delay_ms = static_cast<int>(smpl_itv * 1000);
     int64_t prev_ticks3, curr_ticks3;
 
@@ -102,7 +101,7 @@ inline void measureAngularVelocity3(double &omega3) {
     delay(delay_ms);
     curr_ticks3 = counter3;
 
-    omega3 = static_cast<double>(curr_ticks3 - prev_ticks3) / smpl_itv / COUNTER_PER_REV;
+    return static_cast<double>(curr_ticks3 - prev_ticks3) / smpl_itv / COUNTER_PER_REV;
 }
 
 #endif // ENCODER_HPP
