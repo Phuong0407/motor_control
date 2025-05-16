@@ -12,22 +12,35 @@ static constexpr int STABLE_CYCLES_REQUIRED     = 3;
 
 class MotorControl {
 private:
+    int computeDirection(int dir) {
+        if (dir == FORWARD)
+            return 0x06;
+        if (dir == BACKWARD)
+            return 0x09;
+        return 0x06;
+    }
     int computeDirection12(int dir1, int dir2) {
+        if (dir1 == 0)
+            return computeDirection(dir2);
+        if (dir2 == 0)
+            return computeDirection(dir1);
         if (dir1 == FORWARD && dir2 == FORWARD)
             return 0x06;
-        if (dir1 == FORWARD && dir2 == BACKWARD)
-            return 0x05;
         if (dir1 == BACKWARD && dir2 == FORWARD)
             return 0x0a;
-        else
+        if (dir1 == FORWARD && dir2 == BACKWARD)
+            return 0x05;
+        if (dir1 == BACKWARD && dir2 == BACKWARD)
             return 0x09;
+        else
+            return 0x06;
     }
 
     int computeDirection3(int dir) {
         if (dir == LEFT)
             return 0x06;
         if (dir == RIGHT)
-            return 0x05;
+            return 0x09;
         return 0x06;
     }
 
