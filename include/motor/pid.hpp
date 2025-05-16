@@ -36,6 +36,11 @@ public:
         prev_err = err;
         return ctrl_sgnl;
     }
+
+    void reset() {
+        intgr = 0.0;
+        prev_err = 0.0;
+    }
 };
 
 #endif // PID_HPP
