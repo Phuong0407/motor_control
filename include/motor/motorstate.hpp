@@ -11,6 +11,7 @@ static constexpr int BACKWARD               = -1;
 static constexpr int FORWARD                = +1;
 static constexpr int LEFT                   = -1;
 static constexpr int RIGHT                  = +1;
+static constexpr int STOP                   = 0;
 static constexpr double max_rps             = 0.86;
 static constexpr int DEAD_PWM               = 70;
 
