@@ -47,18 +47,21 @@ private:
     void setMotor1(int pwm1, int dir1) {
         int dir12 = computeDirection12(dir1, motor2.dir);
         wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | motor2.pwm);
+        microsleep(1);
         wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir12);
     }
 
     void setMotor2(int pwm2, int dir2) {
         int dir12 = computeDirection12(motor1.dir, dir2);
         wiringPiI2CWriteReg16(i2c_fd1, 0x82, (motor1.pwm << 8) | pwm2);
+        microsleep(1);
         wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir12);
     }
 
     void setMotor3(int pwm3, int dir3) {
         dir3 = computeDirection3(dir3);
         wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm3 << 8));
+        microsleep(1);
         wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir3);
     }
 

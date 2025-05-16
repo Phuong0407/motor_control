@@ -1,6 +1,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <time.h>
+#include <errno.h>
+#include <iostream>
 #include <wiringPi.h>
 #include <wiringPiI2C.h>
 
@@ -21,5 +24,14 @@ static constexpr double MIN_ERROR_RPS = 0.08;
 static constexpr double COUNTER_PER_REV = 144.0;
 
 static constexpr double smpl_itv = 0.1;
+
+void microsleep(int microseconds) {
+    struct timespec ts;
+    ts.tv_sec = microseconds / 1000000;
+    ts.tv_nsec = (microseconds % 1000000) * 1000;
+    while (nanosleep(&ts, &ts) == -1 && errno == EINTR) {
+        continue;
+    }
+}
 
 #endif // CONFIG_H
