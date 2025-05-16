@@ -15,7 +15,7 @@ static constexpr double MAX_RPS             = 0.86;
 static constexpr int DEAD_PWM               = 70;
 
 class MotorState {
-private:
+public:
     int pwm = 0;
     int dir = FORWARD;
 
