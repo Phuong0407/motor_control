@@ -34,6 +34,8 @@ private:
     void setMotor1(int pwm1, int dir1) {
         int dir12 = computeDirection12(dir1, motor2.dir);
         printf("Motor 1: %d\t%d\n", pwm1, dir1);
+        printf("i2c_fd1: %d\n", i2c_fd1);
+        printf("i2c_fd2: %d\n", i2c_fd2);
         wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | motor2.pwm);
         wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir12);
     }
