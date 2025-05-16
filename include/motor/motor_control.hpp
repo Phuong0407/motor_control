@@ -100,7 +100,7 @@ public:
             double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref1), MIN_ERROR_RPS);
             int pwm1, pwm2, dir1, dir2;
             if (std::abs(err1) > err_thres + 1e-6) {
-                computed1 = pid1.compute(err1/max_rps);
+                computed1 = pid1.compute(err1);
                 printf("Motor 1: %.3f\t%.3f\t%.3f\n", measured1, computed1, err1 * 100.0);
                 dir1 = (computed1 > 0) ? FORWARD : BACKWARD;
                 pwm1 = computePWMFromRPS(std::abs(computed1));
