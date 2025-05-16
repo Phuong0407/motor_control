@@ -181,7 +181,7 @@ public:
         double ref_rps[3] = {ref_rps1, ref_rps2, ref_rps3};
         double stble_time[3] = {0.0, 0.0, 0.0};
         bool logState[3] = {false, false, false};
-
+        printf("rps1: %.3f, rps2: %.3f, rps3: %.3f\n", ref_rps1, ref_rps2, ref_rps3);
         uint64_t start_time = millis();
         while (
             StbleCycCount[0] < STABLE_CYCLES_REQUIRED ||
