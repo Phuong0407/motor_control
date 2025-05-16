@@ -4,7 +4,7 @@
 #include "config.h"
 #include <algorithm>
 
-constexpr double max_out = 0.86;
+constexpr double max_out = 1.0;
 constexpr double max_intgr = 80.0;
 
 class PID {
@@ -24,7 +24,7 @@ public:
     intgr(0.0), prev_err(0.0)
     {}
 
-    void setUpPIDParamters(
+    void setUpPIDParameters(
         double kp,
         double ki,
         double kd
