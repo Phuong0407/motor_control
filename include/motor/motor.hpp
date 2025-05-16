@@ -205,8 +205,9 @@ public:
                 stble[i] = computeMotorState(i, ref_rps[i], omega[i], pwm[i], dir[i]);
                 motor[i].setMotorState(pwm[i], dir[i]);
             }
-            printf("\n");
-            setThreeMotors(pwm[0], dir[0], pwm[1], dir[1], pwm[2], dir[2]);
+            // setThreeMotors(pwm[0], dir[0], pwm[1], dir[1], pwm[2], dir[2]);
+            wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xffff);
+            wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
             printf("[INFO] Motor pwm: pwm %d, pwm %d, pwm %d\t", motor[0].getPWM(), motor[1].getPWM(), motor[2].getPWM());
             printf("[INFO] Motor dir: dir %d, dir %d, dir %d\n", motor[0].getDir(), motor[1].getDir(), motor[2].getDir());
 
