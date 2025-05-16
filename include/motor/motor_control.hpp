@@ -96,7 +96,7 @@ public:
         int StableCycleCount = 0;
         while(StableCycleCount < STABLE_CYCLES_REQUIRED) {
             measured1 = measureAngularVelocity1();
-            double err1 = ref1 - measured1;
+            double err1 = (ref1 - measured1) / max_rps;
             double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref1), MIN_ERROR_RPS);
             int pwm1, pwm2, dir1, dir2;
             if (std::abs(err1) > err_thres + 1e-6) {
