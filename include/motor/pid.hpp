@@ -8,7 +8,7 @@ private:
     double kp, ki, kd;
     double smpl_intv;
     double intgr, prev_err;
-    double max_out, max_intgr;
+    const static double max_out = 1.0, max_intgr = 80.0;
 
 public:
     PID() = default;
@@ -21,11 +21,9 @@ public:
         double max_intgr,
         double smpl_intv
     ) :
-        kp(kp), ki(ki), kd(kd),
-        smpl_intv(smpl_intv),
-        max_out(max_out),
-        max_intgr(max_intgr),
-        intgr(0.0), prev_err(0.0)
+    kp(kp), ki(ki), kd(kd),
+    smpl_intv(smpl_intv),
+    intgr(0.0), prev_err(0.0)
     {}
 
     double compute(double ref, double measured) {
