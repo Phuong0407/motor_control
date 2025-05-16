@@ -10,6 +10,7 @@ pkg_check_modules(LIBCAMERA REQUIRED libcamera)
 include_directories(
     ${LIBCAMERA_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/include/
     ${CMAKE_SOURCE_DIR}/include/vision
     ${CMAKE_SOURCE_DIR}/include/motor
     ${CMAKE_SOURCE_DIR}/include/navigation
