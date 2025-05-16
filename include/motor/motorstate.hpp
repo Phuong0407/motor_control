@@ -24,11 +24,8 @@ int computePWMFromRPS(double u_rps) {
 
 class MotorState{
 public:
-    int pwm;
-    int dir;
-    double ref;
-    double measure;
-    double compute;
+    int pwm = 0;
+    int dir  = 0;
 };
 
 #endif // MOTORSTATE_HPP
