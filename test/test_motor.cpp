@@ -2,7 +2,7 @@
 #include "../include/motor/motor.hpp"
 #include <iostream>
 
-#define TEST_PID
+#define TEST_MOTOR
 
 #ifdef TEST_PID
 
@@ -23,11 +23,12 @@ int main() {
 
 #ifdef TEST_MOTOR
 int main() {
-startEncoders();
+    startEncoders();
     std:: cout << i2c_fd1 << std::endl;
     std:: cout << i2c_fd2 << std::endl;
 
-    setThreeMotors(255, 1, 255, 1, 200, LEFT);
+    // setThreeMotors(255, 1, 255, 1, 200, LEFT);
+    wiringPiI2CWriteReg8(i2c_fd1, 0x82, 0xff);
     delay(5000);
     setMotorPWM(0, 0, 0);
 }
