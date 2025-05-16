@@ -147,7 +147,7 @@ private:
         if (err > err_thres) {
             double norm_rps = pid[motor_id].compute(ref_rps / MAX_RPS[motor_id], omega / MAX_RPS[motor_id]);
             pwm = computePWMFromNormedRPS(norm_rps);
-            printf("[INFO] Motor %d: ref_rps %.3f, omega %.3f, err %.3f, pwm %d\n", motor_id + 1, ref_rps, omega, err, pwm);
+            printf("[INFO] Motor %d:\tomega %.3f,\terr %.3f,\tomega%f\n", motor_id + 1, ref_rps, omega, err, norm_rps * MAX_RPS[motor_id]);
             if (norm_rps < 0) dir = BACKWARD;
             else dir = FORWARD;
             return false;
@@ -206,11 +206,6 @@ public:
                 motor[i].setMotorState(pwm[i], dir[i]);
             }
             setThreeMotors(pwm[0], dir[0], pwm[1], dir[1], pwm[2], dir[2]);
-            // wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xffff);
-            // wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
-            printf("[INFO] Motor pwm: pwm %d, pwm %d, pwm %d\t", motor[0].getPWM(), motor[1].getPWM(), motor[2].getPWM());
-            printf("[INFO] Motor dir: dir %d, dir %d, dir %d\n", motor[0].getDir(), motor[1].getDir(), motor[2].getDir());
-
             uint64_t current_time = millis();
             double elapsed_time = (current_time - start_time) / 1000.0;
             
