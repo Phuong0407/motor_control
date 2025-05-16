@@ -4,13 +4,12 @@
 #include "config.h"
 #include <algorithm>
 
-constexpr double max_intgr = 80.0;
-
 class PID {
 private:
     double max_out;
     double kp, ki, kd;
     double intgr, prev_err;
+    double max_intgr;
 
 public:
     PID() = default;
@@ -23,7 +22,7 @@ public:
     ) :
     kp(kp), ki(ki), kd(kd),
     intgr(0.0), prev_err(0.0),
-    max_out(max_out)
+    max_out(max_out), max_intgr(max_out / smpl_itv)
     {}
 
     void setUpPIDParameters(
@@ -35,9 +34,10 @@ public:
         this->kp = kp;
         this->ki = ki;
         this->kd = kd;
-        this->max_out = max_out;
         this->intgr = 0.0;
         this->prev_err = 0.0;
+        this->max_out = max_out;
+        this->max_intgr = max_out / smpl_itv;
     }
 
     double compute(double err) {
