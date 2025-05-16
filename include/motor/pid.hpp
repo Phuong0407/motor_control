@@ -3,12 +3,14 @@
 
 #include <algorithm>
 
+constexpr double max_out = 1.0;
+constexpr double max_intgr = 80.0;
+
 class PID {
 private:
     double kp, ki, kd;
     double smpl_intv;
     double intgr, prev_err;
-    const static double max_out = 1.0, max_intgr = 80.0;
 
 public:
     PID() = default;
