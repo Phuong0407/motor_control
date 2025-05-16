@@ -80,7 +80,7 @@ inline double measureAngularVelocity1() {
     delay(delay_ms);
     curr_ticks1 = counter1;
 
-    return static_cast<double>(curr_ticks1 - prev_ticks1) / smpl_itv / COUNTER_PER_REV;
+    return static_cast<double>(prev_ticks1 - curr_ticks1) / smpl_itv / COUNTER_PER_REV;
 }
 
 inline double measureAngularVelocity2() {
