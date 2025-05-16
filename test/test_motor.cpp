@@ -27,6 +27,7 @@ int main() {
 
     // setThreeMotors(255, 1, 255, 1, 200, LEFT);
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xffff);
+    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
     delay(5000);
     setMotorPWM(0, 0, 0);
 }
