@@ -80,8 +80,8 @@ public:
                 printf("Motor 1: %.3f\t%.3f\n", measured1, computed1);
                 pwm1 = computePWMFromRPS(computed1);
                 dir1 = (computed1 > 0) ? FORWARD : BACKWARD;
-                StableCycleCount = 0;
                 setMotor1(pwm1, dir1);
+                StableCycleCount = 0;
             } else
                 StableCycleCount++;
         }
