@@ -11,6 +11,16 @@ static constexpr int BACKWARD               = -1;
 static constexpr int FORWARD                = +1;
 static constexpr int LEFT                   = -1;
 static constexpr int RIGHT                  = +1;
+static constexpr double max_rps             = 0.86;
+static constexpr int DEAD_PWM               = 70;
+
+int computePWMFromRPS(double u_rps) {
+    double norm_rps = std::clamp(u_rps / max_rps, 0.0, 1.0);
+    int pwm = MAX_PWM * static_cast<int>(std::round(norm_rps * SAFTY_OFFSET));
+    if (pwm < DEAD_PWM) pwm = 0;
+    else pwm = static_cast<int>(pwm - DEAD_PWM) / SCALEUP_FACTOR_PWM;
+    return pwm;
+}
 
 class MotorState{
 public:
@@ -19,16 +29,6 @@ public:
     double ref;
     double measure;
     double compute;
-    const double max_rps = 0.86;
-    const int DEAD_PWM = 70;
-
-    int computePWMFromRPS(double u_rps) {
-        double norm_rps = std::clamp(u_rps / max_rps, 0.0, 1.0);
-        int pwm = MAX_PWM * static_cast<int>(std::round(norm_rps * SAFTY_OFFSET));
-        if (pwm < DEAD_PWM) pwm = 0;
-        else pwm = static_cast<int>(pwm - DEAD_PWM) / SCALEUP_FACTOR_PWM;
-        return pwm;
-    }
 };
 
 #endif // MOTORSTATE_HPP
