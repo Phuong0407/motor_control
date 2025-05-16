@@ -48,6 +48,7 @@ int computeDirection(int dir) {
         return 0x06;
     if (dir == RIGHT)
         return 0x05;
+    return 0x06;
 }
 
 int computeDirection(int dir1, int dir2) {
