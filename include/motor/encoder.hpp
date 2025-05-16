@@ -24,10 +24,6 @@ void updateCounter1() { digitalRead(MOTOR1_H2) ? ++counter1 : --counter1; }
 void updateCounter2() { digitalRead(MOTOR2_H2) ? ++counter2 : --counter2; }
 void updateCounter3() { digitalRead(MOTOR3_H2) ? ++counter3 : --counter3; }
 
-inline void getTicks(int64_t &ticks1, int64_t &ticks2, int64_t &ticks3) {
-    ticks1 = counter1; ticks2 = counter2; ticks3 = counter3;
-}
-
 void startEncoders() {
     initEncoder(encoder_addr1, MOTOR1_H1, MOTOR1_H2, i2c_fd1);
     initEncoder(encoder_addr1, MOTOR2_H1, MOTOR2_H2, i2c_fd1);
@@ -48,12 +44,42 @@ inline void measureAngularVelocity(double &omega1, double &omega2, double &omega
     int64_t prev_ticks1, prev_ticks2, prev_ticks3;
     int64_t curr_ticks1, curr_ticks2, curr_ticks3;
 
-    getTicks(prev_ticks1, prev_ticks2, prev_ticks3);
+    prev_ticks1 = counter1;
+    prev_ticks2 = counter2;
+    prev_ticks3 = counter3;
     delay(delay_ms);
-    getTicks(curr_ticks1, curr_ticks2, curr_ticks3);
+    curr_ticks1 = counter1;
+    curr_ticks2 = counter2;
+    curr_ticks3 = counter3;
 
     omega1 = static_cast<double>(prev_ticks1 - curr_ticks1) / smpl_itv / COUNTER_PER_REV;
     omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv / COUNTER_PER_REV;
+    omega3 = static_cast<double>(curr_ticks3 - prev_ticks3) / smpl_itv / COUNTER_PER_REV;
+}
+
+inline void measureAngularVelocity12(double &omega1, double &omega2) {
+    int delay_ms = static_cast<int>(smpl_itv * 1000);
+    int64_t prev_ticks1, prev_ticks2;
+    int64_t curr_ticks1, curr_ticks2;
+
+    prev_ticks1 = counter1;
+    prev_ticks2 = counter2;
+    delay(delay_ms);
+    curr_ticks1 = counter1;
+    curr_ticks2 = counter2;
+
+    omega1 = static_cast<double>(prev_ticks1 - curr_ticks1) / smpl_itv / COUNTER_PER_REV;
+    omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / smpl_itv / COUNTER_PER_REV;
+}
+
+inline void measureAngularVelocity3(double &omega3) {
+    int delay_ms = static_cast<int>(smpl_itv * 1000);
+    int64_t prev_ticks3, curr_ticks3;
+
+    prev_ticks3 = counter3;
+    delay(delay_ms);
+    curr_ticks3 = counter3;
+
     omega3 = static_cast<double>(curr_ticks3 - prev_ticks3) / smpl_itv / COUNTER_PER_REV;
 }
 
