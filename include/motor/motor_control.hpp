@@ -82,9 +82,9 @@ public:
         double ki3,
         double kd3
     ) {
-        pid1.setUpPIDParameters(kp1, ki1, kd1);
-        pid2.setUpPIDParameters(kp2, ki2, kd2);
-        pid3.setUpPIDParameters(kp3, ki3, kd3);
+        pid1.setUpPIDParameters(kp1, ki1, kd1, max_rps);
+        pid2.setUpPIDParameters(kp2, ki2, kd2, max_rps);
+        pid3.setUpPIDParameters(kp3, ki3, kd3, max_rps);
         startEncoders();
     }
 
