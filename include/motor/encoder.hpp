@@ -8,6 +8,7 @@
 #include <vector>
 #include <stdio.h>
 #include <inttypes.h>
+#include <unistd.h>
 
 inline void initEncoder(int i2c_addr, int H1, int H2, int &i2c_fd) {
     wiringPiSetup();
