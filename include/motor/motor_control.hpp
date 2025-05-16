@@ -96,11 +96,11 @@ public:
         int StableCycleCount = 0;
         while(StableCycleCount < STABLE_CYCLES_REQUIRED) {
             measured1 = measureAngularVelocity1();
-            double err1 = (ref1 - measured1) / max_rps;
+            double err1 = ref1 - measured1;
             double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref1), MIN_ERROR_RPS);
             int pwm1, pwm2, dir1, dir2;
             if (std::abs(err1) > err_thres + 1e-6) {
-                computed1 = pid1.compute(err1);
+                computed1 = pid1.compute(err1/max_rps);
                 printf("Motor 1: %.3f\t%.3f\t%.3f\n", measured1, computed1, err1 * 100.0);
                 pwm1 = computePWMFromRPS(computed1);
                 dir1 = (computed1 > 0) ? FORWARD : BACKWARD;
