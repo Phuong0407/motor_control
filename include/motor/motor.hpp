@@ -66,9 +66,9 @@ void setThreeMotors(int pwm1, int dir1, int pwm2, int dir2, int pwm3, int dir3) 
     int dir12 = computeDirection(dir1, dir2);
     dir3 = computeDirection(dir3);
     
-    wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
+    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xffff);
     delay(1);
-    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir12);
+    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
     delay(1);
     wiringPiI2CWriteReg16(i2c_fd2, 0x82, (pwm3 << 8));
     delay(1);
