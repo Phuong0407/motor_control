@@ -17,8 +17,6 @@ public:
         double kp,
         double ki,
         double kd,
-        double max_out,
-        double max_intgr,
         double smpl_intv
     ) :
     kp(kp), ki(ki), kd(kd),
