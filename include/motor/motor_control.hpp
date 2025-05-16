@@ -33,27 +33,18 @@ private:
 
     void setMotor1(int pwm1, int dir1) {
         int dir12 = computeDirection12(dir1, motor2.dir);
-        printf("Motor 1: %d\t%d\n", pwm1, dir1);
-        printf("i2c_fd1: %d\n", i2c_fd1);
-        printf("i2c_fd2: %d\n", i2c_fd2);
         wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | motor2.pwm);
         wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir12);
     }
 
     void setMotor2(int pwm2, int dir2) {
         int dir12 = computeDirection12(motor1.dir, dir2);
-        printf("Motor 2: %d\t%d\n", pwm2, dir2);
-        printf("i2c_fd1: %d\n", i2c_fd1);
-        printf("i2c_fd2: %d\n", i2c_fd2);
         wiringPiI2CWriteReg16(i2c_fd1, 0x82, (motor1.pwm << 8) | pwm2);
         wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir12);
     }
 
     void setMotor3(int pwm3, int dir3) {
         dir3 = computeDirection3(dir3);
-        printf("Motor 3: %d\t%d\n", pwm3, dir3);
-        printf("i2c_fd1: %d\n", i2c_fd1);
-        printf("i2c_fd2: %d\n", i2c_fd2);
         wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm3 << 8));
         wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir3);
     }
