@@ -8,13 +8,25 @@
 
 class PID {
 private:
-    double kp = 0.0;
-    double ki = 0.0;
-    double kd = 0.0;
-    double intgr = 0.0;
-    double prev_err = 0.0;
-    double ema_coef = 0.0;
-    double max_out = 0.0;
+    double kp               = 0.0;
+    double ki               = 0.0;
+    double kd               = 0.0;
+    double alpha            = 0.0;
+    double max_out          = 0.0;
+    double intgr            = 0.0;
+    double old_filter_err   = 0.0;
+
+    inline double computeAlphaEMA(double cutoff_freq) {
+        if (cutoff_freq <= 0)
+            return 1.0;
+        double alpha = std::cos(2.0 * float(M_PI) * cutoff_freq);
+        return alpha - 1.0 + std::sqrt(alpha * alpha - 4.0 * alpha + 3.0);
+    }
+
+    inline void setEMACutoff(double cutoff_freq) {
+        double normalizedFreq = cutoff_freq * smpl_itv;
+        alpha = cutoff_freq == 0.0 ? 1.0 : computeAlphaEMA(cutoff_freq);
+    }
 
 public:
     PID() = default;
@@ -27,7 +39,6 @@ public:
         setEMACutoff(cutoff_freq);
     }
 
-
     void setPIDParameters(double kp, double ki, double kd, double cutoff_freq, double max_out) {
         this->kp = kp;
         this->ki = ki;
@@ -36,30 +47,20 @@ public:
         setEMACutoff(cutoff_freq);
     }
 
-    double compute(double input) {
-        double err = ref - input;
+    inline void resetPID() { intgr = 0.0; old_filter_err = 0.0; }
+
+    double compute(double ref, double measured) {
+        double err = ref - measured;
+        double filter_err = alpha * err + (1 - alpha) * old_filter_err;
+        double filter_dev = (filter_err - old_filter_err) / smpl_itv;
         double new_intgr = intgr + err * smpl_itv;
-        double dev = EMAFltCoeff * (prev_input - input);
-        prev_input = input;
+        double ctrl_sgnl = kp * err + ki * new_intgr + kd * filter_dev;
 
-        double output = kp * err + ki * new_intgr + kd * dev;
-
-        output = std::clamp(output, -max_out, max_out);
-        if (std::abs(output) != max_out) intgr = new_intgr;
-        return output;
+        double clamped_ctrl_sgnl = std::clamp(ctrl_sgnl, -max_out, max_out);
+        if (ctrl_sgnl == clamped_ctrl_sgnl) intgr = new_intgr;
+        old_filter_err = filter_err;
+        return ctrl_sgnl;
     }
-
-    inline void setEMACutoff(double cutoff_freq) {
-        if (cutoff_freq <= 0.0) {
-            EMAFltCoeff = 1.0;
-        } else {
-            double normalizedFreq = cutoff_freq * smpl_itv;
-            EMAFltCoeff = 1.0 / (1.0 + normalizedFreq);
-        }
-    }
-
-    inline void setRef(double ref) { this->ref = ref; }
-    inline void resetIntegral() { intgr = 0.0; }
 };
 
 #endif // PID_HPP
