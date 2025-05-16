@@ -36,8 +36,7 @@ public:
         this->prev_err = 0.0;
     }
 
-    double compute(double ref, double measured) {
-        double err = ref - measured;
+    double compute(double err) {
         intgr += err * smpl_itv;
         intgr = std::clamp(intgr, -max_intgr, max_intgr);
         double dev = (err - prev_err) / smpl_itv;
