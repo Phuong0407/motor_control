@@ -37,11 +37,11 @@ include_directories(
 # )
 
 add_executable(
-    test_motor_separate
-    ${CMAKE_SOURCE_DIR}/test/test_motor_separate.cpp
+    test_motor_separation
+    ${CMAKE_SOURCE_DIR}/test/test_motor_separation.cpp
 )
 
 # target_link_libraries(test_vision -llccv ${OpenCV_LIBS} ${LIBCAMERA_LIBRARIES})
 # target_link_libraries(main -llccv ${OpenCV_LIBS} ${LIBCAMERA_LIBRARIES} -lwiringPi)
-target_link_libraries(test_motor_separate -lwiringPi)
+target_link_libraries(test_motor_separation -lwiringPi)
 # target_link_libraries(test_encoder -lwiringPi)
