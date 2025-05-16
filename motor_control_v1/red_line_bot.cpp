@@ -79,7 +79,7 @@ void setMotors(int fd1, int fd2, int leftSpeed, int rightSpeed, int frontSpeed) 
 
 // ======== Vision: Red Line Detection ========
 cv::Mat extractRedMask(const cv::Mat& image) {
-    cv::Mat hsvImage, mask1, mask2, binaryMask;
+    cv::Mat hsvImage, mask1, mask2, blue,  binaryMask;
 
     cv::cvtColor(image, hsvImage, cv::COLOR_BGR2HSV);
 
@@ -87,7 +87,9 @@ cv::Mat extractRedMask(const cv::Mat& image) {
     cv::inRange(hsvImage, cv::Scalar(0, 120, 70),  cv::Scalar(10, 255, 255), mask1);
     cv::inRange(hsvImage, cv::Scalar(170, 120, 70), cv::Scalar(180, 255, 255), mask2);
 
-    binaryMask = mask1 | mask2;
+    cv::inRange(hsvImage, cv::Scalar(100,150,50), cv::Scalar(140, 255, 255), blue);
+
+    binaryMask = mask1 | mask2 | blue;
 
     return binaryMask;
 }
