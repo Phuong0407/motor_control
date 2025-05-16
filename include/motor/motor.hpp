@@ -28,8 +28,8 @@
 static constexpr double SAFTY_OFFSET    = 0.8;
 static constexpr int BACKWARD           = -1;
 static constexpr int FORWARD            = +1;
-static constexpr int LEFT               = +1;
-static constexpr int RIGHT              = -1;
+static constexpr int LEFT               = -1;
+static constexpr int RIGHT              = +1;
 
 void setMotorPWM(int pwm1, int pwm2, int pwm3) {
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
