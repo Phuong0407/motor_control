@@ -28,7 +28,7 @@ int main() {
     std:: cout << i2c_fd2 << std::endl;
 
     // setThreeMotors(255, 1, 255, 1, 200, LEFT);
-    wiringPiI2CWriteReg8(i2c_fd1, 0x82, 0xff);
+    wiringPiI2CWriteReg8(i2c_fd1, 0x84, 0xff);
     delay(5000);
     setMotorPWM(0, 0, 0);
 }
