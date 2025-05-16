@@ -23,12 +23,27 @@ int computePWMFromRPS(double u_rps) {
 }
 
 class MotorState{
-public:
+private:
     int pwm;
     int dir;
     double ref;
     double measure;
     double compute;
+
+public:
+    MotorState() : pwm(0), dir(0), ref(0.0), measure(0.0), compute(0.0) {}
+
+    inline void setPWM(int pwm) { this->pwm = pwm; }
+    inline void setDir(int dir) { this->dir = dir; }
+    inline void setRef(double ref) { this->ref = ref; }
+    inline void setMeasure(double measure) { this->measure = measure; }
+    inline void setCompute(double compute) { this->compute = compute; }
+
+    inline int getPWM() const { return pwm; }
+    inline int getDir() const { return dir; }
+    inline double getRef() const { return ref; }
+    inline double getMeasure() const { return measure; }
+    inline double getCompute() const { return compute; }
 };
 
 #endif // MOTORSTATE_HPP
