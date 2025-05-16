@@ -213,11 +213,6 @@ public:
                 printf("[WARNING] Motor control timed out after %.1f seconds.\n", TIMEOUT_SECS);
                 return false;
             }
-            int remaining_delay = static_cast<int>(smpl_itv * 1000) - millis() + loop_start;
-            if (remaining_delay > 0) {
-                printf("[INFO] Remaining delay: %d ms\n", remaining_delay);
-                delay(remaining_delay);
-            }
         }
         return true;
     }
