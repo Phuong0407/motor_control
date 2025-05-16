@@ -11,7 +11,7 @@
 
 inline void initEncoder(int i2c_addr, int H1, int H2, int &i2c_fd) {
     wiringPiSetup();
-    wiringPiI2CSetup(i2c_addr);
+    i2c_fd = wiringPiI2CSetup(i2c_addr);
     pinMode(H1, INPUT); pullUpDnControl(H1, PUD_UP);
     pinMode(H2, INPUT); pullUpDnControl(H2, PUD_UP);
 }
