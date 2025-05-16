@@ -130,9 +130,9 @@ static constexpr int STABLE_CYCLES_REQUIRED     = 3;
 
 class Motor {
 private:
-    double MAX_RPS[3] = {MAX_RPS1, MAX_RPS2, MAX_RPS3};
     PID pid[3];
     MotorState motor[3];
+    double MAX_RPS[3] = {MAX_RPS1, MAX_RPS2, MAX_RPS3};
 
     bool computeMotorState(
         int motor_id,
