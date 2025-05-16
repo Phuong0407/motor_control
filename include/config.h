@@ -14,5 +14,7 @@ static constexpr int MOTOR2_H2 = 4;
 static constexpr int MOTOR3_H1 = 27;
 static constexpr int MOTOR3_H2 = 0;
 
+static constexpr double MIN_ERROR_RPS = 0.08;
 static constexpr double COUNTER_PER_REV = 144.0;
+
 static constexpr double smpl_itv = 0.1;
