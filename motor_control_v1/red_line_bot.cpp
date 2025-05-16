@@ -135,6 +135,9 @@ int main() {
         cv::Moments M_bot = cv::moments(roi_bottom, true);
         cv::Moments M_top = cv::moments(roi_top, true);
 
+        double coverage = cv::countNonZero(roi_bottom) / static_cast<double>(roi_bottom.total());
+
+
         if (M_bot.m00 > 0 && M_top.m00 > 0) {
             // Line detected in both regions
             cv::Point2f pt_bot(M_bot.m10 / M_bot.m00, height * 3 / 6 + height / 12);
@@ -148,8 +151,8 @@ int main() {
             // ======== Motion Control Logic ========
             //float Kp = std::abs( angle) / 90; // Try increasing Kp for tighter turns
             float Kp = 1.2;
-            float Kd = 0.4;
-            float Ke = 1.2;
+            float Kd = 1.2;
+            float Ke = 0.7;
             float derivative = angle - previous_angle;
             float derivation = pt_bot.x - (width/2);
             float correction = Kp * angle + Kd * derivative + Ke * derivation;
@@ -160,6 +163,7 @@ int main() {
             int leftSpeed = baseSpeed + correction;
             int rightSpeed = baseSpeed - correction;
             int frontSpeed = baseSpeed;
+
          
             if ( std::abs(leftSpeed - rightSpeed)<5) {
 				frontSpeed = 0;
@@ -178,10 +182,15 @@ int main() {
             cv::line(image, pt_bot, pt_top, cv::Scalar(255, 255, 0), 2);
             cv::circle(image, pt_bot, 5, cv::Scalar(0, 255, 0), -1);
             cv::circle(image, pt_top, 5, cv::Scalar(0, 255, 0), -1);
+        } else if (coverage > 0.01) {
+            std::cout << "ligne horizontale a si khalid" << std::endl;
+            setMotors (fd1, fd2, 0, 200, 250);
+
         } else {
             std::cout << "Line not detected. Stopping motors." << std::endl;
             setMotors(fd1, fd2, 0, 0, 0); // Stop if line is lost
         }
+
 
         cv::imshow("Red Mask", redBinary);
         cv::imshow("Video", image);
