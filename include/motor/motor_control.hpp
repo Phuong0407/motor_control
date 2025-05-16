@@ -87,7 +87,7 @@ public:
             int pwm1, pwm2, dir1, dir2;
             if (std::abs(err1) > err_thres) {
                 computed1 = pid1.compute(err1);
-                printf("Motor 1: %.3f\t%.3f\n", measured1, computed1);
+                printf("Motor 1: %.3f\t%.3f\t%.3f\n", measured1, computed1, err1 * 100.0);
                 pwm1 = computePWMFromRPS(computed1);
                 dir1 = (computed1 > 0) ? FORWARD : BACKWARD;
                 setMotor1(pwm1, dir1);
