@@ -34,6 +34,7 @@ void setMotorPWM(int pwm1, int pwm2, int pwm3) {
     wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
     wiringPiI2CWriteReg16(i2c_fd2, 0x82, (pwm3 << 8));
     wiringPiI2CWriteReg16(i2c_fd2, 0xaa, 0x06);
+    printf("i2c_fd1: %d, i2c_fd2: %d\n", i2c_fd1, i2c_fd2);
 }
 
 int computePWMFromNormedRPS(double norm_rps) {
