@@ -28,6 +28,8 @@
 static constexpr double SAFTY_OFFSET    = 0.8;
 static constexpr int BACKWARD           = -1;
 static constexpr int FORWARD            = +1;
+static constexpr int LEFT            = +2;
+static constexpr int RIGHT           = -2;
 
 void setMotorPWM(int pwm1, int pwm2, int pwm3) {
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
@@ -39,6 +41,13 @@ void setMotorPWM(int pwm1, int pwm2, int pwm3) {
 int computePWMFromNormedRPS(double norm_rps) {
     double clamped = std::clamp(norm_rps, -1.0, 1.0);
     return static_cast<int>(std::round(255.0 * clamped * SAFTY_OFFSET));
+}
+
+int computeDirection(int dir) {
+    if (dir == LEFT)
+        return 0x06;
+    if (dir == RIGHT)
+        return 0x05;
 }
 
 int computeDirection(int dir1, int dir2) {
@@ -54,6 +63,7 @@ int computeDirection(int dir1, int dir2) {
 
 void setThreeMotors(int pwm1, int dir1, int pwm2, int dir2, int pwm3, int dir3) {
     int dir12 = computeDirection(dir1, dir2);
+    dir3 = computeDirection(dir3);
     
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
     delay(1);
@@ -61,7 +71,7 @@ void setThreeMotors(int pwm1, int dir1, int pwm2, int dir2, int pwm3, int dir3) 
     delay(1);
     wiringPiI2CWriteReg16(i2c_fd2, 0x82, (pwm3 << 8));
     delay(1);
-    wiringPiI2CWriteReg16(i2c_fd2, 0xaa, 0x06);
+    wiringPiI2CWriteReg16(i2c_fd2, 0xaa, dir3);
     printf("i2c_fd1: %d, i2c_fd2: %d\n", i2c_fd1, i2c_fd2);
 }
 
