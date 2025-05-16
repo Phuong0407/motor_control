@@ -1,3 +1,6 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
 #include <wiringPi.h>
 #include <wiringPiI2C.h>
 
@@ -18,3 +21,5 @@ static constexpr double MIN_ERROR_RPS = 0.08;
 static constexpr double COUNTER_PER_REV = 144.0;
 
 static constexpr double smpl_itv = 0.1;
+
+#endif // CONFIG_H
