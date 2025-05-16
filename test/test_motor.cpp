@@ -2,7 +2,7 @@
 #include "../include/motor/motor.hpp"
 #include <iostream>
 
-#define TEST_MOTOR
+#define TEST_PID
 
 #ifdef TEST_PID
 
