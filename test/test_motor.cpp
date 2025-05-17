@@ -12,15 +12,21 @@
 #include <iostream>
 
 int main(int argc, char *argv[]) {
+    if (argc == 0)
+        goto SKIP_CMD;
     double kp       = std::stod(argv[1]);
     double ki       = std::stod(argv[2]);
     double kd       = std::stod(argv[3]);
     double cutoff   = std::stod(argv[4]);
 
+SKIP_CMD:
+    double kp = 0.3, ki = 0.005, kd = 0.0005, cutoff = 4.0;
+
     startEncoders();
+
     pid1.setPIDParameters(kp, ki, kd, cutoff, MAX_TICKS);
-    pid2.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_TICKS);
-    pid3.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_TICKS);
+    pid2.setPIDParameters(kp, ki, kd, cutoff, MAX_TICKS);
+    pid3.setPIDParameters(kp, ki, kd, cutoff, MAX_TICKS);
 
     ref1 = 90.0, ref2 = 0.0, ref3 = 0.0;
     
