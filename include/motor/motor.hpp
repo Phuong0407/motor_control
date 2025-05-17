@@ -73,26 +73,24 @@ volatile        int64_t counter1    = 0;
 volatile        int64_t counter2    = 0;
 volatile        int64_t counter3    = 0;
 
-inline void initEncoder(int i2c_addr, int H1, int H2, int &i2c_fd) {
-    wiringPiSetup();
-    i2c_fd = wiringPiI2CSetup(i2c_addr);
-    pinMode(H1, INPUT); pullUpDnControl(H1, PUD_UP);
-    pinMode(H2, INPUT); pullUpDnControl(H2, PUD_UP);
-}
-
-inline void updateCounter1() { digitalRead(MOTOR1_H2) ? ++counter1 : --counter1; }
-inline void updateCounter2() { digitalRead(MOTOR2_H2) ? ++counter2 : --counter2; }
-inline void updateCounter3() { digitalRead(MOTOR3_H2) ? ++counter3 : --counter3; }
-
 void startEncoders() {
-    initEncoder(ADDRESS1, MOTOR1_H1, MOTOR1_H2, i2c_fd1);
-    initEncoder(ADDRESS1, MOTOR2_H1, MOTOR2_H2, i2c_fd1);
-    initEncoder(ADDRESS2, MOTOR3_H1, MOTOR3_H2, i2c_fd2);
+    wiringPiSetup();
+    i2c_fd1 = wiringPiI2CSetup(0x0f);
+    i2c_fd2 = wiringPiI2CSetup(0x0d);
+    
+    pinMode(MOTOR1_H1, INPUT); pullUpDnControl(MOTOR1_H1, PUD_UP);
+    pinMode(MOTOR2_H1, INPUT); pullUpDnControl(MOTOR2_H2, PUD_UP);
+    pinMode(MOTOR3_H1, INPUT); pullUpDnControl(MOTOR3_H2, PUD_UP);
 
     wiringPiISR(MOTOR1_H1, INT_EDGE_RISING, updateCounter1);
     wiringPiISR(MOTOR2_H1, INT_EDGE_RISING, updateCounter2);
     wiringPiISR(MOTOR3_H1, INT_EDGE_RISING, updateCounter3);
 }
+
+void updateCounter1() { digitalRead(MOTOR1_H2) ? ++counter1 : --counter1; }
+void updateCounter2() { digitalRead(MOTOR2_H2) ? ++counter2 : --counter2; }
+void updateCounter3() { digitalRead(MOTOR3_H2) ? ++counter3 : --counter3; }
+
 
 
 
@@ -134,23 +132,6 @@ double ref1 = 0.0, ref2 = 0.0, ref3 = 0.0;
 double measured1 = 0.0, measured2 = 0.0, measured3 = 0.0;
 double computed1 = 0.0, computed2 = 0.0, computed3 = 0.0;
 PID pid1, pid2, pid3;
-
-
-
-
-
-//========================================================
-// PID CONTROLLER INITIALIZATION
-//========================================================
-void initPIDControllers(
-    double kp1, double ki1, double kd1, double cutoff1,
-    double kp2, double ki2, double kd2, double cutoff2,
-    double kp3, double ki3, double kd3, double cutoff3
-) {
-    pid1.setPIDParameters(kp1, ki1, kd1, cutoff1, MAX_RPS);
-    pid2.setPIDParameters(kp2, ki2, kd2, cutoff2, MAX_RPS);
-    pid3.setPIDParameters(kp3, ki3, kd3, cutoff3, MAX_RPS);
-}
 
 
 
