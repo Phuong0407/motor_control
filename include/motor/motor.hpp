@@ -267,7 +267,7 @@ void measureAngularVelocity(double &omega1, double &omega2, double &omega3) {
 
     omega1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 14.4;
     omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 14.4;
-    omega3 = static_cast<double>(curr_ticks3 - prev_ticks3) / 14.4;
+    omega3 = static_cast<double>(prev_ticks3 - curr_ticks3) / 14.4;
 }
 
 
