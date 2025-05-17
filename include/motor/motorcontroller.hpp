@@ -170,17 +170,17 @@ void MotorController::monitorMotorsSpeed() {
     while(true) {
         printf("------------------------------------------------\n");
         if (StabilityCycleCounter[0] >= STABLE_CYCLE_REQUIRED)
-            printf("Motor 1 is stable after %ld seconds\n", StableTime[0]);
+            printf("Motor 1 is stable after %.3f seconds\n", StableTime[0]);
         else
             printf("Motor 1 Speed:\tref = %.3f\tmeasured = %.3f\n", ref1, measured1);
         
         if (StabilityCycleCounter[1] >= STABLE_CYCLE_REQUIRED)
-            printf("Motor 2 is stable after %ld seconds\n", StableTime[1]);
+            printf("Motor 2 is stable after %.3f seconds\n", StableTime[1]);
         else
             printf("Motor 2 Speed:\tref = %.3f\tmeasured = %.3f\n", ref2, measured2);
 
         if (StabilityCycleCounter[2] >= STABLE_CYCLE_REQUIRED)
-            printf("Motor 3 is stable after %ld seconds\n", StableTime[2]);
+            printf("Motor 3 is stable after %.3f seconds\n", StableTime[2]);
         else
             printf("Motor 3 Speed:\tref = %.3f\tmeasured = %.3f\n", ref3, measured3);
         printf("------------------------------------------------\n");
