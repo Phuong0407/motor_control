@@ -107,8 +107,8 @@ public:
     int analyzeContours() {
         cv::Mat binaryMask;
         binaryExtractor.extractColoredMask(image, binaryMask);
-        extractContours(binaryMask);
         cv::imshow("binary", binaryMask);
+        extractContours(binaryMask);
 
         if (contours.empty()) return NO_LINE_FOUND;
         identifyMainContour();
