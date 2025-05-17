@@ -59,7 +59,7 @@ static constexpr double MAX_TICKS                 = 9.0;
 static constexpr double SAFETY_OFFSET           = 0.8;
 static constexpr double DEADZONE_SCALEUP        = 0.843137254901961;
 static constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
-static constexpr double MIN_ERROR_TICKS         = 1.0;
+static constexpr double MIN_ERROR_TPS         = 1.0;
 
 
 
@@ -178,7 +178,7 @@ void controlMotor1(void *arg) {
         measured1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 0.1;
 
         double err1 = ref1 - measured1;
-        if (std::abs(err1) > MIN_ERROR_TICKS + 1e-6) {
+        if (std::abs(err1) > MIN_ERROR_TPS + 1e-6) {
             computed1 = pid1.compute(ref1, measured1);
             setMotor1(computed1);
         }
@@ -194,7 +194,7 @@ void controlMotor2(void *arg) {
         measured2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
 
         double err2 = ref2 - measured2;
-        if (std::abs(err2) > MIN_ERROR_TICKS + 1e-6) {
+        if (std::abs(err2) > MIN_ERROR_TPS + 1e-6) {
             computed2 = pid2.compute(ref2, measured2);
             setMotor2(computed2);
         }
@@ -210,7 +210,7 @@ void controlMotor3(void *arg) {
         measured3 = static_cast<double>(prev_ticks3 - curr_ticks3) / 0.1;
 
         double err3 = ref3 - measured3;
-        if (std::abs(err3) > MIN_ERROR_TICKS + 1e-6) {
+        if (std::abs(err3) > MIN_ERROR_TPS + 1e-6) {
             computed3 = pid3.compute(ref3, measured3);
             setMotor3(computed3);
         }
