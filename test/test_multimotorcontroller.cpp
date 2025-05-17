@@ -7,12 +7,6 @@
 
 volatile bool run = true;
 
-// Interrupt Handler
-void stop(int signal) {
-    run = false;
-    std::cout << "Terminating program..." << std::endl;
-}
-
 void monitorMotors(MotorController& motorController) {
     while (run) {
         std::cout << "Motor 1 Speed: " << motorController.getMotor1Reference() << std::endl;

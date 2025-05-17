@@ -42,6 +42,14 @@ public:
     inline double getMotor1Reference() const { return ref1; }
     inline double getMotor2Reference() const { return ref2; }
     inline double getMotor3Reference() const { return ref3; }
+
+    void monitorMotorsSpeed() {
+        printf("---------------------------------------\n");
+        printf("Motor 1 Speed: %.3f RPS\n", measured1);
+        printf("Motor 2 Speed: %.3f RPS\n", measured2);
+        printf("Motor 3 Speed: %.3f RPS\n", measured3);
+        printf("---------------------------------------\n");
+    }
 };
 
 int MotorController::computeDirection(int dir) {
@@ -90,56 +98,32 @@ void MotorController::setMotor3(int pwm3, int dir3) {
 }
 
 void MotorController::controlMotor1() {
-    int stabilization_cycle_count = 0;
-    auto start_time = high_resolution_clock::now();
     while(true) {
         measured1 = measureAngularVelocity1();
         double err1 = ref1 - measured1;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref1), MIN_ERROR_RPS);
         if (std::abs(err1) > err_thres + 1e-6) {
             computed1 = pid1.compute(ref1, measured1);
-            printf("[INFO] Motor 1: %.3f\t%.3f\t%.3f\n", measured1, computed1, err1 * 100.0);
             motor1.setMotorStateRPS(computed1);
             setMotor1(motor1.getPWM(), motor1.getDirection());
-        }
-        else {
-            stabilization_cycle_count++;
-        }
-        if (stabilization_cycle_count >= STABLE_CYCLE_REQUIRED) {
-            auto end_time = high_resolution_clock::now();
-            double stabilization_time = duration_cast<milliseconds>(end_time - start_time).count() / 1000.0;
-            printf("[INFO] Motor 1 stabilized in %.3f seconds with rps = %.3f\n", stabilization_time, measureAngularVelocity1());
         }
     }
 }
 
 void MotorController::controlMotor2() {
-    int stabilization_cycle_count = 0;
-    auto start_time = high_resolution_clock::now();
     while(true) {
         measured2 = measureAngularVelocity2();
         double err2 = ref2 - measured2;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref2), MIN_ERROR_RPS);
         if (std::abs(err2) > err_thres + 1e-6) {
             computed2 = pid2.compute(ref2, measured2);
-            printf("[INFO] Motor 2: %.3f\t%.3f\t%.3f\n", measured2, computed2, err2 * 100.0);
             motor2.setMotorStateRPS(computed2);
             setMotor2(motor2.getPWM(), motor2.getDirection());
-        }
-        else {
-            stabilization_cycle_count++;
-        }
-        if (stabilization_cycle_count >= STABLE_CYCLE_REQUIRED) {
-            auto end_time = high_resolution_clock::now();
-            double stabilization_time = duration_cast<milliseconds>(end_time - start_time).count() / 1000.0;
-            printf("[INFO] Motor 2 stabilized in %.3f seconds with rps = %.3f\n", stabilization_time, measureAngularVelocity2());
         }
     }
 }
 
 void MotorController::controlMotor3() {
-    int stabilization_cycle_count = 0;
-    auto start_time = high_resolution_clock::now();
     while(true) {
         measured3 = measureAngularVelocity3();
         double err3 = ref3 - measured3;
@@ -149,14 +133,6 @@ void MotorController::controlMotor3() {
             printf("[INFO] Motor 3: %.3f\t%.3f\t%.3f\n", measured3, computed3, err3 * 100.0);
             motor3.setMotorStateRPS(computed3);
             setMotor3(motor3.getPWM(), motor3.getDirection());
-        }
-        else {
-            stabilization_cycle_count++;
-        }
-        if (stabilization_cycle_count >= STABLE_CYCLE_REQUIRED) {
-            auto end_time = high_resolution_clock::now();
-            double stabilization_time = duration_cast<milliseconds>(end_time - start_time).count() / 1000.0;
-            printf("[INFO] Motor 3 stabilized in %.3f seconds with rps = %.3f\n", stabilization_time, measureAngularVelocity3());
         }
     }
 }
