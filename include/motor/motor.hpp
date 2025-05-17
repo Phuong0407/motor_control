@@ -173,7 +173,7 @@ void controlMotor1(void *arg) {
         prev_ticks1 = counter1;
         delay(100);
         curr_ticks1 = counter1;
-        measured1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 14.4;
+        measured1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 0.1;
 
         double err1 = ref1 - measured1;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref1), MIN_ERROR_RPS);
@@ -190,7 +190,7 @@ void controlMotor2(void *arg) {
         prev_ticks2 = counter2;
         delay(100);
         curr_ticks2 = counter2;
-        measured2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 14.4;
+        measured2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
 
         double err2 = ref2 - measured2;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref2), MIN_ERROR_RPS);
@@ -207,7 +207,7 @@ void controlMotor3(void *arg) {
         prev_ticks3 = counter3;
         delay(100);
         curr_ticks3 = counter3;
-        measured3 = static_cast<double>(prev_ticks3 - curr_ticks3) / 14.4;
+        measured3 = static_cast<double>(prev_ticks3 - curr_ticks3) / 0.1;
 
         double err3 = ref3 - measured3;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref3), MIN_ERROR_RPS);
@@ -265,9 +265,9 @@ void measureAngularVelocity(double &omega1, double &omega2, double &omega3) {
     delay(100);
     curr_ticks1 = counter1; curr_ticks2 = counter2; curr_ticks3 = counter3;
 
-    omega1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 14.4;
-    omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 14.4;
-    omega3 = static_cast<double>(prev_ticks3 - curr_ticks3) / 14.4;
+    omega1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 0.1;
+    omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
+    omega3 = static_cast<double>(prev_ticks3 - curr_ticks3) / 0.1;
 }
 
 
