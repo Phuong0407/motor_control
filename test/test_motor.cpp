@@ -2,8 +2,8 @@
 
 #include "motor.hpp"
 
-#define MULTITHREAD_CONTROL_CPP
-// #define MEASURE_MOTOR_CPP
+// #define MULTITHREAD_CONTROL_CPP
+#define MEASURE_MOTOR_CPP
 
 #ifdef MULTITHREAD_CONTROL_CPP
 
@@ -11,9 +11,9 @@
 
 int main() {
     startEncoders();
-    pid1.setPIDParameters(6.0, 0.5, 0.01, 0.0, MAX_RPS);
-    pid2.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_RPS);
-    pid3.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_RPS);
+    pid1.setPIDParameters(6.0, 0.5, 0.01, 0.0, MAX_TICKS);
+    pid2.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_TICKS);
+    pid3.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_TICKS);
 
     ref1 = 0.625, ref2 = 0.0, ref3 = 0.0;
     
