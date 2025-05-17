@@ -56,8 +56,10 @@ public:
         double new_intgr = intgr + err * smpl_itv;
         double ctrl_sgnl = kp * err + ki * new_intgr + kd * filter_dev;
 
-        double clamped_ctrl_sgnl = std::clamp(ctrl_sgnl, -max_out, max_out);
-        if (ctrl_sgnl == clamped_ctrl_sgnl) intgr = new_intgr;
+        if (ctrl_sgnl > max_out)        ctrl_sgnl = max_out;
+        else if (ctrl_sgnl < -max_out)  ctrl_sgnl = -max_out;
+        else                            intgr = new_intgr;
+        
         old_filter_err = filter_err;
         return ctrl_sgnl;
     }
