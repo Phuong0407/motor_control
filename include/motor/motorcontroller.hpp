@@ -103,6 +103,9 @@ void MotorController::controlMotor1() {
             motor1.setMotorStateRPS(computed1);
             setMotor1(motor1.getPWM(), motor1.getDirection());
         }
+        else {
+            stabilization_cycle_count++;
+        }
         if (stabilization_cycle_count >= STABLE_CYCLE_REQUIRED) {
             auto end_time = high_resolution_clock::now();
             double stabilization_time = duration_cast<milliseconds>(end_time - start_time).count() / 1000.0;
@@ -126,6 +129,9 @@ void MotorController::controlMotor2() {
             setMotor2(motor2.getPWM(), motor2.getDirection());
             stabilization_cycle_count++;
         }
+        else {
+            stabilization_cycle_count++;
+        }
         if (stabilization_cycle_count >= STABLE_CYCLE_REQUIRED) {
             auto end_time = high_resolution_clock::now();
             double stabilization_time = duration_cast<milliseconds>(end_time - start_time).count() / 1000.0;
@@ -147,6 +153,9 @@ void MotorController::controlMotor3() {
             printf("Motor 3: %.3f\t%.3f\t%.3f\n", measured3, computed3, err3 * 100.0);
             motor3.setMotorStateRPS(computed3);
             setMotor3(motor3.getPWM(), motor3.getDirection());
+        }
+        else {
+            stabilization_cycle_count++;
         }
         if (stabilization_cycle_count >= STABLE_CYCLE_REQUIRED) {
             auto end_time = high_resolution_clock::now();
