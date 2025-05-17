@@ -15,7 +15,7 @@ int main() {
     pid2.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_RPS);
     pid3.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_RPS);
 
-    ref1 = 0.0, ref2 = 0.0, ref3 = 0.0;
+    ref1 = 0.625, ref2 = 0.625, ref3 = 0.625;
     
     std::thread motor1Thread(controlMotor1, nullptr);
     std::thread motor2Thread(controlMotor2, nullptr);
