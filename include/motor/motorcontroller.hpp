@@ -105,7 +105,7 @@ void MotorController::controlMotor1() {
             setMotor1(motor1.getPWM(), motor1.getDirection());
         } else StabilityCycleCounter[0]++;
 
-        if (StabilityCycleCounter[0] >= STABLE_CYCLE_REQUIRED) {
+        if (StabilityCycleCounter[0] == STABLE_CYCLE_REQUIRED) {
             auto end_time = std::chrono::high_resolution_clock::now();
             StableTime[0] = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
         }
@@ -125,7 +125,7 @@ void MotorController::controlMotor2() {
             setMotor2(motor2.getPWM(), motor2.getDirection());
         } else StabilityCycleCounter[1]++;
 
-        if (StabilityCycleCounter[1] >= STABLE_CYCLE_REQUIRED) {
+        if (StabilityCycleCounter[1] == STABLE_CYCLE_REQUIRED) {
             auto end_time = std::chrono::high_resolution_clock::now();
             StableTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
         }
@@ -145,7 +145,7 @@ void MotorController::controlMotor3() {
             setMotor3(motor3.getPWM(), motor3.getDirection());
         } else StabilityCycleCounter[2]++;
 
-        if (StabilityCycleCounter[2] >= STABLE_CYCLE_REQUIRED) {
+        if (StabilityCycleCounter[2] == STABLE_CYCLE_REQUIRED) {
             auto end_time = std::chrono::high_resolution_clock::now();
             StableTime[2] = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
         }
