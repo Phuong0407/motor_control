@@ -56,29 +56,16 @@ public:
      * @param image Input image in BGR format.
      * @param mask Output binary mask combining red, blue, and yellow masks.
      */
-    // void extractColoredMask(const cv::Mat& image, cv::Mat &mask) {
-    //     cv::Mat hsv_image;
-    //     cv::cvtColor(image, hsv_image, cv::COLOR_BGR2HSV);
-
-    //     cv::Mat red_mask;
-    //     cv::Mat blue_mask;
-    //     // red_extractor.extractMask(hsv_image, red_mask);
-    //     blue_extractor.extractMask(hsv_image, blue_mask);
-
-    //     cv::bitwise_or(red_mask, blue_mask, mask);
-    // }
-
     void extractColoredMask(const cv::Mat& image, cv::Mat &mask) {
         cv::Mat hsv_image;
         cv::cvtColor(image, hsv_image, cv::COLOR_BGR2HSV);
-
         cv::GaussianBlur(hsv_image, hsv_image, cv::Size(5, 5), 0);
-
+    
+        cv::Mat red_mask;
         cv::Mat blue_mask;
+        red_extractor.extractMask(hsv_image, red_mask);
         blue_extractor.extractMask(hsv_image, blue_mask);
-        cv::imshow("binary", blue_mask);
-        cv::waitKey(5);
-        mask = blue_mask;
+        cv::bitwise_or(red_mask, blue_mask, mask);
     }
 
 
