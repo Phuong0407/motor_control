@@ -66,8 +66,8 @@ static constexpr double MIN_ERROR_RPS           = 0.10;
 //=======================================================
 // ENCODER HANDLING
 //=======================================================
-static           int    i2c_fd1     = -1;
-static           int    i2c_fd2     = -1;
+static          int    i2c_fd1      = -1;
+static          int    i2c_fd2      = -1;
 
 volatile        int64_t counter1    = 0;
 volatile        int64_t counter2    = 0;
