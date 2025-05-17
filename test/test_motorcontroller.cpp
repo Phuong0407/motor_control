@@ -13,6 +13,7 @@ int main() {
     motorController.setMotor3Reference(0.625);
 
     // motorController.controlMotor1();
-    motorController.controlMotor2();
+    // motorController.controlMotor2();
+    motorController.controlMotor3();
     return 0;
 }
