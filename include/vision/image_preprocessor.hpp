@@ -74,7 +74,8 @@ public:
 
         cv::Mat blue_mask;
         blue_extractor.extractMask(hsv_image, blue_mask);
-
+        cv::imshow("binary", blue_mask);
+        cv::waitKey(5);
         mask = blue_mask;
     }
 
