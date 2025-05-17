@@ -127,7 +127,6 @@ void MotorController::controlMotor2() {
             printf("Motor 2: %.3f\t%.3f\t%.3f\n", measured2, computed2, err2 * 100.0);
             motor2.setMotorStateRPS(computed2);
             setMotor2(motor2.getPWM(), motor2.getDirection());
-            stabilization_cycle_count++;
         }
         else {
             stabilization_cycle_count++;
