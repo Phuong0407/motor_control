@@ -84,9 +84,9 @@ void MotorController::setMotor2(int pwm2, int dir2) {
 
 void MotorController::setMotor3(int pwm3, int dir3) {
     dir3 = computeDirection(dir3);
-    wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm3 << 8));
+    wiringPiI2CWriteReg16(i2c_fd2, 0x82, (pwm3 << 8));
     microsleep(1);
-    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir3);
+    wiringPiI2CWriteReg16(i2c_fd2, 0xaa, dir3);
 }
 
 void MotorController::controlMotor1() {
