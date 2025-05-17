@@ -3,6 +3,8 @@
 
 #include "pid.h"
 
+#include <lccv.hpp>
+
 int x                   = 0;
 int pwm1                = 0;
 int pwm2                = 0;
@@ -22,6 +24,6 @@ double computed3        = 0.0;
 PID                     pid1;
 PID                     pid2;
 PID                     pid3;
-
+lccv::PiCamera          cam;
 
 #endif // ROBOT_HPP
