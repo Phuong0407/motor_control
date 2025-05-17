@@ -11,7 +11,7 @@
 
 int main() {
     startEncoders();
-    pid1.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_RPS);
+    pid1.setPIDParameters(6.0, 0.5, 0.01, 0.0, MAX_RPS);
     pid2.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_RPS);
     pid3.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_RPS);
 
