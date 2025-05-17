@@ -101,7 +101,7 @@ void startEncoders() {
 // MOTOR CONTROL FUNCTIONS
 //=======================================================
 int computePWMFromUnsignedRPS(double u_rps) {
-    double norm_rps = std::clamp(u_rps / MAX_RPS, 0.0, 1.0);
+    double norm_rps = std::clamp(u_rps / MAX_TICKS, 0.0, 1.0);
     int pwm_value = static_cast<int>(MAX_PWM * norm_rps * SAFETY_OFFSET);
     if (pwm_value < DEAD_PWM) return 0;
     return static_cast<int>((pwm_value - DEAD_PWM) / DEADZONE_SCALEUP);
@@ -178,8 +178,7 @@ void controlMotor1(void *arg) {
         measured1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 0.1;
 
         double err1 = ref1 - measured1;
-        double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref1), MIN_ERROR_RPS);
-        if (std::abs(err1) > err_thres + 1e-6) {
+        if (std::abs(err1) > MIN_ERROR_TICKS + 1e-6) {
             computed1 = pid1.compute(ref1, measured1);
             setMotor1(computed1);
         }
@@ -195,8 +194,7 @@ void controlMotor2(void *arg) {
         measured2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
 
         double err2 = ref2 - measured2;
-        double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref2), MIN_ERROR_RPS);
-        if (std::abs(err2) > err_thres + 1e-6) {
+        if (std::abs(err2) > MIN_ERROR_TICKS + 1e-6) {
             computed2 = pid2.compute(ref2, measured2);
             setMotor2(computed2);
         }
@@ -212,8 +210,7 @@ void controlMotor3(void *arg) {
         measured3 = static_cast<double>(prev_ticks3 - curr_ticks3) / 0.1;
 
         double err3 = ref3 - measured3;
-        double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref3), MIN_ERROR_RPS);
-        if (std::abs(err3) > err_thres + 1e-6) {
+        if (std::abs(err3) > MIN_ERROR_TICKS + 1e-6) {
             computed3 = pid3.compute(ref3, measured3);
             setMotor3(computed3);
         }
@@ -230,9 +227,9 @@ void controlMotor3(void *arg) {
 void monitorMotorsSpeed(void *arg) {
     while(true) {
         printf("=====================================================\n");
-        printf("Motor 1 Speed:\tref = %.3f\tmeasured = %.3f\tcomputed=%.3f\n", ref1, measured1, computed1);
-        printf("Motor 2 Speed:\tref = %.3f\tmeasured = %.3f\tcomputed=%.3f\n", ref2, measured2, computed2);
-        printf("Motor 3 Speed:\tref = %.3f\tmeasured = %.3f\tcomputed=%.3f\n", ref3, measured3, computed3);
+        printf("Motor 1 Speed[ticks/s]:\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref1, measured1, computed1);
+        printf("Motor 2 Speed[ticks/s]:\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref2, measured2, computed2);
+        printf("Motor 3 Speed[ticks/s]:\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref3, measured3, computed3);
         printf("=====================================================\n");
         microsleep(1000000);
     }
