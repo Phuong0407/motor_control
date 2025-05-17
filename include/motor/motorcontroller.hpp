@@ -109,8 +109,7 @@ void MotorController::controlMotor1() {
         if (stabilization_cycle_count >= STABLE_CYCLE_REQUIRED) {
             auto end_time = high_resolution_clock::now();
             double stabilization_time = duration_cast<milliseconds>(end_time - start_time).count() / 1000.0;
-            printf("Motor 1 stabilized in %.3f seconds\n", stabilization_time);
-            printf("measure motor 1 rps = %.3f\n", measureAngularVelocity1());
+            printf("Motor 1 stabilized in %.3f seconds with rps = %.3f\n", stabilization_time, measureAngularVelocity1());
         }
     }
 }
@@ -134,8 +133,7 @@ void MotorController::controlMotor2() {
         if (stabilization_cycle_count >= STABLE_CYCLE_REQUIRED) {
             auto end_time = high_resolution_clock::now();
             double stabilization_time = duration_cast<milliseconds>(end_time - start_time).count() / 1000.0;
-            printf("Motor 2 stabilized in %.3f seconds\n", stabilization_time);
-            printf("measure motor 2 rps = %.3f\n", measureAngularVelocity2());
+            printf("Motor 2 stabilized in %.3f seconds with rps = %.3f\n", stabilization_time, measureAngularVelocity2());
         }
     }
 }
@@ -159,8 +157,7 @@ void MotorController::controlMotor3() {
         if (stabilization_cycle_count >= STABLE_CYCLE_REQUIRED) {
             auto end_time = high_resolution_clock::now();
             double stabilization_time = duration_cast<milliseconds>(end_time - start_time).count() / 1000.0;
-            printf("Motor 3 stabilized in %.3f seconds\n", stabilization_time);
-            printf("measure motor 3 rps = %.3f\n", measureAngularVelocity3());
+            printf("Motor 3 stabilized in %.3f seconds with rps = %.3f\n", stabilization_time, measureAngularVelocity3());
         }
     }
 }
