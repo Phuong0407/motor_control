@@ -54,7 +54,7 @@ static constexpr double MAX_RPS                 = 0.63;
 
 
 
-static constexpr double SAFETY_OFFSET           = 0.9;
+static constexpr double SAFETY_OFFSET           = 0.8;
 static constexpr double DEADZONE_SCALEUP        = 0.843137254901961;
 static constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
 static constexpr double MIN_ERROR_RPS           = 0.10;
