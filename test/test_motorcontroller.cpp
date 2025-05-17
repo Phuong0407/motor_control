@@ -5,7 +5,7 @@ int main() {
     MotorController motorController;
     motorController.setMotorController(
         6.0, 0.5, 0.01, 4.0, 0.86,
-        6.0, 0.5, 0.01, 4.0, 0.86,
+        10.0, 0.5, 0.01, 4.0, 0.86,
         6.0, 0.5, 0.01, 4.0, 0.86
     );
     motorController.setMotor1Reference(0.625);
