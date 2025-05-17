@@ -1,8 +1,6 @@
 #ifndef PID_HPP
 #define PID_HPP
 
-#include "config.h"
-
 #include <cmath>
 #include <algorithm>
 
@@ -24,7 +22,7 @@ private:
     }
 
     inline void setEMACutoff(double cutoff_freq) {
-        double normalizedFreq = cutoff_freq * smpl_itv;
+        double normalizedFreq = cutoff_freq * 0.10;
         alpha = cutoff_freq == 0.0 ? 1.0 : computeAlphaEMA(cutoff_freq);
     }
 
@@ -52,8 +50,8 @@ public:
     double compute(double ref, double measured) {
         double err = ref - measured;
         double filter_err = alpha * err + (1 - alpha) * old_filter_err;
-        double filter_dev = (filter_err - old_filter_err) / smpl_itv;
-        double new_intgr = intgr + err * smpl_itv;
+        double filter_dev = (filter_err - old_filter_err) / 0.10;
+        double new_intgr = intgr + err * 0.10;
         double ctrl_sgnl = kp * err + ki * new_intgr + kd * filter_dev;
 
         if (ctrl_sgnl > max_out)        ctrl_sgnl = max_out;

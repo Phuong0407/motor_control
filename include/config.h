@@ -23,8 +23,6 @@ static constexpr int MOTOR3_H2 = 0;
 static constexpr double MIN_ERROR_RPS   = 0.100;
 static constexpr double COUNTER_PER_REV = 144.0;
 
-static constexpr double smpl_itv = 0.1;
-
 void microsleep(int microseconds) {
     struct timespec ts;
     ts.tv_sec = microseconds / 1000000;

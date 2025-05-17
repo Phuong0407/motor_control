@@ -31,9 +31,9 @@ public:
         double kp3, double ki3, double kd3, double cutoff_freq3, double max_rps3
     );
 
-    void controlMotor1();
-    void controlMotor2();
-    void controlMotor3();
+    void controlMotor1(void *arg);
+    void controlMotor2(void *arg);
+    void controlMotor3(void *arg);
     void setMotor1(int pwm1, int dir1);
     void setMotor2(int pwm2, int dir2);
     void setMotor3(int pwm3, int dir3);
@@ -44,7 +44,7 @@ public:
     inline double getMotor1Reference() const { return ref1; }
     inline double getMotor2Reference() const { return ref2; }
     inline double getMotor3Reference() const { return ref3; }
-    void monitorMotorsSpeed();
+    void monitorMotorsSpeed(void *arg);
 };
 
 int MotorController::computeDirection(int dir) {
@@ -92,10 +92,18 @@ void MotorController::setMotor3(int pwm3, int dir3) {
     wiringPiI2CWriteReg16(i2c_fd2, 0xaa, dir3);
 }
 
-void MotorController::controlMotor1() {
+/**
+ * 
+ */
+void MotorController::controlMotor1(void *arg) {
+    int64_t prev_ticks1 = 0, curr_ticks1 = 0;
     auto start_time = std::chrono::high_resolution_clock::now();
     while(true) {
-        measured1 = measureAngularVelocity1();
+        prev_ticks1 = counter1;
+        delay(100);
+        curr_ticks1 = counter1;
+        measured1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 14.4;
+
         double err1 = ref1 - measured1;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref1), MIN_ERROR_RPS);
         if (std::abs(err1) > err_thres + 1e-6) {
@@ -112,10 +120,15 @@ void MotorController::controlMotor1() {
     }
 }
 
-void MotorController::controlMotor2() {
+void MotorController::controlMotor2(void *arg) {
+    int64_t prev_ticks2 = 0, curr_ticks2 = 0;
     auto start_time = std::chrono::high_resolution_clock::now();
     while(true) {
-        measured2 = measureAngularVelocity2();
+        prev_ticks2 = counter2;
+        delay(100);
+        curr_ticks2 = counter2;
+        measured2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 14.4;
+
         double err2 = ref2 - measured2;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref2), MIN_ERROR_RPS);
         if (std::abs(err2) > err_thres + 1e-6) {
@@ -132,10 +145,15 @@ void MotorController::controlMotor2() {
     }
 }
 
-void MotorController::controlMotor3() {
+void MotorController::controlMotor3(void *arg) {
+    int64_t prev_ticks3 = 0, curr_ticks3 = 0;
     auto start_time = std::chrono::high_resolution_clock::now();
     while(true) {
-        measured3 = measureAngularVelocity3();
+        prev_ticks3 = counter3;
+        delay(100);
+        curr_ticks3 = counter3;
+        measured3 = static_cast<double>(prev_ticks3 - curr_ticks3) / 14.4;
+
         double err3 = ref3 - measured3;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref3), MIN_ERROR_RPS);
         if (std::abs(err3) > err_thres + 1e-6) {
@@ -166,7 +184,7 @@ void MotorController::setMotorController(
     startEncoders();
 }
 
-void MotorController::monitorMotorsSpeed() {
+void MotorController::monitorMotorsSpeed(void *arg) {
     while(true) {
         printf("------------------------------------------------\n");
         if (StabilityCycleCounter[0] >= STABLE_CYCLE_REQUIRED)
@@ -183,8 +201,8 @@ void MotorController::monitorMotorsSpeed() {
             printf("Motor 3 is stable after %.3f seconds\n", StableTime[2]);
         else
             printf("Motor 3 Speed:\tref = %.3f\tmeasured = %.3f\n", ref3, measured3);
-        printf("------------------------------------------------\n");
-        
+        printf("================================================\n");
+
         microsleep(1000000);
     }
 }

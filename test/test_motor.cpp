@@ -1,34 +1,27 @@
-#define NOLOADED_RUN
-#include "../include/motor/motor.hpp"
-#include <iostream>
+#define NOLOAD_RUN
 
-#define TEST_PID
+#include "motor.hpp"
 
-#ifdef TEST_PID
+#include <thread>
 
-int main() {
-    Motor motor;
-    motor.setPIDParameters(6.0, 0.5, 0.01, 1.0);
-    bool control_state = motor.controlAngularVelocity(0.625, 0.625, 0.0);
-    if (control_state) {
-        printf("\nMotor control successful.\n");
-    } else {
-        printf("\nMotor control failure.\n");
-    }
-
-    motor.~Motor();
-    return 0;
-}
-#endif
-
-#ifdef TEST_MOTOR
 int main() {
     startEncoders();
+    initPIDControllers(
+        6.0, 0.5, 0.01, 4.0,
+        6.0, 0.5, 0.01, 4.0,
+        6.0, 0.5, 0.01, 4.0
+    );
 
-    // setThreeMotors(255, 1, 255, 1, 200, LEFT);
-    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xffff);
-    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
-    delay(5000);
-    setMotorPWM(0, 0, 0);
+    ref1 = 0.625, ref2 = 0.625, ref3 = 0.625;
+    
+    std::thread motor1Thread(controlMotor1, nullptr);
+    std::thread motor2Thread(controlMotor2, nullptr);
+    std::thread motor3Thread(controlMotor3, nullptr);
+    std::thread monitorThread(monitorMotorsSpeed, nullptr);
+    motor1Thread.join();
+    motor2Thread.join();
+    motor3Thread.join();
+    monitorThread.join();
+
+    return 0;
 }
-#endif
