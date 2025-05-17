@@ -2,7 +2,8 @@
 
 #include "motor.hpp"
 
-#define MEASURE_MOTOR_CPP
+#define MULTITHREAD_CONTROL_CPP
+// #define MEASURE_MOTOR_CPP
 
 #ifdef MULTITHREAD_CONTROL_CPP
 
