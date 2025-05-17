@@ -60,8 +60,9 @@ public:
         cv::Mat hsv_image;
         cv::cvtColor(image, hsv_image, cv::COLOR_BGR2HSV);
 
-        cv::Mat red_mask, blue_mask;
-        red_extractor.extractMask(hsv_image, red_mask);
+        cv::Mat red_mask;
+        cv::Mat blue_mask;
+        // red_extractor.extractMask(hsv_image, red_mask);
         blue_extractor.extractMask(hsv_image, blue_mask);
 
         cv::bitwise_or(red_mask, blue_mask, mask);
