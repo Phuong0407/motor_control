@@ -49,8 +49,8 @@ public:
         if (ctrl_sgnl > max_out)        ctrl_sgnl = max_out;
         else if (ctrl_sgnl < -max_out)  ctrl_sgnl = -max_out;
         else                            intgr = new_intgr;
-        
         old_filter_err = filter_err;
+        
         return ctrl_sgnl;
     }
 };
