@@ -42,14 +42,7 @@ public:
     inline double getMotor1Reference() const { return ref1; }
     inline double getMotor2Reference() const { return ref2; }
     inline double getMotor3Reference() const { return ref3; }
-
-    void monitorMotorsSpeed() {
-        printf("---------------------------------------\n");
-        printf("Motor 1 Speed: %.3f RPS\n", measured1);
-        printf("Motor 2 Speed: %.3f RPS\n", measured2);
-        printf("Motor 3 Speed: %.3f RPS\n", measured3);
-        printf("---------------------------------------\n");
-    }
+    void monitorMotorsSpeed();
 };
 
 int MotorController::computeDirection(int dir) {
@@ -149,6 +142,14 @@ void MotorController::setMotorController(
     motor2.setMotorState(0, 0);
     motor3.setMotorState(0, 0);
     startEncoders();
+}
+
+void MotorController::monitorMotorsSpeed() {
+    printf("---------------------------------------\n");
+    printf("Motor 1 Speed: %.3f RPS\n", measured1);
+    printf("Motor 2 Speed: %.3f RPS\n", measured2);
+    printf("Motor 3 Speed: %.3f RPS\n", measured3);
+    printf("---------------------------------------\n");
 }
 
 #endif // MOTORCONTROLLER_HPP
