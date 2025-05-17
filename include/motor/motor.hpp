@@ -256,17 +256,63 @@ void monitorMotorsSpeed(void *arg) {
 
 
 
+// void measureAngularVelocity(double &omega1, double &omega2, double &omega3) {
+//     int64_t prev_ticks1, prev_ticks2, prev_ticks3;
+//     int64_t curr_ticks1, curr_ticks2, curr_ticks3;
+
+//     prev_ticks1 = counter1; prev_ticks2 = counter2; prev_ticks3 = counter3;
+//     delay(100);
+//     curr_ticks1 = counter1; curr_ticks2 = counter2; curr_ticks3 = counter3;
+
+//     omega1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 0.1;
+//     omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
+//     omega3 = static_cast<double>(prev_ticks3 - curr_ticks3) / 0.1;
+// }
+
+
+#define ALPHA 0.2  // Low-pass filter smoothing factor
+
+double applyLowPassFilter(double new_value, double prev_value) {
+    return ALPHA * new_value + (1 - ALPHA) * prev_value;
+}
+
 void measureAngularVelocity(double &omega1, double &omega2, double &omega3) {
+    static double filtered_omega1 = 0.0;
+    static double filtered_omega2 = 0.0;
+    static double filtered_omega3 = 0.0;
+
     int64_t prev_ticks1, prev_ticks2, prev_ticks3;
     int64_t curr_ticks1, curr_ticks2, curr_ticks3;
 
-    prev_ticks1 = counter1; prev_ticks2 = counter2; prev_ticks3 = counter3;
-    delay(100);
-    curr_ticks1 = counter1; curr_ticks2 = counter2; curr_ticks3 = counter3;
+    unsigned long startTime = millis();
+    prev_ticks1 = counter1;
+    prev_ticks2 = counter2;
+    prev_ticks3 = counter3;
 
-    omega1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 0.1;
-    omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
-    omega3 = static_cast<double>(prev_ticks3 - curr_ticks3) / 0.1;
+    // Delay for 100 ms
+    delay(100);
+
+    unsigned long endTime = millis();
+    double elapsedTime = (endTime - startTime) / 1000.0; // Convert to seconds
+
+    curr_ticks1 = counter1;
+    curr_ticks2 = counter2;
+    curr_ticks3 = counter3;
+
+    // Calculate raw angular velocities
+    double raw_omega1 = static_cast<double>(curr_ticks1 - prev_ticks1) / elapsedTime;
+    double raw_omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / elapsedTime;
+    double raw_omega3 = static_cast<double>(curr_ticks3 - prev_ticks3) / elapsedTime;
+
+    // Apply Low-Pass Filtering
+    omega1 = applyLowPassFilter(raw_omega1, filtered_omega1);
+    omega2 = applyLowPassFilter(raw_omega2, filtered_omega2);
+    omega3 = applyLowPassFilter(raw_omega3, filtered_omega3);
+
+    // Update filtered values for next iteration
+    filtered_omega1 = omega1;
+    filtered_omega2 = omega2;
+    filtered_omega3 = omega3;
 }
 
 

@@ -38,7 +38,7 @@ int main() {
     double omega1, omega2, omega3;
     while(true) {
         measureAngularVelocity(omega1, omega2, omega3);
-        printf("omega1 = %.3f,\tomega2 = %.3f,\tomega3 = %.3f\n", omega1, omega2, omega3);
+        printf("omega1\t=\t%.3f,\tomega2\t=\t%.3f,\tomega3\t=\t%.3f\n", omega1, omega2, omega3);
         delay(1000);
     }
 }
