@@ -144,11 +144,14 @@ void MotorController::setMotorController(
 }
 
 void MotorController::monitorMotorsSpeed() {
-    printf("---------------------------------------\n");
-    printf("Motor 1 Speed: %.3f RPS\n", measured1);
-    printf("Motor 2 Speed: %.3f RPS\n", measured2);
-    printf("Motor 3 Speed: %.3f RPS\n", measured3);
-    printf("---------------------------------------\n");
+    while(true) {
+        printf("---------------------------------------\n");
+        printf("Motor 1 Speed:\tref = %.3f\tmeasured = %.3f\n", ref1, measured1);
+        printf("Motor 2 Speed:\tref = %.3f\tmeasured = %.3f\n", ref2, measured2);
+        printf("Motor 3 Speed:\tref = %.3f\tmeasured = %.3f\n", ref3, measured3);
+        printf("---------------------------------------\n");
+        microsleep(static_cast<int>(smpl_itv * 1000.0));
+    }
 }
 
 #endif // MOTORCONTROLLER_HPP
