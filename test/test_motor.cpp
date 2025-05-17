@@ -8,14 +8,21 @@
 #ifdef MULTITHREAD_CONTROL_CPP
 
 #include <thread>
+#include <string>
+#include <iostream>
 
-int main() {
+int main(int argc, char *argv[]) {
+    double kp       = std::stod(argv[1]);
+    double ki       = std::stod(argv[2]);
+    double kd       = std::stod(argv[3]);
+    double cutoff   = std::stod(argv[4]);
+
     startEncoders();
-    pid1.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_TICKS);
+    pid1.setPIDParameters(kp, ki, kd, cutoff, MAX_TICKS);
     pid2.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_TICKS);
     pid3.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_TICKS);
 
-    ref1 = 90.0, ref2 = 90.0, ref3 = 90.0;
+    ref1 = 90.0, ref2 = 0.0, ref3 = 0.0;
     
     std::thread motor1Thread(controlMotor1, nullptr);
     std::thread motor2Thread(controlMotor2, nullptr);
