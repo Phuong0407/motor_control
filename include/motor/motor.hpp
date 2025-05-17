@@ -45,11 +45,13 @@ static constexpr int    MAX_PWM                 = 255;
 static constexpr int    DEAD_PWM                = 40;
 
 
-
+//=======================================================
+// THIS IS THE NUMBER OF COUNT FOR 0.1 ms
+//=======================================================
 #ifdef NOLOAD_RUN
-static constexpr double MAX_RPS                 = 0.86;
+static constexpr double MAX_TICKS                 = 12.0;
 #else // LOAD_RUN
-static constexpr double MAX_RPS                 = 0.63;
+1static constexpr double MAX_TICKS                 = 9.0;
 #endif
 
 
