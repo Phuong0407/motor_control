@@ -14,10 +14,12 @@
 int main(int argc, char *argv[]) {
     if (argc == 0)
         goto SKIP_CMD;
-    double kp       = std::stod(argv[1]);
-    double ki       = std::stod(argv[2]);
-    double kd       = std::stod(argv[3]);
-    double cutoff   = std::stod(argv[4]);
+    else {
+        double kp       = std::stod(argv[1]);
+        double ki       = std::stod(argv[2]);
+        double kd       = std::stod(argv[3]);
+        double cutoff   = std::stod(argv[4]);
+    }
 
 SKIP_CMD:
     double kp = 0.3, ki = 0.005, kd = 0.0005, cutoff = 4.0;
