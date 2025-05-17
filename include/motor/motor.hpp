@@ -247,9 +247,9 @@ void controlMotor3(void *arg) {
 void monitorMotorsSpeed(void *arg) {
     while(true) {
         printf("=====================================================\n");
-        printf("Motor 1 Speed:\tref = %.3f\tmeasured = %.3f\n", ref1, measured1);
-        printf("Motor 2 Speed:\tref = %.3f\tmeasured = %.3f\n", ref2, measured2);
-        printf("Motor 3 Speed:\tref = %.3f\tmeasured = %.3f\n", ref3, measured3);
+        printf("Motor 1 Speed:\tref = %.3f\tmeasured = %.3f\tcomputed=%.3f\n", ref1, measured1, computed1);
+        printf("Motor 2 Speed:\tref = %.3f\tmeasured = %.3f\tcomputed=%.3f\n", ref2, measured2, computed2);
+        printf("Motor 3 Speed:\tref = %.3f\tmeasured = %.3f\tcomputed=%.3f\n", ref3, measured3, computed3);
         printf("=====================================================\n");
         microsleep(1000000);
     }
