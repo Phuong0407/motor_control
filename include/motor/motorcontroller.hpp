@@ -168,7 +168,7 @@ void MotorController::setMotorController(
 
 void MotorController::monitorMotorsSpeed() {
     while(true) {
-        printf("---------------------------------------\n");
+        printf("--------------------------------------------------\n");
         if (StabilityCycleCounter[0] >= STABLE_CYCLE_REQUIRED)
             printf("Motor 1 is stable after %ld seconds\n", StableTime[0]);
         else
@@ -183,7 +183,7 @@ void MotorController::monitorMotorsSpeed() {
             printf("Motor 3 is stable after %ld seconds\n", StableTime[2]);
         else
             printf("Motor 3 Speed:\tref = %.3f\tmeasured = %.3f\n", ref3, measured3);
-        printf("---------------------------------------\n");
+        printf("--------------------------------------------------\n");
         
         microsleep(static_cast<int>(smpl_itv * 1000.0));
     }
