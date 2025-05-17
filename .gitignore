@@ -5,6 +5,8 @@ camera_control/
 light_control/
 build/
 VisionRace/
+modal/
+archiv/
 _makefile
 LFR_Demo.py
 LFR_Demo.cpp
