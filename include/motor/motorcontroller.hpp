@@ -116,8 +116,10 @@ void MotorController::controlMotor2() {
             motor2.setMotorStateRPS(computed2);
             setMotor2(motor2.getPWM(), motor2.getDirection());
         }
-        else
+        else {
             printf("Motor 2 stablized\n");
+            printf("measure motor 2 rps = %.3f\n", measureAngularVelocity2());
+        }
     }
 }
 
@@ -132,8 +134,10 @@ void MotorController::controlMotor3() {
             motor3.setMotorStateRPS(computed3);
             setMotor3(motor3.getPWM(), motor3.getDirection());
         }
-        else
+        else {
             printf("Motor 3 stablized\n");
+            printf("measure motor 3 rps = %.3f\n", measureAngularVelocity3());
+        }
     }
 }
 
