@@ -39,7 +39,7 @@ public:
             return;
         }
         dir = (rps > 0) ? +1 : -1;
-        pwm = computePWMFromRPS(rps);
+        pwm = computePWMFromRPS(std::abs(rps));
     }
 
     inline void stop() { pwm = 0; }
