@@ -42,8 +42,8 @@ public:
         pwm = computePWMFromRPS(rps);
     }
 
-    void stop() { pwm = 0; }
-    void reverse() { dir = (dir == +1) ? -1 : +1; }
+    inline void stop() { pwm = 0; }
+    inline void reverse() { dir = (dir == +1) ? -1 : +1; }
 
     inline int getPWM() const { return pwm; }
     inline int getDirection() const { return dir; }
