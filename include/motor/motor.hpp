@@ -147,9 +147,9 @@ void initPIDControllers(
     double kp2, double ki2, double kd2, double cutoff2,
     double kp3, double ki3, double kd3, double cutoff3
 ) {
-    pid1.setPIDParameters(kp1, ki1, kd1, 0.0, MAX_RPS);
-    pid2.setPIDParameters(kp2, ki2, kd2, 0.0, MAX_RPS);
-    pid3.setPIDParameters(kp3, ki3, kd3, 0.0, MAX_RPS);
+    pid1.setPIDParameters(kp1, ki1, kd1, cutoff1, MAX_RPS);
+    pid2.setPIDParameters(kp2, ki2, kd2, cutoff2, MAX_RPS);
+    pid3.setPIDParameters(kp3, ki3, kd3, cutoff3, MAX_RPS);
 }
 
 
