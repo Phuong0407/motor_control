@@ -7,9 +7,9 @@
 
 static constexpr int MAX_PWM                = 255;
 static constexpr double SAFETY_OFFSET       = 0.7;
-static constexpr double SCALEUP_FACTOR_PWM  = 0.72549019607;
+static constexpr double SCALEUP_FACTOR_PWM  = 0.843137254901961;
 static constexpr double MAX_RPS             = 0.86;
-static constexpr int DEAD_PWM               = 70;
+static constexpr int DEAD_PWM               = 40;
 
 class MotorState {
 public:
