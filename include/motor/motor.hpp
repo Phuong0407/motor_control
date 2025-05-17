@@ -51,7 +51,7 @@ static constexpr int    DEAD_PWM                = 40;
 #ifdef NOLOAD_RUN
 static constexpr double MAX_TICKS                 = 12.0;
 #else // LOAD_RUN
-1static constexpr double MAX_TICKS                 = 9.0;
+static constexpr double MAX_TICKS                 = 9.0;
 #endif
 
 
