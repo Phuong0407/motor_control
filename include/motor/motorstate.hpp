@@ -8,18 +8,13 @@
 static constexpr int MAX_PWM                = 255;
 static constexpr double SAFETY_OFFSET       = 0.7;
 static constexpr double SCALEUP_FACTOR_PWM  = 0.72549019607;
-static constexpr int BACKWARD               = -1;
-static constexpr int FORWARD                = +1;
-static constexpr int LEFT                   = -1;
-static constexpr int RIGHT                  = +1;
-static constexpr int STOP                   = 0;
 static constexpr double MAX_RPS             = 0.86;
 static constexpr int DEAD_PWM               = 70;
 
 class MotorState {
 public:
     int pwm = 0;
-    int dir = FORWARD;
+    int dir = +1;
 
     static int computePWMFromRPS(double u_rps) {
         double norm_rps = std::clamp(u_rps / MAX_RPS, 0.0, 1.0);
@@ -40,15 +35,15 @@ public:
 
     void setMotorStateRPS(double rps) {
         if(rps == 0.0) {
-            setMotorState(0, STOP);
+            setMotorState(0, 0);
             return;
         }
-        dir = (rps > 0) ? FORWARD : BACKWARD;
+        dir = (rps > 0) ? +1 : -1;
         pwm = computePWMFromRPS(rps);
     }
 
     void stop() { pwm = 0; }
-    void reverse() { dir = (dir == FORWARD) ? BACKWARD : FORWARD; }
+    void reverse() { dir = (dir == +1) ? -1 : +1; }
 
     inline int getPWM() const { return pwm; }
     inline int getDirection() const { return dir; }
