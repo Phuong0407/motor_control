@@ -1,32 +1,11 @@
 #define NOLOADED_RUN
 #define EACH_ENCODER_HPP
 
-// #define THREE_ENCODER_HPP
-
-#include "../include/motor/motor.hpp"
-
 #include <wiringPi.h>
-#include <stdio.h>
-
-#ifdef THREE_ENCODER_HPP
-int main() {
-    startEncoders();
-    setMotorPWM(0xff, 0x00, 0x00);
-    printf("Motor started\n");
-    printf("%d\t%d\t%d\n", counter1, counter2, counter3);
-    delay(25000);
-    stopMotors();
-
-    printf("%" PRId64 "\t%" PRId64 "\t%" PRId64 "\n", counter1, counter2, counter3);
-
-    return 0;
-}
-#endif
-
-#ifdef EACH_ENCODER_HPP
-
 #include <wiringPiI2C.h>
+
 #include <inttypes.h>
+#include <stdio.h>
 
 volatile int64_t counter = 0;
 
@@ -54,5 +33,3 @@ int main() {
     printf("Final Counter Value: %" PRId64 "\n", counter);
     return 0;
 }
-
-#endif
