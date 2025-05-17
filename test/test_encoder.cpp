@@ -31,5 +31,9 @@ int main() {
     delay(5000);
 
     printf("Final Counter Value: %" PRId64 "\n", counter);
+
+    delay(5000);
+
+    printf("Final Counter Value: %" PRId64 "\n", counter);
     return 0;
 }
