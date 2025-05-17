@@ -1,11 +1,9 @@
+#include "motorcontroller.hpp"
+
 #include <iostream>
 #include <thread>
 #include <csignal>
 #include <chrono>
-
-#include "motorcontroller.hpp"
-
-volatile bool run = true;
 
 int main() {
     MotorController motorController;
