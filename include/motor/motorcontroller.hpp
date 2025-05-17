@@ -168,7 +168,7 @@ void MotorController::setMotorController(
 
 void MotorController::monitorMotorsSpeed() {
     while(true) {
-        printf("------------------------------------------------n");
+        printf("------------------------------------------------\n");
         if (StabilityCycleCounter[0] >= STABLE_CYCLE_REQUIRED)
             printf("Motor 1 is stable after %ld seconds\n", StableTime[0]);
         else
