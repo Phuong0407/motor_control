@@ -72,6 +72,8 @@ public:
         cv::Mat hsv_image;
         cv::cvtColor(image, hsv_image, cv::COLOR_BGR2HSV);
 
+        cv::GaussianBlur(hsv_image, hsv_image, cv::Size(5, 5), 0);
+
         cv::Mat blue_mask;
         blue_extractor.extractMask(hsv_image, blue_mask);
         cv::imshow("binary", blue_mask);
