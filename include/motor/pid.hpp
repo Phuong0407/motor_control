@@ -29,14 +29,6 @@ private:
 public:
     PID() = default;
 
-    PID(double kp, double ki, double kd, double cutoff_freq, double max_out) 
-        : kp(kp), ki(ki), kd(kd), max_out(max_out)
-    {
-        this->ki = ki;
-        this->kd = kd;
-        setEMACutoff(cutoff_freq);
-    }
-
     void setPIDParameters(double kp, double ki, double kd, double cutoff_freq, double max_out) {
         this->kp = kp;
         this->ki = ki;
