@@ -270,7 +270,7 @@ void monitorMotorsSpeed(void *arg) {
 // }
 
 
-#define ALPHA 0.2  // Low-pass filter smoothing factor
+#define ALPHA 0.5  // Low-pass filter smoothing factor
 
 double applyLowPassFilter(double new_value, double prev_value) {
     return ALPHA * new_value + (1 - ALPHA) * prev_value;
