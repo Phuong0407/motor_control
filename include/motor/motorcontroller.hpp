@@ -32,9 +32,6 @@ public:
     void setMotor1(int pwm1, int dir1);
     void setMotor2(int pwm2, int dir2);
     void setMotor3(int pwm3, int dir3);
-    void controlMotor1();
-    void controlMotor2();
-    void controlMotor3();
 
     inline void setMotor1Reference(double ref1) { this->ref1 = ref1; }
     inline void setMotor2Reference(double ref2) { this->ref2 = ref2; }
