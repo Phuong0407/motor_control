@@ -73,6 +73,10 @@ volatile        int64_t counter1    = 0;
 volatile        int64_t counter2    = 0;
 volatile        int64_t counter3    = 0;
 
+void updateCounter1() { digitalRead(MOTOR1_H2) ? ++counter1 : --counter1; }
+void updateCounter2() { digitalRead(MOTOR2_H2) ? ++counter2 : --counter2; }
+void updateCounter3() { digitalRead(MOTOR3_H2) ? ++counter3 : --counter3; }
+
 void startEncoders() {
     wiringPiSetup();
     i2c_fd1 = wiringPiI2CSetup(0x0f);
@@ -86,10 +90,6 @@ void startEncoders() {
     wiringPiISR(MOTOR2_H1, INT_EDGE_RISING, updateCounter2);
     wiringPiISR(MOTOR3_H1, INT_EDGE_RISING, updateCounter3);
 }
-
-void updateCounter1() { digitalRead(MOTOR1_H2) ? ++counter1 : --counter1; }
-void updateCounter2() { digitalRead(MOTOR2_H2) ? ++counter2 : --counter2; }
-void updateCounter3() { digitalRead(MOTOR3_H2) ? ++counter3 : --counter3; }
 
 
 
