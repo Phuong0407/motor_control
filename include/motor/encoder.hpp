@@ -102,7 +102,7 @@ inline double measureAngularVelocity3() {
     delay(delay_ms);
     curr_ticks3 = counter3;
 
-    return static_cast<double>(curr_ticks3 - prev_ticks3) / smpl_itv / COUNTER_PER_REV;
+    return static_cast<double>(prev_ticks3 - curr_ticks3) / smpl_itv / COUNTER_PER_REV;
 }
 
 #endif // ENCODER_HPP
