@@ -1,4 +1,4 @@
-g#include "image_processor.hpp"
+#include "image_processor.hpp"
 #include <opencv2/opencv.hpp>
 
 #include <iostream>

@@ -128,12 +128,7 @@ inline int computeDirection(int dir1, int dir2) {
 //=======================================================
 // GLOBAL VARIABLES, PARALLEL CONTROL MOTOR THREADS
 //=======================================================
-int pwm1 = 0, pwm2 = 0, pwm3 = 0;
-int dir1 = 0, dir2 = 0, dir3 = 0;
-double ref1 = 0.0, ref2 = 0.0, ref3 = 0.0;
-double measured1 = 0.0, measured2 = 0.0, measured3 = 0.0;
-double computed1 = 0.0, computed2 = 0.0, computed3 = 0.0;
-PID pid1, pid2, pid3;
+
 
 
 

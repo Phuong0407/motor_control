@@ -2,7 +2,6 @@
 #define PID_HPP
 
 #include <cmath>
-#include <algorithm>
 
 class PID {
 private:
@@ -30,10 +29,11 @@ public:
     PID() = default;
 
     void setPIDParameters(double kp, double ki, double kd, double cutoff_freq, double max_out) {
-        this->kp = kp;
-        this->ki = ki;
-        this->kd = kd;
-        this->max_out = max_out;
+        this->kp        = kp;
+        this->ki        = ki;
+        this->kd        = kd;
+        this->max_out   = max_out;
+        
         setEMACutoff(cutoff_freq);
     }
 
