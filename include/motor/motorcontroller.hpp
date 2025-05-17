@@ -183,7 +183,7 @@ void MotorController::monitorMotorsSpeed() {
             printf("Motor 3 is stable after %ld seconds\n", StableTime[2]);
         else
             printf("Motor 3 Speed:\tref = %.3f\tmeasured = %.3f\n", ref3, measured3);
-        printf("------------------------------------------------n");
+        printf("------------------------------------------------\n");
         
         microsleep(1000000);
     }
