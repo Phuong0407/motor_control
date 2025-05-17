@@ -11,11 +11,11 @@
 
 int main() {
     startEncoders();
-    pid1.setPIDParameters(6.0, 0.5, 0.01, 0.0, MAX_TICKS);
+    pid1.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_TICKS);
     pid2.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_TICKS);
     pid3.setPIDParameters(6.0, 0.5, 0.01, 4.0, MAX_TICKS);
 
-    ref1 = 0.625, ref2 = 0.0, ref3 = 0.0;
+    ref1 = 90.0, ref2 = 90.0, ref3 = 90.0;
     
     std::thread motor1Thread(controlMotor1, nullptr);
     std::thread motor2Thread(controlMotor2, nullptr);
