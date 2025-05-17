@@ -18,7 +18,7 @@ private:
     double computed1 = 0.0, computed2 = 0.0, computed3 = 0.0;
 
     double StableTime[3] = {0.0, 0.0, 0.0};
-    int StabilityCycleCounter[3] = {0, 0, 0};
+    uint64_t StabilityCycleCounter[3] = {0, 0, 0};
 
     int computeDirection(int dir);
     int computeDirection(int dir1, int dir2);
@@ -107,7 +107,7 @@ void MotorController::controlMotor1() {
 
         if (StabilityCycleCounter[0] == STABLE_CYCLE_REQUIRED) {
             auto end_time = std::chrono::high_resolution_clock::now();
-            StableTime[0] = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
+            StableTime[0] = std::chrono::duration<double>(end_time - start_time).count();
         }
     }
 }
@@ -127,7 +127,7 @@ void MotorController::controlMotor2() {
 
         if (StabilityCycleCounter[1] == STABLE_CYCLE_REQUIRED) {
             auto end_time = std::chrono::high_resolution_clock::now();
-            StableTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+            StableTime[1] = std::chrono::duration<double>(end_time - start_time).count();
         }
     }
 }
@@ -147,7 +147,7 @@ void MotorController::controlMotor3() {
 
         if (StabilityCycleCounter[2] == STABLE_CYCLE_REQUIRED) {
             auto end_time = std::chrono::high_resolution_clock::now();
-            StableTime[2] = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+            StableTime[2] = std::chrono::duration<double>(end_time - start_time).count();
         }
     }
 }
