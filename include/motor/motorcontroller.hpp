@@ -48,15 +48,14 @@ int MotorController::computeDirection(int dir) {
     if (dir == +1)
         return 0x06;
     if (dir == -1)
-        return 0x09;
+        return 0x0a;
     return 0x06;
 }
 
 int MotorController::computeDirection(int dir1, int dir2) {
-    if (dir1 == 0)
-        return computeDirection(dir2);
-    if (dir2 == 0)
-        return computeDirection(dir1);
+    if (dir1 == 0) dir1 = +1;
+    if (dir2 == 0) dir2 = +1;
+
     if (dir1 == +1 && dir2 == +1)
         return 0x06;
     if (dir1 == -1 && dir2 == +1)
