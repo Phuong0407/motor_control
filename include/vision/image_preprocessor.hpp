@@ -60,11 +60,16 @@ public:
         cv::Mat hsv_image;
         cv::cvtColor(image, hsv_image, cv::COLOR_BGR2HSV);
         cv::GaussianBlur(hsv_image, hsv_image, cv::Size(5, 5), 0);
-    
-        cv::Mat red_mask;
-        cv::Mat blue_mask;
+
+        cv::Mat red_mask, blue_mask;
         red_extractor.extractMask(hsv_image, red_mask);
         blue_extractor.extractMask(hsv_image, blue_mask);
+
+        cv::morphologyEx(red_mask, red_mask, cv::MORPH_OPEN, cv::Mat(), cv::Point(-1, -1), 2);
+        cv::morphologyEx(red_mask, red_mask, cv::MORPH_CLOSE, cv::Mat(), cv::Point(-1, -1), 2);
+        cv::morphologyEx(blue_mask, blue_mask, cv::MORPH_OPEN, cv::Mat(), cv::Point(-1, -1), 2);
+        cv::morphologyEx(blue_mask, blue_mask, cv::MORPH_CLOSE, cv::Mat(), cv::Point(-1, -1), 2);
+
         cv::bitwise_or(red_mask, blue_mask, mask);
     }
 
