@@ -4,7 +4,7 @@ int main() {
     // Example usage of MotorController
     MotorController motorController;
     motorController.setMotorController(
-        5.0, 0.5, 0.01, 4.0, 0.86,
+        6.0, 0.5, 0.01, 4.0, 0.86,
         5.0, 0.5, 0.01, 4.0, 0.86,
         5.0, 0.5, 0.01, 4.0, 0.86
     );
