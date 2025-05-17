@@ -26,7 +26,7 @@ public:
     
 public:
     MotorState() = default;
-    MotorState(int pwm, int dir) { setMotorState(pwm, dir);}
+    MotorState(int pwm, int dir) { setMotorState(pwm, dir); }
     
     void setMotorState(int pwm, int dir) {
         this->pwm = std::clamp(pwm, 0, MAX_PWM);
