@@ -2,6 +2,10 @@
 
 #include "motor.hpp"
 
+#define MEASURE_MOTOR_CPP
+
+#ifdef MULTITHREAD_CONTROL_CPP
+
 #include <thread>
 
 int main() {
@@ -23,3 +27,19 @@ int main() {
 
     return 0;
 }
+
+#endif // MULTITHREAD_CONTROL_CPP
+
+#ifdef MEASURE_MOTOR_CPP
+
+int main() {
+    startEncoders();
+    double omega1, omega2, omega3;
+    while(true) {
+        measureAngularVelocity(omega1, omega2, omega3);
+        printf("omega1 = %.3f,\tomega2 = %.3f,\tomega3 = %.3f", omega1, omega2, omega3);
+        delay(1000);
+    }
+}
+
+#endif // MEASURE_MOTOR_CPP

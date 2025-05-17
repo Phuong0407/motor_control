@@ -236,4 +236,39 @@ void monitorMotorsSpeed(void *arg) {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void measureAngularVelocity(double &omega1, double &omega2, double &omega3) {
+    int64_t prev_ticks1, prev_ticks2, prev_ticks3;
+    int64_t curr_ticks1, curr_ticks2, curr_ticks3;
+
+    prev_ticks1 = counter1, prev_ticks2 = counter2, prev_ticks3 = counter3;
+    delay(100);
+    curr_ticks1 = counter1, curr_ticks2 = counter2, curr_ticks3 = counter3;
+
+    omega1 = static_cast<double>(prev_ticks1 - curr_ticks1) / 14.4;
+    omega2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 14.4;
+    omega3 = static_cast<double>(curr_ticks3 - prev_ticks3) / 14.4;
+}
+
+
 #endif // MOTOR_HPP
