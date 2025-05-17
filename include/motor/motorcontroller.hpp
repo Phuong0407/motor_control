@@ -123,7 +123,6 @@ void MotorController::controlMotor3() {
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref3), MIN_ERROR_RPS);
         if (std::abs(err3) > err_thres + 1e-6) {
             computed3 = pid3.compute(ref3, measured3);
-            printf("[INFO] Motor 3: %.3f\t%.3f\t%.3f\n", measured3, computed3, err3 * 100.0);
             motor3.setMotorStateRPS(computed3);
             setMotor3(motor3.getPWM(), motor3.getDirection());
         }
