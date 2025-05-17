@@ -5,7 +5,6 @@
 #include "motorstate.hpp"
 #include "pid.hpp"
 #include <chrono>
-using namespace std::chrono;
 
 static constexpr double ERROR_THRESHOLD_PERCENT = 0.10;
 static constexpr int STABLE_CYCLE_REQUIRED = 5;
@@ -17,6 +16,9 @@ private:
     double ref1 = 0.0, ref2 = 0.0, ref3 = 0.0;
     double measured1 = 0.0, measured2 = 0.0, measured3 = 0.0;
     double computed1 = 0.0, computed2 = 0.0, computed3 = 0.0;
+
+    double StableTime[3] = {0.0, 0.0, 0.0};
+    int StabilityCycleCounter[3] = {0, 0, 0};
 
     int computeDirection(int dir);
     int computeDirection(int dir1, int dir2);
@@ -91,40 +93,61 @@ void MotorController::setMotor3(int pwm3, int dir3) {
 }
 
 void MotorController::controlMotor1() {
+    auto start_time = std::chrono::high_resolution_clock::now();
     while(true) {
         measured1 = measureAngularVelocity1();
         double err1 = ref1 - measured1;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref1), MIN_ERROR_RPS);
         if (std::abs(err1) > err_thres + 1e-6) {
+            StabilityCycleCounter[0] = 0;
             computed1 = pid1.compute(ref1, measured1);
             motor1.setMotorStateRPS(computed1);
             setMotor1(motor1.getPWM(), motor1.getDirection());
+        } else StabilityCycleCounter[0]++;
+
+        if (StabilityCycleCounter[0] >= STABLE_CYCLE_REQUIRED) {
+            auto end_time = std::chrono::high_resolution_clock::now();
+            StableTime[0] = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
         }
     }
 }
 
 void MotorController::controlMotor2() {
+    auto start_time = std::chrono::high_resolution_clock::now();
     while(true) {
         measured2 = measureAngularVelocity2();
         double err2 = ref2 - measured2;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref2), MIN_ERROR_RPS);
         if (std::abs(err2) > err_thres + 1e-6) {
+            StabilityCycleCounter[1] = 0;
             computed2 = pid2.compute(ref2, measured2);
             motor2.setMotorStateRPS(computed2);
             setMotor2(motor2.getPWM(), motor2.getDirection());
+        } else StabilityCycleCounter[1]++;
+
+        if (StabilityCycleCounter[1] >= STABLE_CYCLE_REQUIRED) {
+            auto end_time = std::chrono::high_resolution_clock::now();
+            StableTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
         }
     }
 }
 
 void MotorController::controlMotor3() {
+    auto start_time = std::chrono::high_resolution_clock::now();
     while(true) {
         measured3 = measureAngularVelocity3();
         double err3 = ref3 - measured3;
         double err_thres = std::max(ERROR_THRESHOLD_PERCENT * std::abs(ref3), MIN_ERROR_RPS);
         if (std::abs(err3) > err_thres + 1e-6) {
+            StabilityCycleCounter[2] = 0;
             computed3 = pid3.compute(ref3, measured3);
             motor3.setMotorStateRPS(computed3);
             setMotor3(motor3.getPWM(), motor3.getDirection());
+        } else StabilityCycleCounter[2]++;
+
+        if (StabilityCycleCounter[2] >= STABLE_CYCLE_REQUIRED) {
+            auto end_time = std::chrono::high_resolution_clock::now();
+            StableTime[2] = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
         }
     }
 }
@@ -146,10 +169,22 @@ void MotorController::setMotorController(
 void MotorController::monitorMotorsSpeed() {
     while(true) {
         printf("---------------------------------------\n");
-        printf("Motor 1 Speed:\tref = %.3f\tmeasured = %.3f\n", ref1, measured1);
-        printf("Motor 2 Speed:\tref = %.3f\tmeasured = %.3f\n", ref2, measured2);
-        printf("Motor 3 Speed:\tref = %.3f\tmeasured = %.3f\n", ref3, measured3);
+        if (StabilityCycleCounter[0] >= STABLE_CYCLE_REQUIRED)
+            printf("Motor 1 is stable after %ld seconds\n", StableTime[0]);
+        else
+            printf("Motor 1 Speed:\tref = %.3f\tmeasured = %.3f\n", ref1, measured1);
+        
+        if (StabilityCycleCounter[1] >= STABLE_CYCLE_REQUIRED)
+            printf("Motor 2 is stable after %ld seconds\n", StableTime[1]);
+        else
+            printf("Motor 2 Speed:\tref = %.3f\tmeasured = %.3f\n", ref2, measured2);
+
+        if (StabilityCycleCounter[2] >= STABLE_CYCLE_REQUIRED)
+            printf("Motor 3 is stable after %ld seconds\n", StableTime[2]);
+        else
+            printf("Motor 3 Speed:\tref = %.3f\tmeasured = %.3f\n", ref3, measured3);
         printf("---------------------------------------\n");
+        
         microsleep(static_cast<int>(smpl_itv * 1000.0));
     }
 }
