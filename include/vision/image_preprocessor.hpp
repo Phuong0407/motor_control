@@ -18,8 +18,8 @@ struct RedHSV {
  * @brief Defines the HSV color range for detecting blue color.
  */
 struct BlueHSV {
-    static inline const cv::Scalar lower = cv::Scalar(100, 150, 0);
-    static inline const cv::Scalar upper = cv::Scalar(140, 255, 255);
+    static inline const cv::Scalar lower = cv::Scalar(170, 100, 100);
+    static inline const cv::Scalar upper = cv::Scalar(180, 255, 255);
 };
 
 /**
