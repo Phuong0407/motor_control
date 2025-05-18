@@ -7,13 +7,13 @@ find_package(OpenCV REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBCAMERA REQUIRED libcamera)
 
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -Wall -Wextra -Wpedantic")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 -Wall -Wextra -Wpedantic")
+
 include_directories(
     ${LIBCAMERA_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/include/
-    ${CMAKE_SOURCE_DIR}/include/vision
-    ${CMAKE_SOURCE_DIR}/include/motor
-    ${CMAKE_SOURCE_DIR}/include/navigation
 )
 
 add_executable(
