@@ -192,7 +192,7 @@ void ImageProcessor::processImage(cv::Mat& img) {
     sliceBinMask();
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
-        slices[i].drawMarker();
+        // slices[i].drawMarker();
     }
     cv::imshow("slice1", slices[0].img);
     cv::imshow("slice2", slices[1].img);
