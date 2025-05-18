@@ -96,15 +96,9 @@ inline void SliceData::extractContour() {
 }
 
 void SliceData::processSliceImage() {
-    if (!this->bin_mask.empty()) {
-        printf("FUCK YOU\n");
-        return;
-    }
     this->img_center_x  = this->bin_mask.cols / 2;
     this->img_center_y  = this->bin_mask.rows / 2;
 
-    cv::imshow("binary", this->bin_mask);
-    cv::waitKey(5);
     extractContour();
     if (contours.empty()) {
         has_line = false;
