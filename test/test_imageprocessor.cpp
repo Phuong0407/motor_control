@@ -1,4 +1,4 @@
-#include "camera.h"
+// #include "camera.h"
 #include "imageprocessor.h"
 #include <pthread.h>
 #include <iostream>
