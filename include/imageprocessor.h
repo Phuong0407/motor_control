@@ -25,11 +25,10 @@ inline void computeContourCenter(const Contour_t &contour, int &center_x, int &c
     center_y = static_cast<int>(moments.m01 / moments.m00);
 }
 
-inline double computeContourExtent(const Contour_t &contour) {
-    double area = cv::contourArea(contour);
+inline double computeContourExtent(const Contour_t &contour, double area) {
     cv::Rect boundRect = cv::boundingRect(contour);
-    double rectArea = static_cast<double>(boundRect.width * boundRect.height);
-    return (rectArea > 0.0) ? (area / rectArea) : 0.0;
+    double rect_area = static_cast<double>(boundRect.width * boundRect.height);
+    return (rect_area > 0.0) ? (area / rect_area) : 0.0;
 }
 
 
@@ -48,8 +47,8 @@ struct SliceData {
     bool                has_line        = true;
 
     inline void         computeSliceCenter();
-    inline void         computeSliceExtent();
-    void                identifyMainContour();
+    inline void         computeSliceExtent(double area);
+    double                identifyMainContour();
     inline void         computeDirectionOffset();
     inline void         processSliceImage();
     inline void         extractContour();
@@ -65,28 +64,33 @@ inline void SliceData::computeSliceCenter() {
     computeContourCenter(contour, center_x, center_y);
 }
 
-inline void SliceData::computeSliceExtent() {
+inline void SliceData::computeSliceExtent(double area) {
     if (contour.empty()) {
         has_line = false;
         return;
     }
-    extent = computeContourExtent(contour);
+    extent = computeContourExtent(contour, area);
 }
 
 inline void SliceData::computeDirectionOffset() {
     dir_offset = static_cast<int>((img_center_x - center_x) * extent);
 }
 
-void SliceData::identifyMainContour() {
+double SliceData::identifyMainContour() {
+    double area = 0.0;
     contour.clear();
     for (const auto& contour_iter : contours) {
-        double area = cv::contourArea(contour_iter);
-        extent      = computeContourExtent(contour_iter);
-        if (area >= MIN_CONTOUR_AREA && extent <= MAX_EXTENT_RATIO) {
+        area = cv::contourArea(contour_iter);
+        if (area < MIN_CONTOUR_AREA)
+            continue;
+        
+        extent = computeContourExtent(contour_iter, area);
+        if (extent <= MAX_EXTENT_RATIO) {
             contour = contour_iter;
             break;
         }
     }
+    return area;
 }
 
 inline void SliceData::extractContour() {
@@ -104,14 +108,14 @@ void SliceData::processSliceImage() {
         return;
     }
     
-    identifyMainContour();
+    double area = identifyMainContour();
     if (contour.empty()) {
         has_line = false;
         return;
     }
 
     computeSliceCenter();
-    computeSliceExtent();
+    computeSliceExtent(area);
     computeDirectionOffset();
 }
 
