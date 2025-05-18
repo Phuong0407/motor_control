@@ -4,7 +4,6 @@
 #include "robot.h"
 #include <opencv2/opencv.hpp>
 #include <array>
-#include <limits>
 
 constexpr int       N_SLICES    = 5;
 using               Contour_t   = std::vector<cv::Point>;
@@ -114,17 +113,22 @@ void SliceData::processSliceImage(const cv::Mat bin_mask) {
 class ImageProcessor {
 public:
     ImageProcessor() = default;
-    void                            drawMarker();
-    void                            processImage(cv::Mat& img);
+    void        drawMarker();
+    void        processImage(cv::Mat& img);
+    cv::Mat     getOutputImage() const;
 
 private:
-    cv::Mat                         img;
-    cv::Mat                         bin_mask;
-    SliceData                       slices[N_SLICES];
+    cv::Mat     img;
+    cv::Mat     bin_mask;
+    SliceData   slices[N_SLICES];
 
-    void                            extractBinMask();
-    void                            sliceBinMask();
+    void        extractBinMask();
+    void        sliceBinMask();
 };
+
+cv::Mat ImageProcessor::getOutputImage() const {
+    return img;
+}
 
 void ImageProcessor::extractBinMask() {
     cv::Mat img_hsv, red1, red2, blue;
