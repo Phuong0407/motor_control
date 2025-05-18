@@ -29,7 +29,7 @@ int main() {
             continue;
         }
         a.processImage(image1);
-        cv::Mat img = a.getOutputImage();
+        cv::Mat img = a.getOutputImage().clone();
         cv::imshow("processed", img);
         ch = cv::waitKey(5);
     }
