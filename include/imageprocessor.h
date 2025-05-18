@@ -96,7 +96,7 @@ inline void SliceData::extractContour() {
 }
 
 void SliceData::processSliceImage() {
-    if (this->bin_mask.empty()) {
+    if (!this->bin_mask.empty()) {
         printf("FUCK YOU\n");
         return;
     }
