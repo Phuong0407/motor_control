@@ -5,6 +5,7 @@ set (CMAKE_CXX_STANDARD 17)
 
 find_package(OpenCV REQUIRED)
 find_package(PkgConfig REQUIRED)
+find_package(OpenMP REQUIRED)
 pkg_check_modules(LIBCAMERA REQUIRED libcamera)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -Wall -Wextra -Wpedantic")
@@ -58,4 +59,10 @@ add_executable(
 # target_link_libraries(test_multimotorcontroller -lwiringPi)
 # target_link_libraries(test_motor -lwiringPi)
 
-target_link_libraries(test_imageprocessor -llccv ${OpenCV_LIBS} ${LIBCAMERA_LIBRARIES})
+target_link_libraries(
+    test_imageprocessor
+    -llccv
+    ${OpenCV_LIBS}
+    ${LIBCAMERA_LIBRARIES}
+    OpenMP::OpenMP_CXX
+)

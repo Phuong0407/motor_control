@@ -4,6 +4,7 @@
 #include "robot.h"
 #include <opencv2/opencv.hpp>
 #include <array>
+#include <omp.h>
 
 constexpr double        MIN_CONTOUR_AREA            = 100.0;
 constexpr double        MAX_EXTENT_RATIO            = 0.7;
@@ -190,6 +191,8 @@ void ImageProcessor::processImage(cv::Mat& img) {
     this->img = img;
     extractBinMask();
     sliceBinMask();
+
+    #pragma omp parallel for
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
         slices[i].drawMarker();
