@@ -1,58 +1,90 @@
-#ifndef PID_HPP
-#define PID_HPP
+#ifndef PID_H
+#define PID_H
 
+#include "robot.h"
 #include <cmath>
 
-class PID {
-private:
-    double kp               = 0.0;
-    double ki               = 0.0;
-    double kd               = 0.0;
-    double alpha            = 0.0;
-    double max_out          = 0.0;
-    double intgr            = 0.0;
-    double old_filter_err   = 0.0;
+double alpha1               = 0.0;
+double alpha2               = 0.0;
+double alpha3               = 0.0;
 
-    inline double computeAlphaEMA(double cutoff_freq) {
-        if (cutoff_freq <= 0)
-            return 1.0;
-        double alpha = std::cos(2.0 * float(M_PI) * cutoff_freq);
-        return alpha - 1.0 + std::sqrt(alpha * alpha - 4.0 * alpha + 3.0);
-    }
+double integral1            = 0.0;
+double integral2            = 0.0;
+double integral3            = 0.0;
 
-    inline void setEMACutoff(double cutoff_freq) {
-        double normalizedFreq = cutoff_freq * 0.10;
-        alpha = cutoff_freq == 0.0 ? 1.0 : computeAlphaEMA(cutoff_freq);
-    }
+double old_filter_error1    = 0.0;
+double old_filter_error2    = 0.0;
+double old_filter_error3    = 0.0;
 
-public:
-    PID() = default;
+double max_out1             = MAX_TPS;
+double max_out2             = MAX_TPS;
+double max_out3             = MAX_TPS;
 
-    void setPIDParameters(double kp, double ki, double kd, double cutoff_freq, double max_out) {
-        this->kp        = kp;
-        this->ki        = ki;
-        this->kd        = kd;
-        this->max_out   = max_out;
-        
-        setEMACutoff(cutoff_freq);
-    }
+inline double computeAlphaEMA(double cutoff_freq) {
+    if (cutoff_freq <= 0)
+        return 1.0;
+    double alpha = std::cos(2.0 * float(M_PI) * cutoff_freq);
+    return alpha - 1.0 + std::sqrt(alpha * alpha - 4.0 * alpha + 3.0);
+}
 
-    inline void resetPID() { intgr = 0.0; old_filter_err = 0.0; }
+void setupPIDParameters() {
+    alpha1 = computeAlphaEMA(cutoff1);
+    alpha2 = computeAlphaEMA(cutoff2);
+    alpha3 = computeAlphaEMA(cutoff3);
+}
 
-    double compute(double ref, double measured) {
-        double err = ref - measured;
-        double filter_err = alpha * err + (1 - alpha) * old_filter_err;
-        double filter_dev = (filter_err - old_filter_err) / 0.10;
-        double new_intgr = intgr + err * 0.10;
-        double ctrl_sgnl = kp * err + ki * new_intgr + kd * filter_dev;
+void resetPID1() { integral1 = 0.0; old_filter_error1 = 0.0; }
+void resetPID2() { integral2 = 0.0; old_filter_error2 = 0.0; }
+void resetPID3() { integral3 = 0.0; old_filter_error3 = 0.0; }
 
-        if (ctrl_sgnl > max_out)        ctrl_sgnl = max_out;
-        else if (ctrl_sgnl < -max_out)  ctrl_sgnl = -max_out;
-        else                            intgr = new_intgr;
-        old_filter_err = filter_err;
-        
-        return ctrl_sgnl;
-    }
-};
+double compute1() {
+    double error1                           = ref1 - measured1;
+    double new_intgral1                     = integral1 + error1 * 0.10;
+    double filter_error1                    = alpha1 * err1 + (1.0 - alpha) * old_filter_error1;
+    double filter_devivative1               = (filter_error1 - old_filter_error1) / 0.10;
+    double control_signal1                  = kp1 * error1 + ki * new_intgral + kd * filter_dev;
 
-#endif // PID_HPP
+    if (control_signal1 > max_out1)         control_signal1 = max_out1;
+    else if (control_signal1 < -max_out1)   control_signal1 = -max_out1;
+    else                                    integral1 = new_intgral1;
+    
+    old_filter_error1 = filter_error1;
+
+    return control_signal;
+}
+
+double compute2() {
+    double error2                           = ref2 - measured2;
+    double new_intgral2                     = integral2 + error2 * 0.20;
+    double filter_error2                    = alpha2 * err2 + (1.0 - alpha) * old_filter_error2;
+    double filter_devivative2               = (filter_error2 - old_filter_error2) / 0.10;
+    double control_signal2                  = kp2 * error2 + ki * new_intgral + kd * filter_dev;
+
+    if (control_signal2 > max_out2)         control_signal2 = max_out2;
+    else if (control_signal2 < -max_out2)   control_signal2 = -max_out2;
+    else                                    integral2 = new_intgral2;
+    
+    old_filter_error2 = filter_error2;
+    
+    return control_signal;
+}
+
+double compute3() {
+    double error3                           = ref3 - measured3;
+    double new_intgral3                     = integral3 + error3 * 0.30;
+    double filter_error3                    = alpha3 * err3 + (1.0 - alpha) * old_filter_error3;
+    double filter_devivative3               = (filter_error3 - old_filter_error3) / 0.10;
+    double control_signal3                  = kp3 * error3 + ki * new_intgral + kd * filter_dev;
+
+    if (control_signal3 > max_out3)         control_signal3 = max_out3;
+    else if (control_signal3 < -max_out3)   control_signal3 = -max_out3;
+    else                                    integral3 = new_intgral2;
+    
+    old_filter_error2 = filter_error2;
+    
+    return control_signal;
+}
+
+
+
+#endif // PID_H

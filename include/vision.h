@@ -1,25 +1,9 @@
-#ifndef VISION_HPP
-#define VISION_HPP
+#ifndef VISION_H
+#define VISION_H
 
 #include "robot.h"
-#include <opencv2/opencv.hpp>
 #include <vector>
 #include <stdio.h>
-
-static constexpr int    framewidth      = 640;
-static constexpr int    frameheight     = 480;
-static constexpr int    framerate       = 30;
-static constexpr bool   verbose         = false;
-
-
-void startCamera() {
-    cam.options->video_width    = framewidth;
-    cam.options->video_height   = frameheight;
-    cam.options->framerate      = framerate;
-    cam.options->verbose        = verbose;
-    cam.startVideo();
-}
-
 
 void * computeBaryCenter(void *arg) {
     cv::Mat img, img_hsv;
@@ -58,4 +42,4 @@ void * computeBaryCenter(void *arg) {
     }
 }
 
-#endif // VISION_HPP
+#endif // VISION_H
