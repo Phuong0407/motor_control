@@ -158,12 +158,6 @@ void ImageProcessor::sliceBinMask() {
         cv::Rect slice_rect(0, start_y, width, slice_height);
         slices[i].bin_mask = bin_mask(slice_rect).clone();
     }
-    cv::imshow("bin1", slices[0].bin_mask);
-    cv::imshow("bin2", slices[1].bin_mask);
-    cv::imshow("bin3", slices[2].bin_mask);
-    cv::imshow("bin4", slices[3].bin_mask);
-    cv::imshow("bin5", slices[4].bin_mask);
-
 }
 
 void ImageProcessor::drawMarker() {
