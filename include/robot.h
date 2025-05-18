@@ -24,7 +24,7 @@ double measured2        = 0.0;
 double measured3        = 0.0;
 double computed1        = 0.0;
 double computed2        = 0.0;
-double computed3        
+double computed3        = 0.0;
 
 lccv::PiCamera          cam;
 static constexpr int    framewidth              = 640;
