@@ -197,8 +197,8 @@ void ImageProcessor::processImage(cv::Mat& img) {
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
     }
-    return;
     drawMarker();
+    return;
 }
 
 
