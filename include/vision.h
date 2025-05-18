@@ -34,7 +34,7 @@ void * computeBaryCenter(void *arg) {
         x                   = moment.m10 / moment.m00;
 
         cv::Point p(x, moment.m01 / moment.m00);
-        cv::circle(img_cpy2, p, 5, Scalar(128,0,0), -1);
+        cv::circle(img_cpy2, p, 5, cv::Scalar(128,0,0), -1);
         cv::imshow("CAMERA", img_cpy2);
 
         printf("x = %d\n", x);
