@@ -21,6 +21,7 @@ void * computeBaryCenter(void *arg) {
         cv::inRange(img_hsv, cv::Scalar(170, 120, 70),  cv::Scalar(180, 255, 255),  red2);
         cv::inRange(img_hsv, cv::Scalar(100,150,50),    cv::Scalar(140, 255, 255),  blue);
         bin_mask = red1 | red2 | blue;
+        cv::imshow("BINARY MASK", bin_mask);
 
         std::vector<cv::Vec4i>              hierarchy;
         std::vector<std::vector<cv::Point>> contours;
