@@ -19,8 +19,8 @@ int main() {
     cam.startVideo();
 
     int ch = 0;
-    // startCamera();
-    // ImageProcessor a;
+    startCamera();
+    ImageProcessor a;
     cv::Mat image1(frameheight, framewidth, CV_8UC3);
 
     while (ch != 27) {
@@ -30,9 +30,9 @@ int main() {
         }
         cv::imshow("raw", image1);
 
-        // a.processImage(image1);
-        // cv::Mat img = a.getOutputImage();
-        // cv::imshow("processed", img);
+        a.processImage(image1);
+        cv::Mat img = a.getOutputImage();
+        cv::imshow("processed", img);
         ch = cv::waitKey(5);
     }
 }
