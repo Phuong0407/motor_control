@@ -57,27 +57,6 @@ struct SliceData {
 };
 Contours_t SliceData::contours;
 
-void SliceData::drawMarker() {
-    cv::Point contour_center = cv::Point(center_x, center_y);
-    cv::Point slice_center   = cv::Point(img_center_x, img_center_y);
-    
-    cv::drawContours(img, contour, -1, CONTOUR_COLOR, 2);
-    cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
-    cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
-    
-    cv::putText(
-            img, "Offset: " + std::to_string(img_center_x - center_x),
-            contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1
-            );
-            cv::putText(
-                img, "Extent: " + std::to_string(extent),
-                cv::Point(center_x + 20, center_y + TEXT_OFFSET_Y),
-                cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
-            );
-}
-
-
-
 inline void SliceData::computeSliceCenter() {
     if (contour.empty()) {
         has_line = false;
@@ -139,6 +118,26 @@ void SliceData::processSliceImage() {
     printf("%d\n", extent);
 }
 
+void SliceData::drawMarker() {
+    cv::Point contour_center = cv::Point(center_x, center_y);
+    cv::Point slice_center   = cv::Point(img_center_x, img_center_y);
+    
+    cv::drawContours(img, {contour}, -1, CONTOUR_COLOR, 2);
+    cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
+    cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
+    
+    cv::putText(
+            img, "Offset: " + std::to_string(img_center_x - center_x),
+            contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1
+            );
+            cv::putText(
+                img, "Extent: " + std::to_string(extent),
+                cv::Point(center_x + 20, center_y + TEXT_OFFSET_Y),
+                cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
+            );
+}
+
+
 
 class ImageProcessor {
 public:
@@ -192,7 +191,7 @@ void ImageProcessor::processImage(cv::Mat& img) {
     sliceBinMask();
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
-        // slices[i].drawMarker();
+        slices[i].drawMarker();
     }
     cv::imshow("slice1", slices[0].img);
     cv::imshow("slice2", slices[1].img);
