@@ -13,7 +13,7 @@ int main() {
     int ch = 0;
     startCamera();
     ImageProcessor a;
-    cv::Mat image(frameheight, framewidth, CV_8UC3);
+    cv::Mat image1(frameheight, framewidth, CV_8UC3);
 
     while (ch != 27) {
         if (!cam.getVideoFrame(image1, 1000)) {
