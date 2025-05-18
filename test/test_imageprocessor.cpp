@@ -28,8 +28,6 @@ int main() {
             std::cout << "Timeout error while grabbing frame." << std::endl;
             continue;
         }
-        cv::imshow("raw", image1);
-
         a.processImage(image1);
         cv::Mat img = a.getOutputImage();
         cv::imshow("processed", img);
