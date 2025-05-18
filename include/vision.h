@@ -22,8 +22,8 @@ void * computeBaryCenter(void *arg) {
         cv::inRange(img_hsv, cv::Scalar(100,150,50),    cv::Scalar(140, 255, 255),  blue);
         bin_mask = red1 | red2 | blue;
 
-        std::vector<Vec4i>              hierarchy;
-        std::vector<std::vector<Point>> contours;
+        std::vector<cv::Vec4i>              hierarchy;
+        std::vector<std::vector<cv::Point>> contours;
         findContours(bin_mask, contours, hierarchy, RETR_TREE, CHAIN_APPROX_NONE);
 
         cv::Mat img_cpy1 = img.clone();
