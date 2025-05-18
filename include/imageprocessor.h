@@ -152,6 +152,8 @@ void ImageProcessor::extractBinMask() {
     cv::inRange(img_hsv, cv::Scalar(100, 150, 50),  cv::Scalar(140, 255, 255),  blue);
 
     bin_mask = red1 | red2 | blue;
+    cv::imshow("bin", bin_mask);
+
 }
 
 void ImageProcessor::sliceBinMask() {
@@ -191,11 +193,11 @@ void ImageProcessor::processImage(cv::Mat& img) {
     this->img = img;
     cv::imshow("FUCK YOU", img);
     extractBinMask();
-    return;
     sliceBinMask();
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
     }
+    return;
     drawMarker();
 }
 
