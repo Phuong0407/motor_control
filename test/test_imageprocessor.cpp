@@ -3,7 +3,7 @@
 #include <pthread.h>
 #include <iostream>
 
-lccv::PiCamera   cam;
+// lccv::PiCamera   cam;
 
 int main() {
     
