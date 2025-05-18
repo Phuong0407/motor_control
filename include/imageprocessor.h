@@ -136,7 +136,7 @@ private:
     void        extractBinMask();
     void        sliceBinMask();
     void        repackSlice();
-    void        drawMarker();
+    // void        drawMarker();
 };
 
 cv::Mat ImageProcessor::getOutputImage() const {
