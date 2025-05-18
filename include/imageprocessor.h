@@ -54,7 +54,6 @@ struct SliceData {
     inline void         processSliceImage();
     inline void         extractContour();
     void                drawMarker();
-    inline bool         containLine() const;
 };
 Contours_t SliceData::contours;
 
@@ -98,8 +97,6 @@ inline void SliceData::computeSliceExtent() {
 inline void SliceData::computeDirectionOffset() {
     dir_offset = static_cast<int>((img_center_x - center_x) * extent);
 }
-
-bool SliceData::containLine() const { return has_line; }
 
 void SliceData::identifyMainContour() {
     contour.clear();
@@ -152,11 +149,13 @@ public:
 
 private:
     cv::Mat     img;
+    cv::Mat     output;
     cv::Mat     bin_mask;
     SliceData   slices[N_SLICES];
 
     void        extractBinMask();
     void        sliceBinMask();
+    void        repackSlice();
 };
 
 cv::Mat ImageProcessor::getOutputImage() const {
@@ -204,8 +203,16 @@ void ImageProcessor::processImage(cv::Mat& img) {
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
     }
+    repackSlice();
+    cv::imshow("OUT", output);
     return;
 }
 
+void ImageProcessor::repackSlice() {
+    output = slices[0].img.clone();
+    for (size_t i = 1; i < N_SLICES; ++i) {
+        cv::vconcat(output, slices[i].img, output);
+    }
+}
 
 #endif // IMAGEPROCESSOR_H
