@@ -5,9 +5,19 @@
 #include <opencv2/opencv.hpp>
 #include <array>
 
-constexpr int       N_SLICES    = 5;
-using               Contour_t   = std::vector<cv::Point>;
-using               Contours_t  = std::vector<Contour_t>;
+constexpr double        MIN_CONTOUR_AREA            = 100.0;
+constexpr double        MAX_EXTENT_RATIO            = 0.7;
+constexpr int           CONTOUR_OFFSET_THRESHOLD    = 5;
+const     cv::Scalar    CONTOUR_COLOR               = cv::Scalar(0, 255, 0);
+const     cv::Scalar    IMAGE_CENTER_COLOR          = cv::Scalar(0, 0, 255);
+const     cv::Scalar    TEXT_COLOR                  = cv::Scalar(200, 0, 200);
+constexpr int           MARKER_RADIUS               = 5;
+constexpr int           TEXT_OFFSET_Y               = 30;
+constexpr int           FOUND_LINE                  = 1;
+constexpr int           NO_LINE_FOUND               = 0;
+constexpr int           N_SLICES                    = 5;
+using                   Contour_t                   = std::vector<cv::Point>;
+using                   Contours_t                  = std::vector<Contour_t>;
 
 inline void computeContourCenter(const Contour_t &contour, double &center_x, double &center_y) {
     cv::Moments moments = cv::moments(contour);

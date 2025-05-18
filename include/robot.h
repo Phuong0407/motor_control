@@ -79,28 +79,4 @@ static constexpr int    frameheight                 = 480;
 static constexpr int    framerate                   = 30;
 static constexpr bool   verbose                     = false;
 
-constexpr double        MIN_CONTOUR_AREA            = 100.0;
-constexpr double        MAX_EXTENT_RATIO            = 0.7;
-constexpr int           CONTOUR_OFFSET_THRESHOLD    = 5;
-const     cv::Scalar    CONTOUR_COLOR               = cv::Scalar(0, 255, 0);
-const     cv::Scalar    IMAGE_CENTER_COLOR          = cv::Scalar(0, 0, 255);
-const     cv::Scalar    TEXT_COLOR                  = cv::Scalar(200, 0, 200);
-constexpr int           MARKER_RADIUS               = 5;
-constexpr int           TEXT_OFFSET_Y               = 30;
-constexpr int           FOUND_LINE                  = 1;
-constexpr int           NO_LINE_FOUND               = 0;
-
-using                   Contour_t                   = std::vector<cv::Point>;
-constexpr int           N_SLICES                    = 5;
-
-int                     contour_center_x[N_SLICES]  = 0;
-int                     contour_center_y[N_SLICES]  = 0;
-int                     direction_offset[N_SLICES]  = 0;
-
-cv::Mat                 img;
-cv::Mat                 slices[N_SLICES];
-
-
-
-
 #endif // ROBOT_H
