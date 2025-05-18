@@ -19,7 +19,7 @@ int main() {
     cam.startVideo();
 
     int ch = 0;
-    startCamera();
+    // startCamera();
     ImageProcessor a;
     cv::Mat image1(frameheight, framewidth, CV_8UC3);
 
