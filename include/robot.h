@@ -2,6 +2,7 @@
 #define ROBOT_H
 
 #include <lccv.hpp>
+#include <libcamera_app.hpp>
 
 #include <inttypes.h>
 #include <wiringPi.h>
