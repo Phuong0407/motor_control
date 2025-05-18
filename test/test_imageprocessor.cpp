@@ -20,19 +20,19 @@ int main() {
 
     int ch = 0;
     // startCamera();
-//     ImageProcessor a;
-//     cv::Mat image1(frameheight, framewidth, CV_8UC3);
+    // ImageProcessor a;
+    // cv::Mat image1(frameheight, framewidth, CV_8UC3);
 
-//     while (ch != 27) {
-//         if (!cam.getVideoFrame(image1, 1000)) {
-//             std::cout << "Timeout error while grabbing frame." << std::endl;
-//             continue;
-//         }
-//         cv::imshow("raw", image1);
+    while (ch != 27) {
+        if (!cam.getVideoFrame(image1, 1000)) {
+            std::cout << "Timeout error while grabbing frame." << std::endl;
+            continue;
+        }
+        cv::imshow("raw", image1);
 
-//         // a.processImage(image1);
-//         // cv::Mat img = a.getOutputImage();
-//         // cv::imshow("processed", img);
-//         // ch = cv::waitKey(5);
-//     }
+        // a.processImage(image1);
+        // cv::Mat img = a.getOutputImage();
+        // cv::imshow("processed", img);
+        // ch = cv::waitKey(5);
+    }
 }
