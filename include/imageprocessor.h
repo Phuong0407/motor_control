@@ -122,7 +122,7 @@ void SliceData::drawMarker() {
     cv::Point contour_center = cv::Point(center_x, center_y);
     cv::Point slice_center   = cv::Point(img_center_x, img_center_y);
     
-    cv::drawContours(img, {contour}, -1, CONTOUR_COLOR, 2);
+    cv::drawContours(img, std::vector<std::vector<cv::Point>>{contour}, -1, CONTOUR_COLOR, 2);
     cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
     cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
     
