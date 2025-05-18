@@ -102,12 +102,14 @@ void SliceData::processSliceImage() {
     extractContour();
     if (contours.empty()) {
         has_line = false;
+        printf("[INFO] No contours found in the slice 1.\n");
         return;
     }
     
     identifyMainContour();
     if (contour.empty()) {
         has_line = false;
+        printf("[INFO] No contours found in the slice 2.\n");
         return;
     }
 
@@ -195,8 +197,8 @@ void ImageProcessor::processImage(cv::Mat& img) {
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
     }
-    return;
     drawMarker();
+    return;
 }
 
 
