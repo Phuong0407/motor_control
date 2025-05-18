@@ -6,7 +6,7 @@
 int main() {
     startCamera();
     pthread_t CameraController;
-	pthread_create(&CameraController, NULL, computeBaryCenter, NULL);
+	pthread_create(&CameraController, NULL, computeBarycenter, NULL);
 	pthread_join(CameraController,NULL);
 
 

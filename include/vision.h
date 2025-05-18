@@ -5,7 +5,7 @@
 #include <vector>
 #include <stdio.h>
 
-void * computeBaryCenter(void *arg) {
+void * computeBarycenter(void *arg) {
     cv::Mat img, img_hsv;
     cv::Mat red1, red2, blue;
     cv::Mat bin_mask;
