@@ -20,9 +20,11 @@ int main() {
             std::cout << "Timeout error while grabbing frame." << std::endl;
             continue;
         }
-        a.processImage(image1);
-        cv::Mat img = a.getOutputImage();
-        cv::imshow("processed", img);
-        ch = cv::waitKey(5);
+        cv::imshow("raw", image1);
+
+        // a.processImage(image1);
+        // cv::Mat img = a.getOutputImage();
+        // cv::imshow("processed", img);
+        // ch = cv::waitKey(5);
     }
 }
