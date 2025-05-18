@@ -155,7 +155,7 @@ private:
 };
 
 cv::Mat ImageProcessor::getOutputImage() const {
-    return img;
+    return output;
 }
 
 void ImageProcessor::extractBinMask() {
