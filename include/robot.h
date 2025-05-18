@@ -1,8 +1,6 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
-#include "pid.h"
-
 #include <lccv.hpp>
 
 #include <inttypes.h>
