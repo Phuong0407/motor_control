@@ -190,6 +190,7 @@ void ImageProcessor::drawMarker() {
 void ImageProcessor::processImage(cv::Mat& img) {
     this->img = img;
     cv::imshow("FUCK YOU", img);
+    return;
     extractBinMask();
     sliceBinMask();
     for (int i = 0; i < N_SLICES; ++i) {
