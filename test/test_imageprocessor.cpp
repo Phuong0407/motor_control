@@ -3,6 +3,8 @@
 #include <pthread.h>
 #include <iostream>
 
+lccv::PiCamera   cam;
+
 int main() {
     
     // pthread_t CameraController;
