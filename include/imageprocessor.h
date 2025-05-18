@@ -19,7 +19,7 @@ constexpr int           N_SLICES                    = 5;
 using                   Contour_t                   = std::vector<cv::Point>;
 using                   Contours_t                  = std::vector<Contour_t>;
 
-inline void computeContourCenter(const Contour_t &contour, double &center_x, double &center_y) {
+inline void computeContourCenter(const Contour_t &contour, int &center_x, int &center_y) {
     cv::Moments moments = cv::moments(contour);
     center_x = static_cast<int>(moments.m10 / moments.m00);
     center_y = static_cast<int>(moments.m01 / moments.m00);
@@ -50,7 +50,7 @@ struct SliceData {
     inline void         computeSliceExtent();
     void                identifyMainContour();
     inline void         computeDirectionOffset();
-    inline void         processSliceImage(const cv::Mat bin_mask);
+    inline void         processSliceImage();
     inline void         extractContour();
     inline bool         containLine() const;
 };
@@ -95,8 +95,7 @@ inline void SliceData::extractContour() {
     cv::findContours(bin_mask, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 }
 
-void SliceData::processSliceImage(const cv::Mat bin_mask) {
-    this->bin_mask      = bin_mask;
+void SliceData::processSliceImage() {
     this->img_center_x  = this->bin_mask.cols / 2;
     this->img_center_y  = this->bin_mask.rows / 2;
 
@@ -170,7 +169,7 @@ void ImageProcessor::drawMarker() {
 
         cv::drawContours(img, slices[i].contour, -1, CONTOUR_COLOR, 2);
         cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
-        cv::circle(image, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
+        cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
         
         cv::putText(
                 image, "Offset: " + std::to_string(slices[i].img_center_x - slices[i].center_x),
@@ -189,7 +188,7 @@ void ImageProcessor::processImage(cv::Mat& img) {
     extractBinMask();
     sliceBinMask();
     for (int i = 0; i < N_SLICES; ++i) {
-        slice[i].processSliceImage(bin_mask[i]);
+        slices[i].processSliceImage();
     }
     repackSlice();
     drawMarker();
