@@ -3,6 +3,7 @@
 
 #include <lccv.hpp>
 #include <libcamera_app.hpp>
+#include <opencv2/opencv.hpp>
 
 #include <inttypes.h>
 #include <wiringPi.h>
