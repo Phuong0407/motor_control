@@ -161,9 +161,9 @@ void ImageProcessor::sliceBinMask() {
 }
 
 void ImageProcessor::drawMarker() {
-    printf("FUCK YOU\n");
     for (int i = 0; i < N_SLICES; ++i) {
         cv::Point contour_center = cv::Point(slices[i].center_x, slices[i].center_y);
+        printf("FUCK YOU\n");
         cv::Point slice_center   = cv::Point(slices[i].img_center_x, slices[i].img_center_y);
 
         cv::drawContours(img, slices[i].contour, -1, CONTOUR_COLOR, 2);
