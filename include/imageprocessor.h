@@ -163,6 +163,9 @@ void ImageProcessor::sliceBinMask() {
 
 void ImageProcessor::drawMarker() {
     for (int i = 0; i < N_SLICES; ++i) {
+        if (!slices[i].has_line)
+            return;
+
         cv::Point contour_center = cv::Point(slices[i].center_x, slices[i].center_y);
         cv::Point slice_center   = cv::Point(slices[i].img_center_x, slices[i].img_center_y);
         
