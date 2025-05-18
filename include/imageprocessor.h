@@ -190,7 +190,11 @@ void ImageProcessor::sliceBinMask() {
     cv::imshow("slice3", slices[2].img);
     cv::imshow("slice4", slices[3].img);
     cv::imshow("slice5", slices[4].img);
-
+    cv::imshow("bin1", slices[0].bin_mask);
+    cv::imshow("bin2", slices[1].bin_mask);
+    cv::imshow("bin3", slices[2].bin_mask);
+    cv::imshow("bin4", slices[3].bin_mask);
+    cv::imshow("bin5", slices[4].bin_mask);
 }
 
 void ImageProcessor::processImage(cv::Mat& img) {
