@@ -73,7 +73,7 @@ volatile  int64_t       counter3                    = 0;
 
 
 
-lccv::PiCamera          cam;
+extern lccv::PiCamera   cam;
 static constexpr int    framewidth                  = 640;
 static constexpr int    frameheight                 = 480;
 static constexpr int    framerate                   = 30;
