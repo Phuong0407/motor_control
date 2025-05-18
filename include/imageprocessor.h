@@ -114,6 +114,7 @@ void SliceData::processSliceImage() {
     computeSliceCenter();
     computeSliceExtent();
     computeDirectionOffset();
+    printf("%d\n", extent);
 }
 
 
