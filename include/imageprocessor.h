@@ -206,7 +206,7 @@ void ImageProcessor::drawMarker() {
                 contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1
                 );
                 cv::putText(
-                    img, "Extent: " + std::to_string(extent),
+                    img, "Extent: " + std::to_string(slices[i].extent),
                     cv::Point(slices[i].center_x + 20, slices[i].center_y + TEXT_OFFSET_Y),
                     cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
                 );
