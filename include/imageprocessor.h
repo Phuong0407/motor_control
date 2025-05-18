@@ -1,0 +1,185 @@
+#ifndef IMAGEPROCESSOR_H
+#define IMAGEPROCESSOR_H
+
+#include "robot.h"
+#include <opencv2/opencv.hpp>
+#include <array>
+#include <limits>
+
+constexpr int       N_SLICES    = 5;
+using               Contour_t   = std::vector<cv::Point>;
+using               Contours_t  = std::vector<Contour_t>;
+
+inline void computeContourCenter(const Contour_t &contour, double &center_x, double &center_y) {
+    cv::Moments moments = cv::moments(contour);
+    center_x = static_cast<int>(moments.m10 / moments.m00);
+    center_y = static_cast<int>(moments.m01 / moments.m00);
+}
+
+inline double computeContourExtent(const Contour_t &contour) {
+    double area = cv::contourArea(contour);
+    cv::Rect boundRect = cv::boundingRect(contour);
+    double rectArea = static_cast<double>(boundRect.width * boundRect.height);
+    return (rectArea > 0.0) ? (area / rectArea) : 0.0;
+}
+
+
+
+struct SliceData {
+    cv::Mat             bin_mask;
+    static Contours_t   contours;
+    Contour_t           contour;
+    int                 center_x        = 0;
+    int                 center_y        = 0;
+    int                 img_center_x    = 0;
+    int                 img_center_y    = 0;
+    int                 dir_offset      = 0;
+    double              extent          = 0.0;
+    bool                has_line        = true;
+
+    inline void         computeSliceCenter();
+    inline void         computeSliceExtent();
+    void                identifyMainContour();
+    inline void         computeDirectionOffset();
+    inline void         processSliceImage(const cv::Mat bin_mask);
+    inline void         extractContour();
+    inline bool         containLine() const;
+};
+Contours_t SliceData::contours;
+
+inline void SliceData::computeSliceCenter() {
+    if (contour.empty()) {
+        has_line = false;
+        return;
+    }
+    computeContourCenter(contour, center_x, center_y);
+}
+
+inline void SliceData::computeSliceExtent() {
+    if (contour.empty()) {
+        has_line = false;
+        return;
+    }
+    extent = computeContourExtent(contour);
+}
+
+inline void SliceData::computeDirectionOffset() {
+    dir_offset = static_cast<int>((img_center_x - center_x) * extent);
+}
+
+bool SliceData::containLine() const { return has_line; }
+
+void SliceData::identifyMainContour() {
+    contour.clear();
+    for (const auto& contour_iter : contours) {
+        double area = cv::contourArea(contour_iter);
+        extent      = computeContourExtent(contour_iter);
+        if (area >= MIN_CONTOUR_AREA && extent <= MAX_EXTENT_RATIO) {
+            contour = contour_iter;
+            break;
+        }
+    }
+}
+
+inline void SliceData::extractContour() {
+    SliceData::contours.clear();
+    cv::findContours(bin_mask, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+}
+
+void SliceData::processSliceImage(const cv::Mat bin_mask) {
+    this->bin_mask      = bin_mask;
+    this->img_center_x  = this->bin_mask.cols / 2;
+    this->img_center_y  = this->bin_mask.rows / 2;
+
+    cv::imshow("binary", this->bin_mask);
+    cv::waitKey(5);
+    extractContour();
+    if (contours.empty()) {
+        has_line = false;
+        return;
+    }
+    
+    identifyMainContour();
+    if (contour.empty()) {
+        has_line = false;
+        return;
+    }
+
+    computeSliceCenter();
+    computeSliceExtent();
+    computeDirectionOffset();
+}
+
+
+class ImageProcessor {
+public:
+    ImageProcessor() = default;
+    void                            drawMarker();
+    void                            processImage(cv::Mat& img);
+
+private:
+    cv::Mat                         img;
+    cv::Mat                         bin_mask;
+    SliceData                       slices[N_SLICES];
+
+    void                            extractBinMask();
+    void                            sliceBinMask();
+};
+
+void ImageProcessor::extractBinMask() {
+    cv::Mat img_hsv, red1, red2, blue;
+    
+    cv::cvtColor(img, img_hsv, cv::COLOR_BGR2HSV);
+    cv::inRange(img_hsv, cv::Scalar(0, 120, 70),    cv::Scalar(10, 255, 255),   red1);
+    cv::inRange(img_hsv, cv::Scalar(170, 120, 70),  cv::Scalar(180, 255, 255),  red2);
+    cv::inRange(img_hsv, cv::Scalar(100, 150, 50),  cv::Scalar(140, 255, 255),  blue);
+
+    bin_mask = red1 | red2 | blue;
+}
+
+void ImageProcessor::sliceBinMask() {
+    int width           = bin_mask.cols;
+    int height          = bin_mask.rows;
+    int slice_height    = height / N_SLICES;
+
+    for (int i = 0; i < N_SLICES; i++) {
+        int start_y = slice_height * i;
+        cv::Rect slice_rect(0, start_y, width, slice_height);
+        slices[i].bin_mask = bin_mask(slice_rect).clone();
+    }
+}
+
+void ImageProcessor::drawMarker() {
+    for (int i = 0; i < N_SLICES; ++i) {
+        cv::Point contour_center = cv::Point(slices[i].center_x, slices[i].center_y);
+        cv::Point slice_center   = cv::Point(slices[i].img_center_x, slices[i].img_center_y);
+
+        cv::drawContours(img, slices[i].contour, -1, CONTOUR_COLOR, 2);
+        cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
+        cv::circle(image, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
+        
+        cv::putText(
+                image, "Offset: " + std::to_string(slices[i].img_center_x - slices[i].center_x),
+                contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1
+                );
+                cv::putText(
+                    image, "Extent: " + std::to_string(slices[i].extent),
+                    cv::Point(slices[i].center_x + 20, slices[i].center_y + TEXT_OFFSET_Y),
+                    cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
+                );
+    }
+}
+
+void ImageProcessor::processImage(cv::Mat& img) {
+    this->img = img;
+    extractBinMask();
+    sliceBinMask();
+    for (int i = 0; i < N_SLICES; ++i) {
+        slice[i].processSliceImage(bin_mask[i]);
+    }
+    repackSlice();
+    drawMarker();
+}
+
+
+#endif // IMAGEPROCESSOR_H
