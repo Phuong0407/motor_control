@@ -9,6 +9,8 @@
 #include <wiringPi.h>
 #include <wiringPiI2C.h>
 
+#include <stdio.h>
+
 int x                   = 0;
 int pwm1                = 0;
 int pwm2                = 0;
