@@ -172,11 +172,11 @@ void ImageProcessor::drawMarker() {
         cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
         
         cv::putText(
-                image, "Offset: " + std::to_string(slices[i].img_center_x - slices[i].center_x),
+                img, "Offset: " + std::to_string(slices[i].img_center_x - slices[i].center_x),
                 contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1
                 );
                 cv::putText(
-                    image, "Extent: " + std::to_string(slices[i].extent),
+                    img, "Extent: " + std::to_string(slices[i].extent),
                     cv::Point(slices[i].center_x + 20, slices[i].center_y + TEXT_OFFSET_Y),
                     cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
                 );
@@ -190,7 +190,6 @@ void ImageProcessor::processImage(cv::Mat& img) {
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
     }
-    repackSlice();
     drawMarker();
 }
 

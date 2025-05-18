@@ -21,7 +21,7 @@ int main() {
         }
         a.processImage(image1);
         cv::Mat img = a.getOutputImage();
-        cv::imshow("processed", image2);
+        cv::imshow("processed", img);
         ch = cv::waitKey(5);
     }
 }
