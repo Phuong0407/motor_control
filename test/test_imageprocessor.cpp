@@ -11,9 +11,15 @@ int main() {
 	// pthread_create(&CameraController, NULL, computeBarycenter, NULL);
 	// pthread_join(CameraController,NULL);
     
-    
+    lccv::PiCamera   cam;    
+    cam.options->video_width    = framewidth;
+    cam.options->video_height   = frameheight;
+    cam.options->framerate      = framerate;
+    cam.options->verbose        = verbose;
+    cam.startVideo();
+
     int ch = 0;
-    startCamera();
+    // startCamera();
 //     ImageProcessor a;
 //     cv::Mat image1(frameheight, framewidth, CV_8UC3);
 
