@@ -25,8 +25,8 @@ inline int computeDirection(int dir1, int dir2) {
 }
 
 
-void setMotor1(double rps1) {
-    dir1 = (rps1 > 0) ? +1 : -1;
+void * setMotor1(void *arg) {
+    dir1 = (ref1 > 0) ? +1 : -1;
     pwm1 = computePWMFromUnsignedRPS(std::abs(rps1));
     int xdir12 = computeDirection(dir1, dir2);
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
@@ -34,8 +34,8 @@ void setMotor1(double rps1) {
     wiringPiI2CWriteReg16(i2c_fd1, 0xaa, xdir12);
 }
 
-void setMotor2(double rps2) {
-    dir2 = (rps2 > 0) ? +1 : -1;
+void * setMotor2(void *arg) {
+    dir2 = (ref2 > 0) ? +1 : -1;
     pwm2 = computePWMFromUnsignedRPS(std::abs(rps2));
     int xdir12 = computeDirection(dir1, dir2);
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
@@ -43,8 +43,8 @@ void setMotor2(double rps2) {
     wiringPiI2CWriteReg16(i2c_fd1, 0xaa, xdir12);
 }
 
-void setMotor3(double rps3) {
-    dir3 = (rps3 > 0) ? +1 : -1;
+void * setMotor3(void *arg) {
+    dir3 = (ref3 > 0) ? +1 : -1;
     pwm3 = computePWMFromUnsignedRPS(std::abs(rps3));
     int xdir3 = computeDirection(dir3);
     wiringPiI2CWriteReg16(i2c_fd2, 0x82, (pwm3 << 8));
