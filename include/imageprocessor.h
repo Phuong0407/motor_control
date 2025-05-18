@@ -165,25 +165,26 @@ void ImageProcessor::drawMarker() {
     for (int i = 0; i < N_SLICES; ++i) {
         if (!slices[i].has_line) {
             printf("God please helps me!\n");            
-            return;
+            continue;
         }
-
-        cv::Point contour_center = cv::Point(slices[i].center_x, slices[i].center_y);
-        cv::Point slice_center   = cv::Point(slices[i].img_center_x, slices[i].img_center_y);
-        
-        cv::drawContours(img, slices[i].contour, -1, CONTOUR_COLOR, 2);
-        cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
-        cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
-        
-        cv::putText(
-                img, "Offset: " + std::to_string(slices[i].img_center_x - slices[i].center_x),
-                contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1
-                );
-                cv::putText(
-                    img, "Extent: " + std::to_string(slices[i].extent),
-                    cv::Point(slices[i].center_x + 20, slices[i].center_y + TEXT_OFFSET_Y),
-                    cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
-                );
+        else {
+            cv::Point contour_center = cv::Point(slices[i].center_x, slices[i].center_y);
+            cv::Point slice_center   = cv::Point(slices[i].img_center_x, slices[i].img_center_y);
+            
+            cv::drawContours(img, slices[i].contour, -1, CONTOUR_COLOR, 2);
+            cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
+            cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
+            
+            cv::putText(
+                    img, "Offset: " + std::to_string(slices[i].img_center_x - slices[i].center_x),
+                    contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1
+                    );
+                    cv::putText(
+                        img, "Extent: " + std::to_string(slices[i].extent),
+                        cv::Point(slices[i].center_x + 20, slices[i].center_y + TEXT_OFFSET_Y),
+                        cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
+                    );
+        }
     }
 }
 
