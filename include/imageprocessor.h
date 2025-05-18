@@ -152,8 +152,6 @@ void ImageProcessor::extractBinMask() {
     cv::inRange(img_hsv, cv::Scalar(100, 150, 50),  cv::Scalar(140, 255, 255),  blue);
 
     bin_mask = red1 | red2 | blue;
-    cv::imshow("bin", bin_mask);
-
 }
 
 void ImageProcessor::sliceBinMask() {
@@ -166,6 +164,12 @@ void ImageProcessor::sliceBinMask() {
         cv::Rect slice_rect(0, start_y, width, slice_height);
         slices[i].bin_mask = bin_mask(slice_rect).clone();
     }
+    cv::imshow("bin1", slices[0].bin_mask);
+    cv::imshow("bin2", slices[1].bin_mask);
+    cv::imshow("bin3", slices[2].bin_mask);
+    cv::imshow("bin4", slices[3].bin_mask);
+    cv::imshow("bin5", slices[4].bin_mask);
+
 }
 
 void ImageProcessor::drawMarker() {
