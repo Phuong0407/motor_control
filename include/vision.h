@@ -25,57 +25,57 @@ int                     contour_center_x3           = 0;
 int                     contour_center_x4           = 0;
 int                     contour_center_x5           = 0;
 
-inline cv::Mat extrackBinMask(const cv::Mat& img) {
-    cv::Mat img_hsv, red1, red2, blue, bin_mask;
-    cv::cvtColor(img, img_hsv, cv::COLOR_BGR2HSV);
+// inline cv::Mat extrackBinMask(const cv::Mat& img) {
+//     cv::Mat img_hsv, red1, red2, blue, bin_mask;
+//     cv::cvtColor(img, img_hsv, cv::COLOR_BGR2HSV);
 
-    cv::inRange(img_hsv, cv::Scalar(0, 120, 70),    cv::Scalar(10, 255, 255),   red1);
-    cv::inRange(img_hsv, cv::Scalar(170, 120, 70),  cv::Scalar(180, 255, 255),  red2);
-    cv::inRange(img_hsv, cv::Scalar(100, 150, 50),  cv::Scalar(140, 255, 255),  blue);
+//     cv::inRange(img_hsv, cv::Scalar(0, 120, 70),    cv::Scalar(10, 255, 255),   red1);
+//     cv::inRange(img_hsv, cv::Scalar(170, 120, 70),  cv::Scalar(180, 255, 255),  red2);
+//     cv::inRange(img_hsv, cv::Scalar(100, 150, 50),  cv::Scalar(140, 255, 255),  blue);
 
-    return red1 | red2 | blue;
-}
+//     return red1 | red2 | blue;
+// }
 
-inline cv::Point computeCenter(const std::vector<cv::Point>& contour) const {
-    if (contour.empty()) return cv::Point(0, 0);
-    cv::Moments moments = cv::moments(contour);
-    if (moments.m00 == 0) return cv::Point(0, 0);
-    return cv::Point(
-        static_cast<int>(moments.m10 / moments.m00),
-        static_cast<int>(moments.m01 / moments.m00)
-    );
-}
+// inline cv::Point computeCenter(const std::vector<cv::Point>& contour) const {
+//     if (contour.empty()) return cv::Point(0, 0);
+//     cv::Moments moments = cv::moments(contour);
+//     if (moments.m00 == 0) return cv::Point(0, 0);
+//     return cv::Point(
+//         static_cast<int>(moments.m10 / moments.m00),
+//         static_cast<int>(moments.m01 / moments.m00)
+//     );
+// }
 
-double computeExtent(const std::vector<cv::Point>& contour) const {
-    if (contour.empty()) return 0.0;
-    double area = cv::contourArea(contour);
-    cv::Rect boundingRect = cv::boundingRect(contour);
-    double rect_area = static_cast<double>(boundingRect.width * boundingRect.height);
-    return (rect_area > 0.0) ? (area / rect_area) : 0.0;
-}
+// double computeExtent(const std::vector<cv::Point>& contour) const {
+//     if (contour.empty()) return 0.0;
+//     double area = cv::contourArea(contour);
+//     cv::Rect boundingRect = cv::boundingRect(contour);
+//     double rect_area = static_cast<double>(boundingRect.width * boundingRect.height);
+//     return (rect_area > 0.0) ? (area / rect_area) : 0.0;
+// }
 
-void correctMainContour(int prevCenterX) {
-    for (const auto& contour : contours) {
-        cv::Point center = computeCenter(contour);
-        if (center.x != 0 && std::abs(center.x - prevCenterX) < CONTOUR_OFFSET_THRESHOLD) {
-            mainContour = contour;
-            contourCenterX = center.x;
-            break;
-        }
-    }
-}
+// void correctMainContour(int prevCenterX) {
+//     for (const auto& contour : contours) {
+//         cv::Point center = computeCenter(contour);
+//         if (center.x != 0 && std::abs(center.x - prevCenterX) < CONTOUR_OFFSET_THRESHOLD) {
+//             mainContour = contour;
+//             contourCenterX = center.x;
+//             break;
+//         }
+//     }
+// }
 
-void drawMarkers(const cv::Point& center, double extent) {
-    cv::drawContours(image, std::vector<std::vector<cv::Point>>{mainContour}, -1, CONTOUR_COLOR, 2);
-    cv::circle(image, center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
-    cv::circle(image, cv::Point(imageCenterX, imageCenterY), 3, IMAGE_CENTER_COLOR, -1);
-    cv::putText(image, "Offset: " + std::to_string(imageCenterX - contourCenterX),
-                cv::Point(contourCenterX + 20, imageCenterY),
-                cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1);
-    cv::putText(image, "Extent: " + std::to_string(extent),
-                cv::Point(contourCenterX + 20, imageCenterY + TEXT_OFFSET_Y),
-                cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1);
-}
+// void drawMarkers(const cv::Point& center, double extent) {
+//     cv::drawContours(image, std::vector<std::vector<cv::Point>>{mainContour}, -1, CONTOUR_COLOR, 2);
+//     cv::circle(image, center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
+//     cv::circle(image, cv::Point(imageCenterX, imageCenterY), 3, IMAGE_CENTER_COLOR, -1);
+//     cv::putText(image, "Offset: " + std::to_string(imageCenterX - contourCenterX),
+//                 cv::Point(contourCenterX + 20, imageCenterY),
+//                 cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1);
+//     cv::putText(image, "Extent: " + std::to_string(extent),
+//                 cv::Point(contourCenterX + 20, imageCenterY + TEXT_OFFSET_Y),
+//                 cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1);
+// }
 
 void * computeBarycenter(void *arg) {
     cv::Mat img, img_hsv;
