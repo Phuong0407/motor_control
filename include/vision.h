@@ -37,6 +37,8 @@ void * computeBaryCenter(void *arg) {
         cv::circle(image_cpy2, p, 5, Scalar(128,0,0), -1);
         cv::imshow("CAMERA", img_cpy2);
 
+        printf("x = %d\n", x);
+
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
     }
