@@ -191,6 +191,7 @@ void ImageProcessor::processImage(cv::Mat& img) {
         slices[i].drawMarker();
     }
     repackSlice();
+    cv::imshow("showed", output);
     return;
 }
 
