@@ -188,10 +188,10 @@ void ImageProcessor::sliceBinMask() {
     for (int i = 0; i < N_SLICES; i++) {
         int start_y = slice_height * i;
         cv::Rect slice_rect(0, start_y, width, slice_height);
-        // slices[i].bin_mask  = bin_mask(slice_rect).clone();
-        // slices[i].img       = img(slice_rect).clone();
-        slices[i].bin_mask  = bin_mask(slice_rect);
-        slices[i].img       = img(slice_rect);
+        slices[i].bin_mask  = bin_mask(slice_rect).clone();
+        slices[i].img       = img(slice_rect).clone();
+        // slices[i].bin_mask  = bin_mask(slice_rect);
+        // slices[i].img       = img(slice_rect);
     }
 }
 
