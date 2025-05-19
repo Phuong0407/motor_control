@@ -6,6 +6,11 @@
 #include <array>
 #include <omp.h>
 
+#ifdef PARALLEL_OPENCV
+#define NUM_THREADS 2
+#include <omp.h>
+#endif
+
 constexpr double        MIN_CONTOUR_AREA            = 100.0;
 constexpr double        MAX_EXTENT_RATIO            = 0.7;
 constexpr int           CONTOUR_OFFSET_THRESHOLD    = 5;
@@ -155,8 +160,6 @@ private:
     void        extractBinMask();
     void        sliceBinMask();
     void        repackSlice();
-    // void        drawMarker();
-
 };
 
 cv::Mat ImageProcessor::getOutputImage() const {
@@ -179,11 +182,16 @@ void ImageProcessor::sliceBinMask() {
     int height          = bin_mask.rows;
     int slice_height    = height / N_SLICES;
 
+#ifdef PARALLEL_OPENCV
+    #pragma omp parallel for schedule(dynamic, 1)
+#endif
     for (int i = 0; i < N_SLICES; i++) {
         int start_y = slice_height * i;
         cv::Rect slice_rect(0, start_y, width, slice_height);
-        slices[i].bin_mask  = bin_mask(slice_rect).clone();
-        slices[i].img       = img(slice_rect).clone();
+        // slices[i].bin_mask  = bin_mask(slice_rect).clone();
+        // slices[i].img       = img(slice_rect).clone();
+        slices[i].bin_mask  = bin_mask(slice_rect);
+        slices[i].img       = img(slice_rect);
     }
 }
 
@@ -191,6 +199,10 @@ void ImageProcessor::processImage(cv::Mat& img) {
     this->img = img;
     extractBinMask();
     sliceBinMask();
+
+#ifdef PARALLEL_OPENCV
+    #pragma omp parallel for schedule(dynamic, 1)
+#endif
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
         slices[i].drawMarker();
@@ -204,23 +216,5 @@ void ImageProcessor::repackSlice() {
         cv::vconcat(output, slices[i].img, output);
     }
 }
-
-// void ImageProcessor::drawMarker() {
-//     for (int i = 0; i < N_SLICES; ++i) {
-//         cv::Point contour_center = cv::Point(slices[i].center_x, slices[i].center_y);
-//         cv::Point slice_center   = cv::Point(slices[i].img_center_x, slices[i].img_center_y);
-        
-//         cv::drawContours(img, std::vector<std::vector<cv::Point>>{slices[i].contour}, -1, CONTOUR_COLOR, 2);
-//         cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
-//         cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
-        
-//         cv::putText(img, "Offset: " + std::to_string(slices[i].img_center_x - slices[i].center_x),
-//                     contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1);
-//         cv::putText(img, "Extent: " + std::to_string(slices[i].extent),
-//                     cv::Point(slices[i].center_x + 20, slices[i].center_y + TEXT_OFFSET_Y),
-//                     cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
-//                     );
-//     }
-// }
 
 #endif // IMAGEPROCESSOR_H
