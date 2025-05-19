@@ -1,6 +1,3 @@
-// #include "camera.h"
-
-#define PARALLEL_OPENCV
 #include "imageprocessor.h"
 #include <pthread.h>
 #include <iostream>

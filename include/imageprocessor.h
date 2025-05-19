@@ -6,11 +6,6 @@
 #include <array>
 #include <omp.h>
 
-#ifdef PARALLEL_OPENCV
-#define NUM_THREADS 2
-#include <omp.h>
-#endif
-
 constexpr double        MIN_CONTOUR_AREA            = 100.0;
 constexpr double        MAX_EXTENT_RATIO            = 0.7;
 constexpr int           CONTOUR_OFFSET_THRESHOLD    = 5;
@@ -181,16 +176,13 @@ void ImageProcessor::sliceBinMask() {
     int height          = bin_mask.rows;
     int slice_height    = height / N_SLICES;
 
-#ifdef PARALLEL_OPENCV
-    #pragma omp parallel for schedule(dynamic, 1)
-#endif
     for (int i = 0; i < N_SLICES; i++) {
         int start_y = slice_height * i;
         cv::Rect slice_rect(0, start_y, width, slice_height);
-        slices[i].bin_mask  = bin_mask(slice_rect).clone();
-        slices[i].img       = img(slice_rect).clone();
-        // slices[i].bin_mask  = bin_mask(slice_rect);
-        // slices[i].img       = img(slice_rect);
+        // slices[i].bin_mask  = bin_mask(slice_rect).clone();
+        // slices[i].img       = img(slice_rect).clone();
+        slices[i].bin_mask  = bin_mask(slice_rect);
+        slices[i].img       = img(slice_rect);
     }
 }
 
@@ -199,9 +191,6 @@ void ImageProcessor::processImage(cv::Mat& img) {
     extractBinMask();
     sliceBinMask();
 
-#ifdef PARALLEL_OPENCV
-    #pragma omp parallel for schedule(dynamic, 1)
-#endif
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
         slices[i].drawMarker();
