@@ -35,7 +35,7 @@ inline double computeContourExtent(const Contour_t &contour, double area) {
 
 
 struct SliceData {
-    // cv::Mat             img;
+    cv::Mat             img;
     cv::Mat             bin_mask;
     static Contours_t   contours;
     Contour_t           contour;
@@ -53,7 +53,7 @@ struct SliceData {
     inline void         computeDirectionOffset();
     inline void         processSliceImage();
     inline void         extractContour();
-    // void                drawMarker();
+    void                drawMarker();
 };
 Contours_t SliceData::contours;
 
@@ -120,24 +120,24 @@ void SliceData::processSliceImage() {
     computeDirectionOffset();
 }
 
-// void SliceData::drawMarker() {
-//     cv::Point contour_center = cv::Point(center_x, center_y);
-//     cv::Point slice_center   = cv::Point(img_center_x, img_center_y);
+void SliceData::drawMarker() {
+    cv::Point contour_center = cv::Point(center_x, center_y);
+    cv::Point slice_center   = cv::Point(img_center_x, img_center_y);
     
-//     cv::drawContours(img, std::vector<std::vector<cv::Point>>{contour}, -1, CONTOUR_COLOR, 2);
-//     cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
-//     cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
+    cv::drawContours(img, std::vector<std::vector<cv::Point>>{contour}, -1, CONTOUR_COLOR, 2);
+    cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
+    cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
     
-//     cv::putText(
-//             img, "Offset: " + std::to_string(img_center_x - center_x),
-//             contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1
-//             );
-//             cv::putText(
-//                 img, "Extent: " + std::to_string(extent),
-//                 cv::Point(center_x + 20, center_y + TEXT_OFFSET_Y),
-//                 cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
-//             );
-// }
+    cv::putText(
+            img, "Offset: " + std::to_string(img_center_x - center_x),
+            contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1
+            );
+            cv::putText(
+                img, "Extent: " + std::to_string(extent),
+                cv::Point(center_x + 20, center_y + TEXT_OFFSET_Y),
+                cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
+            );
+}
 
 
 class ImageProcessor {
@@ -154,13 +154,13 @@ private:
 
     void        extractBinMask();
     void        sliceBinMask();
-    // void        repackSlice();
-    void        drawMarker();
+    void        repackSlice();
+    // void        drawMarker();
 
 };
 
 cv::Mat ImageProcessor::getOutputImage() const {
-    return img;
+    return output;
 }
 
 void ImageProcessor::extractBinMask() {
@@ -183,7 +183,7 @@ void ImageProcessor::sliceBinMask() {
         int start_y = slice_height * i;
         cv::Rect slice_rect(0, start_y, width, slice_height);
         slices[i].bin_mask  = bin_mask(slice_rect).clone();
-        // slices[i].img       = img(slice_rect).clone();
+        slices[i].img       = img(slice_rect).clone();
     }
 }
 
@@ -193,35 +193,34 @@ void ImageProcessor::processImage(cv::Mat& img) {
     sliceBinMask();
     for (int i = 0; i < N_SLICES; ++i) {
         slices[i].processSliceImage();
-        // slices[i].drawMarker();
+        slices[i].drawMarker();
     }
-    drawMarker();
-    // repackSlice();
+    repackSlice();
 }
 
-// void ImageProcessor::repackSlice() {
-//     output = slices[0].img.clone();
-//     for (size_t i = 1; i < N_SLICES; ++i) {
-//         cv::vconcat(output, slices[i].img, output);
+void ImageProcessor::repackSlice() {
+    output = slices[0].img.clone();
+    for (size_t i = 1; i < N_SLICES; ++i) {
+        cv::vconcat(output, slices[i].img, output);
+    }
+}
+
+// void ImageProcessor::drawMarker() {
+//     for (int i = 0; i < N_SLICES; ++i) {
+//         cv::Point contour_center = cv::Point(slices[i].center_x, slices[i].center_y);
+//         cv::Point slice_center   = cv::Point(slices[i].img_center_x, slices[i].img_center_y);
+        
+//         cv::drawContours(img, std::vector<std::vector<cv::Point>>{slices[i].contour}, -1, CONTOUR_COLOR, 2);
+//         cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
+//         cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
+        
+//         cv::putText(img, "Offset: " + std::to_string(slices[i].img_center_x - slices[i].center_x),
+//                     contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1);
+//         cv::putText(img, "Extent: " + std::to_string(slices[i].extent),
+//                     cv::Point(slices[i].center_x + 20, slices[i].center_y + TEXT_OFFSET_Y),
+//                     cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
+//                     );
 //     }
 // }
-
-void ImageProcessor::drawMarker() {
-    for (int i = 0; i < N_SLICES; ++i) {
-        cv::Point contour_center = cv::Point(slices[i].center_x, slices[i].center_y);
-        cv::Point slice_center   = cv::Point(slices[i].img_center_x, slices[i].img_center_y);
-        
-        cv::drawContours(img, std::vector<std::vector<cv::Point>>{slices[i].contour}, -1, CONTOUR_COLOR, 2);
-        cv::circle(img, contour_center, MARKER_RADIUS, cv::Scalar(255, 255, 255), -1);
-        cv::circle(img, slice_center, MARKER_RADIUS, IMAGE_CENTER_COLOR, -1);
-        
-        cv::putText(img, "Offset: " + std::to_string(slices[i].img_center_x - slices[i].center_x),
-                    contour_center, cv::FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 1);
-        cv::putText(img, "Extent: " + std::to_string(slices[i].extent),
-                    cv::Point(slices[i].center_x + 20, slices[i].center_y + TEXT_OFFSET_Y),
-                    cv::FONT_HERSHEY_SIMPLEX, 0.5, TEXT_COLOR, 1
-                    );
-    }
-}
 
 #endif // IMAGEPROCESSOR_H
