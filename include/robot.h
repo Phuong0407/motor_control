@@ -106,4 +106,9 @@ constexpr int           NO_LINE_FOUND               = 0;
 using                   Contour_t                   = std::vector<cv::Point>;
 using                   Contours_t                  = std::vector<Contour_t>;
 
+
+cv::Mat                 img;
+cv::Mat                 output;
+cv::Mat                 bin_mask;
+
 #endif // ROBOT_H
