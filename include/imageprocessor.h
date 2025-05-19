@@ -196,15 +196,15 @@ void ImageProcessor::processImage(cv::Mat& img) {
         // slices[i].drawMarker();
     }
     drawMarker();
-    repackSlice();
+    // repackSlice();
 }
 
-void ImageProcessor::repackSlice() {
-    output = slices[0].img.clone();
-    for (size_t i = 1; i < N_SLICES; ++i) {
-        cv::vconcat(output, slices[i].img, output);
-    }
-}
+// void ImageProcessor::repackSlice() {
+//     output = slices[0].img.clone();
+//     for (size_t i = 1; i < N_SLICES; ++i) {
+//         cv::vconcat(output, slices[i].img, output);
+//     }
+// }
 
 void ImageProcessor::drawMarker() {
     for (int i = 0; i < N_SLICES; ++i) {
