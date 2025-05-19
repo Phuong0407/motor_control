@@ -8,9 +8,6 @@ find_package(PkgConfig REQUIRED)
 find_package(OpenMP REQUIRED)
 pkg_check_modules(LIBCAMERA REQUIRED libcamera)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -Wall -Wextra -Wpedantic")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 -Wall -Wextra -Wpedantic")
-
 include_directories(
     ${LIBCAMERA_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
@@ -64,5 +61,4 @@ target_link_libraries(
     -llccv
     ${OpenCV_LIBS}
     ${LIBCAMERA_LIBRARIES}
-    OpenMP::OpenMP_CXX
 )
