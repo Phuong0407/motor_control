@@ -2,6 +2,7 @@
 #include "imageprocessor.h"
 #include <pthread.h>
 #include <iostream>
+#include <chrono>
 
 // lccv::PiCamera   cam;
 
@@ -24,6 +25,7 @@ int main() {
     cv::Mat image1(frameheight, framewidth, CV_8UC3);
 
     while (ch != 27) {
+        auto start_time = std::chrono::high_resolution_clock::now();
         if (!cam.getVideoFrame(image1, 1000)) {
             std::cout << "Timeout error while grabbing frame." << std::endl;
             continue;
@@ -31,6 +33,10 @@ int main() {
         a.processImage(image1);
         cv::Mat img = a.getOutputImage();
         cv::imshow("processed", img);
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed_seconds = end_time - start_time;
+        std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
         ch = cv::waitKey(5);
     }
 }
