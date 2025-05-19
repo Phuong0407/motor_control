@@ -42,7 +42,7 @@ inline double computeContourExtent(const Contour_t &contour, double area) {
 struct SliceData {
     cv::Mat             img;
     cv::Mat             bin_mask;
-    static Contours_t   contours;
+    Contours_t   contours;
     Contour_t           contour;
     int                 center_x        = 0;
     int                 center_y        = 0;
@@ -60,7 +60,6 @@ struct SliceData {
     inline void         extractContour();
     void                drawMarker();
 };
-Contours_t SliceData::contours;
 
 inline void SliceData::computeSliceCenter() {
     if (contour.empty()) {
