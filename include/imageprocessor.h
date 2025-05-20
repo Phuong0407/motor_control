@@ -100,8 +100,13 @@ void sliceImageToMask() {
         cv::Rect slice_rect(0, start_y, width, slice_height);
         slice_img[i]        = img(slice_rect).clone();
         slice_bin_mask[i]   = bin_mask(slice_rect).clone();
-        cv::imshow("bin_mask, ", slice_bin_mask[i]);
     }
+        cv::imshow("bin_mask 1", slice_bin_mask[0]);
+        cv::imshow("bin_mask 2", slice_bin_mask[1]);
+        cv::imshow("bin_mask 3", slice_bin_mask[2]);
+        cv::imshow("bin_mask 4", slice_bin_mask[3]);
+        cv::imshow("bin_mask 5", slice_bin_mask[4]);
+
 }
 
 void repackSlice() {
