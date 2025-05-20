@@ -64,8 +64,10 @@ void computeRefTPSFromVelocity() {
 }
 
 void * computeRefTPSFromVision(void * arg) {
-    computeRobotVelocity();
-    computeRefTPSFromVelocity();
+    while(true) {
+        computeRobotVelocity();
+        computeRefTPSFromVelocity();
+    }
     return nullptr;
 }
 
