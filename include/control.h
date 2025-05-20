@@ -4,6 +4,7 @@
 #include "robot.h"
 #include "pid.h"
 #include "timing.h"
+#include "motor.h"
 
 #include <stdio.h>
 #include <cmath>
