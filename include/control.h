@@ -50,7 +50,7 @@ void * controlMotor2(void *arg) {
     }
 }
 
-void * controlMotor3(void *arg) {
+void * 6controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
     while(true) {
         prev_ticks3 = counter3;

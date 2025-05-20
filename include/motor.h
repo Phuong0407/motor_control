@@ -3,8 +3,8 @@
 
 #include "robot.h"
 
-inline int computePWMFromUnsignedRPS(double u_rps) {
-    double norm_rps = std::clamp(u_rps / MAX_TPS, 0.0, 1.0);
+inline int computePWMFromUnsignedRPS(double utps) {
+    double norm_rps = std::clamp(utps / MAX_TPS, 0.0, 1.0);
     int pwm_value = static_cast<int>(MAX_PWM * norm_rps * SAFETY_OFFSET);
     if (pwm_value < DEAD_PWM) return 0;
     return static_cast<int>((pwm_value - DEAD_PWM) / DEADZONE_SCALEUP);
@@ -50,7 +50,7 @@ void setMotor2() {
 // void * setMotor3(void *arg) {
 void setMotor3() {
     dir3 = (computed3 > 0) ? +1 : -1;
-    pwm3 = computePWMFromUnsignedRPS(std::abs(computed1));
+    pwm3 = computePWMFromUnsignedRPS(std::abs(computed3));
     int xdir3 = computeDirection(dir3);
     wiringPiI2CWriteReg16(i2c_fd2, 0x82, (pwm3 << 8));
     microsleep(1);
