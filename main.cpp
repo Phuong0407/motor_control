@@ -1,7 +1,7 @@
 // #define NOLOADED_RUN
 #define LOADED_RUN
 
-#include "camera.h"
+// #include "camera.h"
 #include "imageprocessor.h"
 #include "vision.h"
 #include "velocity.h"
@@ -15,8 +15,13 @@
 
 int main(int argc, char *argv[]) {
 
-    lccv::camera cam;
-    startCamera();
+    lccv::Picamera cam;
+    cam.options->video_width    = framewidth;
+    cam.options->video_height   = frameheight;
+    cam.options->framerate      = framerate;
+    cam.options->verbose        = verbose;
+    cam.startVideo();
+
     startEncoders();
 
     pthread_t Vision;

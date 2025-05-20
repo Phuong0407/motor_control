@@ -106,13 +106,13 @@ cv::Mat                 img;
 cv::Mat                 output;
 cv::Mat                 bin_mask;
 
-bool                    contain_lines[N_SLICES]     = true;
-int                     img_center_xs[N_SLICES]     = 0;
-int                     img_center_ys[N_SLICES]     = 0;
-int                     center_xs[N_SLICES]         = 0;
-int                     center_ys[N_SLICES]         = 0;
-int                     dir_offsets[N_SLICES]       = 0;
-double                  extents[N_SLICES]           = 0.0;
+bool                    contain_lines[N_SLICES]     = {true};
+int                     img_center_xs[N_SLICES]     = {0};
+int                     img_center_ys[N_SLICES]     = {0};
+int                     center_xs[N_SLICES]         = {0};
+int                     center_ys[N_SLICES]         = {0};
+int                     dir_offsets[N_SLICES]       = {0};
+double                  extents[N_SLICES]           = {0.0};
 
 
 constexpr int           TURN_THRESHOLD              = 50;

@@ -23,22 +23,25 @@ void identifyMainContour(
             continue;
         else
             area = larea;
-        
-        lextent = computeContourExtent(contour_it, area);
+
+        cv::Rect bound_rect = cv::boundingRect(contour_it);
+        double rect_area = static_cast<double>(bound_rect.width * bound_rect.height);
+
+        double lextent = (rect_area > 0.0) ? (larea / rect_area) : 0.0;
         if (lextent <= MAX_EXTENT_RATIO) {
             contour = contour_it;
-            extent[i] = lextent;
+            extent = lextent;
         }
     }
 }
 
 void processSliceImage() {
     for (unsigned int i = 0; i < N_SLICES; ++i) {
-        img_center_x[i] = slice_bin_mask[i].cols / 2;
-        img_center_y[i] = slice_bin_mask[i].rows / 2;
+        img_center_xs[i] = slice_bin_mask[i].cols / 2;
+        img_center_ys[i] = slice_bin_mask[i].rows / 2;
 
-        contours.clear();
-        cv::findContours(bin_mask, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+        slice_contours[i].clear();
+        cv::findContours(bin_mask, slice_contours[i], cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
         
         if (slice_contours[i].empty())
             contain_lines[i] = false;
@@ -53,11 +56,7 @@ void processSliceImage() {
         center_x[i] = static_cast<int>(moments.m10 / moments.m00);
         center_y[i] = static_cast<int>(moments.m01 / moments.m00);
 
-        cv::Rect bound_rect = cv::boundingRect(contour);
-        double rect_area = static_cast<double>(bound_rect.width * bound_rect.height);
-        extents[i] = (rect_area > 0.0) ? (area / rect_area) : 0.0;
-
-        dir_offsets[i] = static_cast<int>((img_center_x[i] - center_x[i]) * extent[i]);
+        dir_offsets[i] = static_cast<int>((img_center_x[i] - center_x[i]) * extents[i]);
     }
 }
 
