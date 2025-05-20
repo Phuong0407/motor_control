@@ -56,7 +56,8 @@ void processSliceImage() {
         center_xs[i] = static_cast<int>(moments.m10 / moments.m00);
         center_ys[i] = static_cast<int>(moments.m01 / moments.m00);
 
-        dir_offsets[i] = static_cast<int>((img_center_xs[i] - center_xs[i]) * extents[i]);
+        dir_offsets[i] = static_cast<int>(static_cast<double>(img_center_xs[i] - center_xs[i]) * extents[i]);
+        printf("dir offset %d,]\t%d", dir_offsets[i]);
     }
 }
 

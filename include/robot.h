@@ -112,11 +112,11 @@ int                     img_center_xs[N_SLICES]     = {0};
 int                     img_center_ys[N_SLICES]     = {0};
 int                     center_xs[N_SLICES]         = {0};
 int                     center_ys[N_SLICES]         = {0};
-int                     dir_offsets[N_SLICES]       = {0};
+int                     dir_offsets[N_SLICES]       = {0.0};
 double                  extents[N_SLICES]           = {0.0};
 
 
-constexpr int           TURN_THRESHOLD              = 50;
+constexpr int           TURN_THRESHOLD              = 10;
 constexpr double        TURN_SPEED_DECREASE         = 0.5;
 constexpr double        TURN_SPEED_INCREASE         = 0.5;
 constexpr double        kp_dir                      = 0.01;
