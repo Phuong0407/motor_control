@@ -11,9 +11,9 @@
 
 #include <stdio.h>
 
-double  L1              = 0.0;
-double  L2              = 0.0;
-double  r               = 0.0;
+double  L1              = 0.115;
+double  L2              = 0.230;
+double  r               = 0.028;
 
 int x                   = 0;
 int pwm1                = 0;
