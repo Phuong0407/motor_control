@@ -68,7 +68,7 @@ void drawMarker() {
         cv::Point extent_center     = cv::Point(center_xs[i] + 20, center_ys[i] + TEXT_OFFSET_Y);
 
         cv::drawContours(slice_img[i], Contours_t{slice_contour[i]}, -1, CONTOUR_COLOR, 2);
-        cv::circle(slice_img[i], contour_center, MARKER_RADIUS, CONTOUR_ENTER_COLOR, -1);
+        cv::circle(slice_img[i], contour_center, MARKER_RADIUS, CONTOUR_CENTER_COLOR, -1);
         cv::circle(slice_img[i], slice_center,   MARKER_RADIUS, IMAGE_CENTER_COLOR,  -1);
 
         cv::putText(slice_img[i], "Offset: " + std::to_string(img_center_xs[i] - center_xs[i]),
