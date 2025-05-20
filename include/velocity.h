@@ -27,24 +27,34 @@ inline double computeDirectionControlSignal(double error) {
     return kp_dir * error + kd_dir * derivative;
 }
 
+// void computeRobotVelocity() {
+//     int     num_valid_slice     = 0;
+//     double  dir_offset_tot      = 0.0;
+
+//     for (size_t i = 0; i < N_SLICES; i++) {
+//         if (contain_lines[i]) {
+//             dir_offset_tot += static_cast<double>(dir_offsets[i]);
+//             num_valid_slice++;
+//         }
+//     }
+
+//     double avg_dir_offset = (num_valid_slice > 0) ? dir_offset_tot / static_cast<double>(num_valid_slice) : 0.0;
+//     omega = computeDirectionControlSignal(avg_dir_offset);
+//     printf("omega = %.3f", omega);
+//     if (detectPerpendicularTurn()) {
+//         base_speed  *= TURN_SPEED_DECREASE;
+//         omega       *= TURN_SPEED_INCREASE;
+//     }
+// }
+
 void computeRobotVelocity() {
-    int     num_valid_slice     = 0;
-    double  dir_offset_tot      = 0.0;
-
-    for (size_t i = 0; i < N_SLICES; i++) {
-        if (contain_lines[i]) {
-            dir_offset_tot += static_cast<double>(dir_offsets[i]);
-            num_valid_slice++;
-        }
-    }
-
-    double avg_dir_offset = (num_valid_slice > 0) ? dir_offset_tot / static_cast<double>(num_valid_slice) : 0.0;
+    double avg_dir = static_cast<double>(x - framewidth / 2);
     omega = computeDirectionControlSignal(avg_dir_offset);
     printf("omega = %.3f", omega);
-    if (detectPerpendicularTurn()) {
-        base_speed  *= TURN_SPEED_DECREASE;
-        omega       *= TURN_SPEED_INCREASE;
-    }
+    // if (detectPerpendicularTurn()) {
+    //     base_speed  *= TURN_SPEED_DECREASE;
+    //     omega       *= TURN_SPEED_INCREASE;
+    // }
 }
 
 void computeRefTPSFromVelocity() {
