@@ -40,7 +40,7 @@ void computeRobotVelocity() {
 
     double avg_dir_offset = (num_valid_slice > 0) ? dir_offset_tot / static_cast<double>(num_valid_slice) : 0.0;
     omega = computeDirectionControlSignal(avg_dir_offset);
-    
+    printf("omega = %.3f", omega);
     if (detectPerpendicularTurn()) {
         base_speed  *= TURN_SPEED_DECREASE;
         omega       *= TURN_SPEED_INCREASE;
