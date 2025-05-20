@@ -33,7 +33,7 @@ void computeRobotVelocity() {
 
     for (size_t i = 0; i < N_SLICES; i++) {
         if (contain_lines[i]) {
-            dir_offset_tot += dir_offsets[i];
+            dir_offset_tot += static_cast<double>(dir_offsets[i]);
             num_valid_slice++;
         }
     }
