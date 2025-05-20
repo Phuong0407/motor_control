@@ -15,13 +15,6 @@
 
 int main(int argc, char *argv[]) {
 
-    lccv::PiCamera cam;
-    cam.options->video_width    = framewidth;
-    cam.options->video_height   = frameheight;
-    cam.options->framerate      = framerate;
-    cam.options->verbose        = verbose;
-    cam.startVideo();
-
     startEncoders();
 
     pthread_t Vision;

@@ -4,7 +4,7 @@
 #include "robot.h"
 
 inline int computePWMFromUnsignedRPS(double u_rps) {
-    double norm_rps = std::clamp(u_rps / MAX_TICKS, 0.0, 1.0);
+    double norm_rps = std::clamp(u_rps / MAX_TPS, 0.0, 1.0);
     int pwm_value = static_cast<int>(MAX_PWM * norm_rps * SAFETY_OFFSET);
     if (pwm_value < DEAD_PWM) return 0;
     return static_cast<int>((pwm_value - DEAD_PWM) / DEADZONE_SCALEUP);
