@@ -50,7 +50,7 @@ inline double computeDirectionControlSignal(double error) {
 void computeRobotVelocity() {
     double avg_dir_offset = static_cast<double>(x - framewidth / 2);
     omega = computeDirectionControlSignal(avg_dir_offset);
-    printf("omega = %.3f", omega);
+    printf("omega = %.3f\n", omega);
     // if (detectPerpendicularTurn()) {
     //     base_speed  *= TURN_SPEED_DECREASE;
     //     omega       *= TURN_SPEED_INCREASE;
