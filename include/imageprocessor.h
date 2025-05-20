@@ -48,15 +48,15 @@ void processSliceImage() {
         
         identifyMainContour(slice_contours[i], slice_contour[i], slice_area[i], extents[i]);
         if (slice_contour[i].empty()) {
-            has_line = false;
+            contain_lines = false;
             continue;
         }
 
-        cv::Moments moments = cv::moments(contour);
-        center_x[i] = static_cast<int>(moments.m10 / moments.m00);
-        center_y[i] = static_cast<int>(moments.m01 / moments.m00);
+        cv::Moments moments = cv::moments(slice_contour[i]);
+        center_xs[i] = static_cast<int>(moments.m10 / moments.m00);
+        center_ys[i] = static_cast<int>(moments.m01 / moments.m00);
 
-        dir_offsets[i] = static_cast<int>((img_center_x[i] - center_x[i]) * extents[i]);
+        dir_offsets[i] = static_cast<int>((img_center_xs[i] - center_xs[i]) * extents[i]);
     }
 }
 
@@ -66,7 +66,7 @@ void drawMarker() {
         cv::Point slice_center      = cv::Point(img_center_xs[i], img_center_ys[i]);
         cv::Point extent_center     = cv::Point(center_x + 20, center_y + TEXT_OFFSET_Y);
 
-        cv::drawContours(slice_img[i], Contours_t{contour}, -1, CONTOUR_COLOR, 2);
+        cv::drawContours(slice_img[i], Contours_t{slice_contour[i]}, -1, CONTOUR_COLOR, 2);
         cv::circle(slice_img[i], contour_center, MARKER_RADIUS, CONTOUR_ENTER_COLOR, -1);
         cv::circle(slice_img[i], slice_center,   MARKER_RADIUS, IMAGE_CENTER_COLOR,  -1);
 

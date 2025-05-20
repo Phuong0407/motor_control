@@ -15,6 +15,7 @@ double  L1              = 0.0;
 double  L2              = 0.0;
 double  r               = 0.0;
 
+int x                   = 0;
 int pwm1                = 0;
 int pwm2                = 0;
 int pwm3                = 0;
@@ -121,7 +122,7 @@ constexpr double        TURN_SPEED_INCREASE         = 0.5;
 constexpr double        kp_dir                      = 0.01;
 constexpr double        kd_dir                      = 0.01;
 
-int                     dir_offset_diffs[N_SLICES]  = 0;
+int                     dir_offset_diffs[N_SLICES]  = {0};
 double                  base_speed                  = 0.1;
 double                  omega                       = 0.0;
 
