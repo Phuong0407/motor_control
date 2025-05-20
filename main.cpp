@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     pthread_t Motor3;
     pthread_t SpeedMonitor;
 
-	pthread_create(&Vision, NULL, computeNavigation, NULL);
+	pthread_create(&Vision, NULL, computeBarycenter, NULL);
 	pthread_create(&Velocity, NULL, computeRefTPSFromVision, NULL);
 	pthread_create(&Control1, NULL, controlMotor1, NULL);
 	pthread_create(&Control2, NULL, controlMotor2, NULL);
