@@ -119,7 +119,7 @@ double                  extents[N_SLICES]           = {0.0};
 constexpr int           TURN_THRESHOLD              = 10;
 constexpr double        TURN_SPEED_DECREASE         = 0.5;
 constexpr double        TURN_SPEED_INCREASE         = 0.5;
-constexpr double        kp_dir                      = 0.1;
+constexpr double        kp_dir                      = 0.05;
 constexpr double        kd_dir                      = 0.00;
 
 int                     dir_offset_diffs[N_SLICES]  = {0};
