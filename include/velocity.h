@@ -58,9 +58,9 @@ void computeRobotVelocity() {
 }
 
 void computeRefTPSFromVelocity() {
-    ref1 = (1.0 / r) * (base_speed - L1 * omega);
-    ref2 = (1.0 / r) * (base_speed + L1 * omega);
-    ref3 = (1.0 / r) * omega * L2;
+    ref1 = (1.0 / r) * (base_speed - L1 * omega) * 144.0;
+    ref2 = (1.0 / r) * (base_speed + L1 * omega) * 144.0;
+    ref3 = (1.0 / r) * omega * L2 * 144.0;
 }
 
 void * computeRefTPSFromVision(void * arg) {
