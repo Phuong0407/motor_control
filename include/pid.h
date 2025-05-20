@@ -37,7 +37,7 @@ void resetPID1() { integral1 = 0.0; old_filter_error1 = 0.0; }
 void resetPID2() { integral2 = 0.0; old_filter_error2 = 0.0; }
 void resetPID3() { integral3 = 0.0; old_filter_error3 = 0.0; }
 
-double compute1() {
+double computePID1() {
     double error1                           = ref1 - measured1;
     double new_intgral1                     = integral1 + error1 * 0.10;
     double filter_error1                    = alpha1 * error1 + (1.0 - alpha1) * old_filter_error1;
@@ -53,7 +53,7 @@ double compute1() {
     return control_signal1;
 }
 
-double compute2() {
+double computePID2() {
     double error2                           = ref2 - measured2;
     double new_intgral2                     = integral2 + error2 * 0.20;
     double filter_error2                    = alpha2 * error2 + (1.0 - alpha2) * old_filter_error2;
@@ -69,7 +69,7 @@ double compute2() {
     return control_signal2;
 }
 
-double compute3() {
+double computePID3() {
     double error3                           = ref3 - measured3;
     double new_intgral3                     = integral3 + error3 * 0.30;
     double filter_error3                    = alpha3 * error3 + (1.0 - alpha3) * old_filter_error3;

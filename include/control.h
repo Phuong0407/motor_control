@@ -24,7 +24,7 @@ void * controlMotor1(void *arg) {
 
         if (measured1 >= LOWER && measured1 <= UPPER) err1 = 0.0;
 
-        if (std::abs(err1) > 1e-6) computed1 = compute1();
+        if (std::abs(err1) > 1e-6) computed1 = computePID1();
         setMotor1();
     }
 }
@@ -45,12 +45,12 @@ void * controlMotor2(void *arg) {
 
         if (measured1 >= LOWER && measured1 <= UPPER) err2 = 0.0;
 
-        if (std::abs(err2) > 1e-6) computed2 = compute2();
+        if (std::abs(err2) > 1e-6) computed2 = computePID2();
         setMotor2();
     }
 }
 
-void * 6controlMotor3(void *arg) {
+void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
     while(true) {
         prev_ticks3 = counter3;
@@ -64,7 +64,7 @@ void * 6controlMotor3(void *arg) {
 
         if (measured1 >= LOWER && measured1 <= UPPER) err3 = 0.0;
 
-        if (std::abs(err3) > 1e-6) computed3 = compute3();
+        if (std::abs(err3) > 1e-6) computed3 = computePID3();
         setMotor3();
     }
 }
