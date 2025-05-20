@@ -11,7 +11,10 @@
 
 #include <stdio.h>
 
-int x                   = 0;
+double  L1              = 0.0;
+double  L2              = 0.0;
+double  r               = 0.0;
+
 int pwm1                = 0;
 int pwm2                = 0;
 int pwm3                = 0;
@@ -83,15 +86,6 @@ static constexpr bool   verbose                     = false;
 
 
 constexpr unsigned int  N_SLICES                    = 5;
-int                     center_xs[N_SLICES]         = 0;
-int                     center_ys[N_SLICES]         = 0;
-int                     img_center_xs[N_SLICES]     = 0;
-int                     img_center_ys[N_SLICES]     = 0;
-int                     dir_offsets[N_SLICES]       = 0;
-double                  extents[N_SLICES]           = 0.0;
-bool                    contain_lines[N_SLICES]     = true;
-
-
 constexpr double        MIN_CONTOUR_AREA            = 100.0;
 constexpr double        MAX_EXTENT_RATIO            = 0.7;
 constexpr int           CONTOUR_OFFSET_THRESHOLD    = 5;
@@ -107,8 +101,28 @@ using                   Contour_t                   = std::vector<cv::Point>;
 using                   Contours_t                  = std::vector<Contour_t>;
 
 
+
 cv::Mat                 img;
 cv::Mat                 output;
 cv::Mat                 bin_mask;
+
+bool                    contain_lines[N_SLICES]     = true;
+int                     img_center_xs[N_SLICES]     = 0;
+int                     img_center_ys[N_SLICES]     = 0;
+int                     center_xs[N_SLICES]         = 0;
+int                     center_ys[N_SLICES]         = 0;
+int                     dir_offsets[N_SLICES]       = 0;
+double                  extents[N_SLICES]           = 0.0;
+
+
+constexpr int           TURN_THRESHOLD              = 50;
+constexpr double        TURN_SPEED_DECREASE         = 0.5;
+constexpr double        TURN_SPEED_INCREASE         = 0.5;
+constexpr double        kp_dir                      = 0.01;
+constexpr double        kd_dir                      = 0.01;
+
+int                     dir_offset_diffs[N_SLICES]  = 0;
+double                  base_speed                  = 0.1;
+double                  omega                       = 0.0;
 
 #endif // ROBOT_H
