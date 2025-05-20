@@ -98,8 +98,8 @@ void sliceImageToMask() {
     for (unsigned int i = 0; i < N_SLICES; i++) {
         int start_y = slice_height * i;
         cv::Rect slice_rect(0, start_y, width, slice_height);
-        slice_img[i]        = img(slice_rect);
-        slice_bin_mask[i]   = bin_mask(slice_rect);
+        slice_img[i]        = img(slice_rect).clone();
+        slice_bin_mask[i]   = bin_mask(slice_rect).clone();
         cv::imshow("bin_mask, ", slice_bin_mask[i]);
     }
 }
