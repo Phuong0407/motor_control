@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
     startEncoders();
 	printf("%d %d\n", i2c_fd1, i2c_fd2);
-
+	wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xffff);
     pthread_t Vision;
     pthread_t Velocity;
     pthread_t Control1;
