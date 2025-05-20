@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
 	cam.startVideo();
 
     startEncoders();
+	printf("%d %d\n", i2c_fd1, i2c_fd2);
 
     pthread_t Vision;
     pthread_t Velocity;
