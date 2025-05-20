@@ -112,7 +112,7 @@ int                     img_center_xs[N_SLICES]     = {0};
 int                     img_center_ys[N_SLICES]     = {0};
 int                     center_xs[N_SLICES]         = {0};
 int                     center_ys[N_SLICES]         = {0};
-int                     dir_offsets[N_SLICES]       = {0.0};
+int                     dir_offsets[N_SLICES]       = {0};
 double                  extents[N_SLICES]           = {0.0};
 
 
