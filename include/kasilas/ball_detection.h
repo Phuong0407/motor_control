@@ -13,11 +13,6 @@ const cv::Scalar    UPPER_RED_1(10,    255, 255);
 const cv::Scalar    LOWER_RED_2(170,   120, 70);
 const cv::Scalar    UPPER_RED_2(180,   255, 255);
 
-constexpr double    PIXELS_PER_CM_X     = 10.0;
-constexpr double    PIXELS_PER_CM_Y     = 10.0;
-constexpr double    INTERVAL            = 0.1;
-
-
 static constexpr int    frameheight     = 480;
 static constexpr int    framewidth      = 640;
 
