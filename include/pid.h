@@ -80,7 +80,7 @@ double compute3() {
     else if (control_signal3 < -max_out3)   control_signal3 = -max_out3;
     else                                    integral3 = new_intgral3;
     
-    old_filter_error2 = filter_error2;
+    old_filter_error3 = filter_error3;
     
     return control_signal3;
 }
