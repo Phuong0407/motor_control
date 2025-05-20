@@ -41,8 +41,8 @@ double compute1() {
     double error1                           = ref1 - measured1;
     double new_intgral1                     = integral1 + error1 * 0.10;
     double filter_error1                    = alpha1 * error1 + (1.0 - alpha1) * old_filter_error1;
-    double filter_devivative1               = (filter_error1 - old_filter_error1) / 0.10;
-    double control_signal1                  = kp1 * error1 + ki1 * new_intgral1 + kd1 * filter_dev;
+    double filter_dev1                      = (filter_error1 - old_filter_error1) / 0.10;
+    double control_signal1                  = kp1 * error1 + ki1 * new_intgral1 + kd1 * filter_dev1;
 
     if (control_signal1 > max_out1)         control_signal1 = max_out1;
     else if (control_signal1 < -max_out1)   control_signal1 = -max_out1;
@@ -57,8 +57,8 @@ double compute2() {
     double error2                           = ref2 - measured2;
     double new_intgral2                     = integral2 + error2 * 0.20;
     double filter_error2                    = alpha2 * error2 + (1.0 - alpha2) * old_filter_error2;
-    double filter_devivative2               = (filter_error2 - old_filter_error2) / 0.10;
-    double control_signal2                  = kp2 * error2 + ki2 * new_intgral2 + kd2 * filter_dev;
+    double filter_dev2                      = (filter_error2 - old_filter_error2) / 0.10;
+    double control_signal2                  = kp2 * error2 + ki2 * new_intgral2 + kd2 * filter_dev2;
 
     if (control_signal2 > max_out2)         control_signal2 = max_out2;
     else if (control_signal2 < -max_out2)   control_signal2 = -max_out2;
@@ -73,8 +73,8 @@ double compute3() {
     double error3                           = ref3 - measured3;
     double new_intgral3                     = integral3 + error3 * 0.30;
     double filter_error3                    = alpha3 * error3 + (1.0 - alpha3) * old_filter_error3;
-    double filter_devivative3               = (filter_error3 - old_filter_error3) / 0.10;
-    double control_signal3                  = kp3 * error3 + ki3 * new_intgral3 + kd3 * filter_dev;
+    double filter_dev3                      = (filter_error3 - old_filter_error3) / 0.10;
+    double control_signal3                  = kp3 * error3 + ki3 * new_intgral3 + kd3 * filter_dev3;
 
     if (control_signal3 > max_out3)         control_signal3 = max_out3;
     else if (control_signal3 < -max_out3)   control_signal3 = -max_out3;
