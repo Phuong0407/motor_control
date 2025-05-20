@@ -25,7 +25,8 @@ inline int computeDirection(int dir1, int dir2) {
 }
 
 
-void * setMotor1(void *arg) {
+// void * setMotor1(void *arg) {
+void setMotor1() {
     dir1 = (computed1 > 0) ? +1 : -1;
     pwm1 = computePWMFromUnsignedRPS(std::abs(computed1));
     int xdir12 = computeDirection(dir1, dir2);
@@ -35,7 +36,8 @@ void * setMotor1(void *arg) {
     return nullptr;
 }
 
-void * setMotor2(void *arg) {
+// void * setMotor2(void *arg) {
+void setMotor2() {
     dir2 = (computed2 > 0) ? +1 : -1;
     pwm2 = computePWMFromUnsignedRPS(std::abs(computed2));
     int xdir12 = computeDirection(dir1, dir2);
@@ -45,7 +47,8 @@ void * setMotor2(void *arg) {
     return nullptr;
 }
 
-void * setMotor3(void *arg) {
+// void * setMotor3(void *arg) {
+void setMotor3() {
     dir3 = (computed3 > 0) ? +1 : -1;
     pwm3 = computePWMFromUnsignedRPS(std::abs(computed1));
     int xdir3 = computeDirection(dir3);

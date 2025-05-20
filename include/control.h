@@ -10,8 +10,7 @@
 #include <cmath>
 #include <algorithm>
 
-void controlMotor1() {
-// void * controlMotor1(void *arg) {
+void * controlMotor1(void *arg) {
     int64_t prev_ticks1 = 0, curr_ticks1 = 0;
     while(true) {
         prev_ticks1 = counter1;
@@ -32,8 +31,7 @@ void controlMotor1() {
 
 
 
-void controlMotor2() {
-// void * controlMotor2(void *arg) {
+void * controlMotor2(void *arg) {
     int64_t prev_ticks2 = 0, curr_ticks2 = 0;
     while(true) {
         prev_ticks2 = counter2;
@@ -52,8 +50,7 @@ void controlMotor2() {
     }
 }
 
-// void * controlMotor3(void *arg) {
-void controlMotor3() {
+void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
     while(true) {
         prev_ticks3 = counter3;
