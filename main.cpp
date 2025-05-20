@@ -15,7 +15,7 @@
 
 int main(int argc, char *argv[]) {
 
-    lccv::Picamera cam;
+    lccv::PiCamera cam;
     cam.options->video_width    = framewidth;
     cam.options->video_height   = frameheight;
     cam.options->framerate      = framerate;
