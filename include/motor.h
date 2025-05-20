@@ -33,7 +33,7 @@ void setMotor1() {
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
     microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd1, 0xaa, xdir12);
-    return nullptr;
+    // return nullptr;
 }
 
 // void * setMotor2(void *arg) {
@@ -44,7 +44,7 @@ void setMotor2() {
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
     microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd1, 0xaa, xdir12);
-    return nullptr;
+    // return nullptr;
 }
 
 // void * setMotor3(void *arg) {
@@ -55,7 +55,7 @@ void setMotor3() {
     wiringPiI2CWriteReg16(i2c_fd2, 0x82, (pwm3 << 8));
     microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd2, 0xaa, xdir3);
-    return nullptr;
+    // return nullptr;
 }
 
 #endif // MOTOR_H
