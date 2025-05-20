@@ -49,12 +49,6 @@
 //     return NULL;
 // }
 
-lccv::PiCamera cam;
-cam.options->video_width    = framewidth;
-cam.options->video_height   = frameheight;
-cam.options->framerate      = framerate;
-cam.options->verbose        = verbose;
-cam.startVideo();
 
 void * computeNavigation(void *arg) {
     while (true) {
