@@ -24,6 +24,7 @@ void * controlMotor1(void *arg) {
         if (measured1 >= LOWER && measured1 <= UPPER) err1 = 0.0;
 
         if (std::abs(err1) > 1e-6) computed1 = compute1();
+        setMotor1();
     }
 }
 
@@ -42,6 +43,7 @@ void * controlMotor2(void *arg) {
         if (measured1 >= LOWER && measured1 <= UPPER) err2 = 0.0;
 
         if (std::abs(err2) > 1e-6) computed2 = compute2();
+        setMotor2();
     }
 }
 
@@ -60,6 +62,7 @@ void * controlMotor3(void *arg) {
         if (measured1 >= LOWER && measured1 <= UPPER) err3 = 0.0;
 
         if (std::abs(err3) > 1e-6) computed3 = compute3();
+        setMotor3();
     }
 }
 

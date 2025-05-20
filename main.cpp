@@ -38,9 +38,9 @@ int main(int argc, char *argv[]) {
 	pthread_create(&Control1, NULL, controlMotor1, NULL);
 	pthread_create(&Control2, NULL, controlMotor2, NULL);
 	pthread_create(&Control3, NULL, controlMotor3, NULL);
-	pthread_create(&Motor1, NULL, setMotor1, NULL);
-	pthread_create(&Motor2, NULL, setMotor2, NULL);
-	pthread_create(&Motor3, NULL, setMotor3, NULL);
+	// pthread_create(&Motor1, NULL, setMotor1, NULL);
+	// pthread_create(&Motor2, NULL, setMotor2, NULL);
+	// pthread_create(&Motor3, NULL, setMotor3, NULL);
 	pthread_create(&SpeedMonitor, NULL, monitorMotorsSpeed, NULL);
 
 	pthread_join(Vision, NULL);
@@ -48,9 +48,9 @@ int main(int argc, char *argv[]) {
 	pthread_join(Control1, NULL);
 	pthread_join(Control2, NULL);
 	pthread_join(Control3, NULL);
-	pthread_join(Motor1, NULL);
-	pthread_join(Motor2, NULL);
-	pthread_join(Motor3, NULL);
+	// pthread_join(Motor1, NULL);
+	// pthread_join(Motor2, NULL);
+	// pthread_join(Motor3, NULL);
 	pthread_join(SpeedMonitor, NULL);
     
 }
