@@ -100,6 +100,7 @@ void sliceImageToMask() {
         cv::Rect slice_rect(0, start_y, width, slice_height);
         slice_img[i]        = img(slice_rect);
         slice_bin_mask[i]   = bin_mask(slice_rect);
+        cv::imshow("bin_mask, ", slice_bin_mask[i]);
     }
 }
 
