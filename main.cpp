@@ -15,17 +15,17 @@
 
 int main(int argc, char *argv[]) {
 
-	// cam.options->video_width    = framewidth;
-	// cam.options->video_height   = frameheight;
-	// cam.options->framerate      = framerate;
-	// cam.options->verbose        = verbose;
-	// cam.startVideo();
+	cam.options->video_width    = framewidth;
+	cam.options->video_height   = frameheight;
+	cam.options->framerate      = framerate;
+	cam.options->verbose        = verbose;
+	cam.startVideo();
 
     startEncoders();
 
-ref1 = 100.0;
-ref2 = 90.0;
-ref3 = 95.0;
+// ref1 = 100.0;
+// ref2 = 90.0;
+// ref3 = 95.0;
 
 	pthread_t Vision;
     pthread_t Velocity;
