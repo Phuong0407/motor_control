@@ -27,8 +27,8 @@ ref1 = 100.0;
 ref2 = 90.0;
 ref3 = 95.0;
 
-	// pthread_t Vision;
-    // pthread_t Velocity;
+	pthread_t Vision;
+    pthread_t Velocity;
     pthread_t Control1;
     pthread_t Control2;
     pthread_t Control3;
@@ -37,8 +37,8 @@ ref3 = 95.0;
     // pthread_t Motor3;
     pthread_t SpeedMonitor;
 
-	// pthread_create(&Vision, NULL, computeBarycenter, NULL);
-	// pthread_create(&Velocity, NULL, computeRefTPSFromVision, NULL);
+	pthread_create(&Vision, NULL, computeBarycenter, NULL);
+	pthread_create(&Velocity, NULL, computeRefTPSFromVision, NULL);
 	pthread_create(&Control1, NULL, controlMotor1, NULL);
 	pthread_create(&Control2, NULL, controlMotor2, NULL);
 	pthread_create(&Control3, NULL, controlMotor3, NULL);
@@ -47,8 +47,8 @@ ref3 = 95.0;
 	// pthread_create(&Motor3, NULL, setMotor3, NULL);
 	pthread_create(&SpeedMonitor, NULL, monitorMotorsSpeed, NULL);
 
-	// pthread_join(Vision, NULL);
-	// pthread_join(Velocity, NULL);
+	pthread_join(Vision, NULL);
+	pthread_join(Velocity, NULL);
 	pthread_join(Control1, NULL);
 	pthread_join(Control2, NULL);
 	pthread_join(Control3, NULL);
