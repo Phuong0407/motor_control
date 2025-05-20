@@ -13,10 +13,6 @@
 #include <pthread.h>
 #include <stdio.h>
 
-ref1 = 100.0;
-ref2 = 90.0;
-ref3 = 95.0;
-
 int main(int argc, char *argv[]) {
 
 	// cam.options->video_width    = framewidth;
@@ -26,6 +22,10 @@ int main(int argc, char *argv[]) {
 	// cam.startVideo();
 
     startEncoders();
+
+ref1 = 100.0;
+ref2 = 90.0;
+ref3 = 95.0;
 
 	// pthread_t Vision;
     // pthread_t Velocity;
