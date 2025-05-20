@@ -1,13 +1,52 @@
 // #define NOLOADED_RUN
 #define LOADED_RUN
-#include "./include/navigation/navigation.hpp"
+
+#include "camera.h"
+#include "imageprocessor.h"
+#include "vision.h"
+#include "velocity.h"
+#include "encoder.h"
+#include "control.h"
+#include "motor.h"
 
 #include <string>
+#include <pthread.h>
+#include <stdio.h>
 
 int main(int argc, char *argv[]) {
-    double kp_omega = std::stod(argv[1]);
 
-    Navigation naviation(0.1155, 0.245, 0.0273, 640, 480, 30, false, 1.0, kp_omega);
-    naviation.followLine();
-    return 0;
+    lccv::camera cam;
+    startCamera();
+    startEncoders();
+
+    pthread_t Vision;
+    pthread_t Velocity;
+    pthread_t Control1;
+    pthread_t Control2;
+    pthread_t Control3;
+    pthread_t Motor1;
+    pthread_t Motor2;
+    pthread_t Motor3;
+    pthread_t SpeedMonitor;
+
+	pthread_create(&Vision, NULL, computeNavigation, NULL);
+	pthread_create(&Velocity, NULL, computeRefTPSFromVision, NULL);
+	pthread_create(&Control1, NULL, controlMotor1, NULL);
+	pthread_create(&Control2, NULL, controlMotor2, NULL);
+	pthread_create(&Control3, NULL, controlMotor3, NULL);
+	pthread_create(&Motor1, NULL, setMotor1, NULL);
+	pthread_create(&Motor2, NULL, setMotor2, NULL);
+	pthread_create(&Motor3, NULL, setMotor3, NULL);
+	pthread_create(&SpeedMonitor, NULL, monitorMotorsSpeed, NULL);
+
+	pthread_join(Vision, NULL);
+	pthread_join(Velocity, NULL);
+	pthread_join(Control1, NULL);
+	pthread_join(Control2, NULL);
+	pthread_join(Control3, NULL);
+	pthread_join(Motor1, NULL);
+	pthread_join(Motor2, NULL);
+	pthread_join(Motor3, NULL);
+	pthread_join(SpeedMonitor, NULL);
+    
 }

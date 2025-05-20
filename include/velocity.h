@@ -27,7 +27,7 @@ inline double computeDirectionControlSignal(double error) {
     return kp_dir * error + kd_dir * derivative;
 }
 
-void calculateRobotVelocity() {
+void computeRobotVelocity() {
     int     num_valid_slice     = 0;
     double  dir_offset_tot      = 0.0;
 
@@ -47,10 +47,16 @@ void calculateRobotVelocity() {
     }
 }
 
-void computeTPSFromVelocity() {
+void computeRefTPSFromVelocity() {
     ref1 = (1.0 / r) * (base_speed - L1 * omega);
     ref2 = (1.0 / r) * (base_speed + L1 * omega);
     ref3 = (1.0 / r) * omega * L2;
+}
+
+void * computeRefTPSFromVision(void * arg) {
+    computeRobotVelocity();
+    computeRefTPSFromVelocity();
+    return nullptr;
 }
 
 #endif // VELOCITY_H

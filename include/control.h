@@ -1,17 +1,15 @@
-#ifndef MOTOR_H
-#define MOTOR_H
+#ifndef CONTROL_H
+#define CONTROL_H
 
 #include "robot.h"
 #include "pid.h"
-#include "motor.h"
-#include "encoder.h"
 #include "timing.h"
 
 #include <stdio.h>
 #include <cmath>
 #include <algorithm>
 
-void controlMotor1(void *arg) {
+void * controlMotor1(void *arg) {
     int64_t prev_ticks1 = 0, curr_ticks1 = 0;
     while(true) {
         prev_ticks1 = counter1;
@@ -29,7 +27,7 @@ void controlMotor1(void *arg) {
     }
 }
 
-void controlMotor2(void *arg) {
+void * controlMotor2(void *arg) {
     int64_t prev_ticks2 = 0, curr_ticks2 = 0;
     while(true) {
         prev_ticks2 = counter2;
@@ -47,7 +45,7 @@ void controlMotor2(void *arg) {
     }
 }
 
-void controlMotor3(void *arg) {
+void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
     while(true) {
         prev_ticks3 = counter3;
@@ -65,7 +63,7 @@ void controlMotor3(void *arg) {
     }
 }
 
-void monitorMotorsSpeed(void *arg) {
+void * monitorMotorsSpeed(void *arg) {
     while(true) {
         printf("Motor 1 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref1, measured1, computed1);
         printf("Motor 2 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref2, measured2, computed2);
@@ -74,4 +72,4 @@ void monitorMotorsSpeed(void *arg) {
     }
 }
 
-#endif // MOTOR_H
+#endif // CONTROL_H

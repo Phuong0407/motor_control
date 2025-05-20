@@ -2,6 +2,7 @@
 #define VISION_H
 
 #include "robot.h"
+#include "imageprocessor.h"
 #include <vector>
 #include <stdio.h>
 #include <limits>
@@ -47,5 +48,22 @@ void * computeBarycenter(void *arg) {
     }
     return NULL;
 }
+
+
+void * computeNavigation(void *arg) {
+    while (true) {
+        if (!cam.getVideoFrame(img, 1000)) {
+            printf("Timeout error while grabbing frame.\n");
+        continue;
+        }
+        
+        processImage();
+        cv::imshow("OUTPUT", output);
+
+        char key = static_cast<char>(cv::waitKey(5));
+        if (key == 27) break;
+    }
+}
+
 
 #endif // VISION_H
