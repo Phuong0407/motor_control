@@ -6,6 +6,12 @@
 
 double old_error = 0.0;
 
+inline double computeDirectionControlSignal(double error) {
+    double derivative = error - old_error;
+    old_error = error;
+    return kp_dir * error + kd_dir * derivative / 0.1;
+}
+
 void computeRobotVelocity() {
     double deviation = static_cast<double>(x - framewidth / 2);
     if (deviation > 0.0 && std::abs(deviation) >= TURN_RIGHT_THRES)

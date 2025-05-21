@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     pthread_t Control1;
     pthread_t Control2;
     pthread_t Control3;
-    // pthread_t StuckSolver;
+    pthread_t StuckSolver;
     pthread_t SpeedMonitor;
 
 	pthread_create(&Vision, NULL, computeBarycenter, NULL);
