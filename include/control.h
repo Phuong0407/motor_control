@@ -84,7 +84,7 @@ void turnLeftFullThrottle() {
     microsleep(100);
 }
 
-void * turnRightFullThrottle(void *arg) {
+void turnRightFullThrottle() {
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xff00);
     microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
