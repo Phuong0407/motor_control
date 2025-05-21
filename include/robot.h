@@ -129,7 +129,7 @@ bool                    turn_left                   = false;
 bool                    turn_right                  = false;
 bool                    THROTTLE_MODE               = false;
 
-constexpr double        STUCK_THRES                 = 10.0;
+constexpr double        STUCK_THRES                 = 50.0;
 constexpr double        TURN_RIGHT_THRES            = 165.0;
 constexpr double        TURN_LEFT_THRES             = 165.0;
 
