@@ -14,16 +14,7 @@
 
 void * controlMotor1(void *arg) {
     int64_t prev_ticks1 = 0, curr_ticks1 = 0;
-    while(true) {
-
-        bool localThrottle = THROTTLE_MODE;
-
-
-        if (localThrottle) {
-            delay(100);
-            continue;
-        }
-
+    while(!THROTTLE_MODE) {
         prev_ticks1 = counter1;
         delay(100);
         curr_ticks1 = counter1;
@@ -45,15 +36,7 @@ void * controlMotor1(void *arg) {
 
 void * controlMotor2(void *arg) {
     int64_t prev_ticks2 = 0, curr_ticks2 = 0;
-    while(true) {
-
-        bool localThrottle = THROTTLE_MODE;
-
-        if (localThrottle) {
-            delay(100);
-            continue;
-        }
-
+    while(!THROTTLE_MODE) {
         prev_ticks2 = counter2;
         delay(100);
         curr_ticks2 = counter2;
@@ -76,13 +59,6 @@ void * controlMotor2(void *arg) {
 void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
     while(!THROTTLE_MODE) {
-        bool localThrottle = THROTTLE_MODE;
-
-        if (localThrottle) {
-            delay(100);
-            continue;
-        }
-
         prev_ticks3 = counter3;
         delay(100);
         curr_ticks3 = counter3;
