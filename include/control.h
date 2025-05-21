@@ -12,7 +12,7 @@
 
 void * controlMotor1(void *arg) {
     int64_t prev_ticks1 = 0, curr_ticks1 = 0;
-    while(true) {
+    while(!THROTTLE_MODE) {
         prev_ticks1 = counter1;
         delay(100);
         curr_ticks1 = counter1;
@@ -33,7 +33,7 @@ void * controlMotor1(void *arg) {
 
 void * controlMotor2(void *arg) {
     int64_t prev_ticks2 = 0, curr_ticks2 = 0;
-    while(true) {
+    while(!THROTTLE_MODE) {
         prev_ticks2 = counter2;
         delay(100);
         curr_ticks2 = counter2;
@@ -54,7 +54,7 @@ void * controlMotor2(void *arg) {
 
 void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
-    while(true) {
+    while(!THROTTLE_MODE) {
         prev_ticks3 = counter3;
         delay(100);
         curr_ticks3 = counter3;
@@ -108,6 +108,7 @@ void * overcomeStuckState(void *arg) {
         if (std::abs(prev1) <= STUCK_THRES && std::abs(curr1) <= STUCK_THRES &&
             std::abs(prev2) <= STUCK_THRES && std::abs(curr2) <= STUCK_THRES &&
             std::abs(prev3) <= STUCK_THRES && std::abs(curr3) <= STUCK_THRES) {
+            THROTTLE_MODE = true;
             if (turn_left) {
                 turnLeftFullThrottle();
                 printf("[INFO] TURN LEFT FULL THROTTLE MODE.\n");
@@ -117,6 +118,7 @@ void * overcomeStuckState(void *arg) {
                 printf("[INFO] TURN RIGHT FULL THROTTLE MODE.\n");
             }
             microsleep(100);
+            THROTTLE_MODE = false;
         }
     }
 }
@@ -124,7 +126,7 @@ void * overcomeStuckState(void *arg) {
 void * monitorMotorsSpeed(void *arg) {
     while(true) {
         printf("\n");
-        printf("[INFO] DEVIATION = %.3f\n", static_cast<double>(x - framewidth /2));
+        if (THROTTLE_MODE) printf("[INFO] FULL THROTTLE MODE.\n");
         printf("Motor 1 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref1, measured1, computed1);
         printf("Motor 2 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref2, measured2, computed2);
         printf("Motor 3 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref3, measured3, computed3);

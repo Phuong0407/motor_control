@@ -127,6 +127,7 @@ double                  base_speed                  = 0.1;
 double                  omega                       = 0.0;
 bool                    turn_left                   = false;
 bool                    turn_right                  = false;
+bool                    THROTTLE_MODE               = false;
 
 constexpr double        STUCK_THRES                 = 20.0;
 constexpr double        TURN_RIGHT_THRES            = 170.0;
