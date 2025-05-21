@@ -129,8 +129,8 @@ bool                    turn_left                   = false;
 bool                    turn_right                  = false;
 
 constexpr double        STUCK_THRES                 = 50.0;
-constexpr double        TURN_RIGHT_THRES            = 50.0;
-constexpr double        TURN_LEFT_THRES             = 50.0;
+constexpr double        TURN_RIGHT_THRES            = 173.0;
+constexpr double        TURN_LEFT_THRES             = 173.0;
 
 
 #endif // ROBOT_H
