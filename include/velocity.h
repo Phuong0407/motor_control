@@ -48,12 +48,13 @@ inline double computeDirectionControlSignal(double error) {
 // }
 
 void computeRobotVelocity() {
-    double avg_dir_offset = static_cast<double>(x - framewidth / 2);
+    double deviation = static_cast<double>(x - framewidth / 2);
+    if (deviation > 0.0 && std::abs(deviation) >= TURN_RIGHT_THRES)
+        turn_right = true;
+    if (deviation < 0.0 && std::abs(deviation) >= TURN_LEFT_THRES)
+        turn_left = true;
+
     omega = computeDirectionControlSignal(avg_dir_offset);
-    // if (detectPerpendicularTurn()) {
-    //     base_speed  *= TURN_SPEED_DECREASE;
-    //     omega       *= TURN_SPEED_INCREASE;
-    // }
 }
 
 void computeRefTPSFromVelocity() {

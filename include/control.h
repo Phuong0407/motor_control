@@ -50,6 +50,8 @@ void * controlMotor2(void *arg) {
     }
 }
 
+
+
 void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
     while(true) {
@@ -66,6 +68,49 @@ void * controlMotor3(void *arg) {
 
         if (std::abs(err3) > 1e-6) computed3 = computePID3();
         setMotor3();
+    }
+}
+
+
+
+void turnLeftFullThrottle() {
+    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0x00ff);
+    microsleep(1);
+    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
+    microsleep(1);
+    wiringPiI2CWriteReg16(i2c_fd2, 0x82, 0xffff);
+    microsleep(1);
+    wiringPiI2CWriteReg16(i2c_fd2, 0xaa, 0x09);
+    microsleep(100);
+}
+
+void * turnRightFullThrottle(void *arg) {
+    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xff00);
+    microsleep(1);
+    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
+    microsleep(1);
+    wiringPiI2CWriteReg16(i2c_fd2, 0x82, 0xffff);
+    microsleep(1);
+    wiringPiI2CWriteReg16(i2c_fd2, 0xaa, 0x06);
+    microsleep(100);
+}
+
+void * overcomeStuckState(void *arg) {
+    while (true) {
+        double prev1 = measured1;
+        double prev2 = measured2;
+        double prev3 = measured3;
+        microsleep(400);
+        double curr1 = measured1;
+        double curr2 = measured2;
+        double curr3 = measured3;
+
+        if (std::abs(prev1) <= STUCK_THRES && std::abs(curr1) <= STUCK_THRES &&
+            std::abs(prev2) <= STUCK_THRES && std::abs(curr2) <= STUCK_THRES &&
+            std::abs(prev3) <= STUCK_THRES && std::abs(curr3) <= STUCK_THRES) {
+            if (turn_left)  turnLeftFullThrottle();
+            if (turn_right) turnRightFullThrottle();
+        }
     }
 }
 

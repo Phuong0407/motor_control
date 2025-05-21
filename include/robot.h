@@ -125,5 +125,12 @@ constexpr double        kd_dir                      = 0.01;
 int                     dir_offset_diffs[N_SLICES]  = {0};
 double                  base_speed                  = 0.1;
 double                  omega                       = 0.0;
+bool                    turn_left                   = false;
+bool                    turn_right                  = false;
+
+constexpr double        STUCK_THRES                 = 50.0;
+constexpr double        TURN_RIGHT_THRES            = 50.0;
+constexpr double        TURN_LEFT_THRES             = 50.0;
+
 
 #endif // ROBOT_H
