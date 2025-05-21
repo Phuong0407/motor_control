@@ -113,7 +113,7 @@ void * overcomeStuckState(void *arg) {
         double prev1 = static_cast<double>(curr_ticks1 - prev_ticks1) / 0.1;
         double prev2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
         double prev3 = static_cast<double>(curr_ticks3 - prev_ticks3) / 0.1;
-        delay(300);
+        delay(500);
 
         prev_ticks1 = counter1;
         prev_ticks2 = counter2;
