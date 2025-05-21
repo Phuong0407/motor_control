@@ -27,6 +27,7 @@ void * controlMotor1(void *arg) {
         if (std::abs(err1) > 1e-6) computed1 = computePID1();
         setMotor1();
     }
+    return nullptr;
 }
 
 
@@ -48,6 +49,7 @@ void * controlMotor2(void *arg) {
         if (std::abs(err2) > 1e-6) computed2 = computePID2();
         setMotor2();
     }
+    return nullptr;
 }
 
 
@@ -69,6 +71,7 @@ void * controlMotor3(void *arg) {
         if (std::abs(err3) > 1e-6) computed3 = computePID3();
         setMotor3();
     }
+    return nullptr;
 }
 
 
@@ -121,6 +124,7 @@ void * overcomeStuckState(void *arg) {
             THROTTLE_MODE = false;
         }
     }
+    return nullptr;
 }
 
 void * monitorMotorsSpeed(void *arg) {
@@ -133,6 +137,7 @@ void * monitorMotorsSpeed(void *arg) {
         printf("\n");
         microsleep(1000000);
     }
+    return nullptr;
 }
 
 #endif // CONTROL_H
