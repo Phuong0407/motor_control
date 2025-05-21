@@ -143,9 +143,9 @@ void * overcomeStuckState(void *arg) {
                 printf("[INFO] TURN RIGHT FULL THROTTLE MODE.\n");
             }
             microsleep(100000);
-
-            THROTTLE_MODE = false;
         }
+        else
+            THROTTLE_MODE = false;
     }
     return nullptr;
 }
