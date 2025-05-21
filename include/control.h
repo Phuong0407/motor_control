@@ -10,9 +10,20 @@
 #include <cmath>
 #include <algorithm>
 
+pthread_mutex_t throttle_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 void * controlMotor1(void *arg) {
     int64_t prev_ticks1 = 0, curr_ticks1 = 0;
-    while(!THROTTLE_MODE) {
+    while(true) {
+        pthread_mutex_lock(&throttle_mutex);
+        bool localThrottle = THROTTLE_MODE;
+        pthread_mutex_unlock(&throttle_mutex);
+
+        if (localThrottle) {
+            delay(100);
+            continue;
+        }
+
         prev_ticks1 = counter1;
         delay(100);
         curr_ticks1 = counter1;
@@ -34,7 +45,16 @@ void * controlMotor1(void *arg) {
 
 void * controlMotor2(void *arg) {
     int64_t prev_ticks2 = 0, curr_ticks2 = 0;
-    while(!THROTTLE_MODE) {
+    while(true) {
+        pthread_mutex_lock(&throttle_mutex);
+        bool localThrottle = THROTTLE_MODE;
+        pthread_mutex_unlock(&throttle_mutex);
+
+        if (localThrottle) {
+            delay(100);
+            continue;
+        }
+
         prev_ticks2 = counter2;
         delay(100);
         curr_ticks2 = counter2;
@@ -57,6 +77,15 @@ void * controlMotor2(void *arg) {
 void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
     while(!THROTTLE_MODE) {
+        pthread_mutex_lock(&throttle_mutex);
+        bool localThrottle = THROTTLE_MODE;
+        pthread_mutex_unlock(&throttle_mutex);
+
+        if (localThrottle) {
+            delay(100);
+            continue;
+        }
+
         prev_ticks3 = counter3;
         delay(100);
         curr_ticks3 = counter3;
@@ -103,7 +132,7 @@ void * overcomeStuckState(void *arg) {
         double prev1 = measured1;
         double prev2 = measured2;
         double prev3 = measured3;
-        microsleep(400);
+        microsleep(200);
         double curr1 = measured1;
         double curr2 = measured2;
         double curr3 = measured3;
@@ -111,7 +140,11 @@ void * overcomeStuckState(void *arg) {
         if (std::abs(prev1) <= STUCK_THRES && std::abs(curr1) <= STUCK_THRES &&
             std::abs(prev2) <= STUCK_THRES && std::abs(curr2) <= STUCK_THRES &&
             std::abs(prev3) <= STUCK_THRES && std::abs(curr3) <= STUCK_THRES) {
+
+            pthread_mutex_lock(&throttle_mutex);
             THROTTLE_MODE = true;
+            pthread_mutex_unlock(&throttle_mutex);
+
             if (turn_left) {
                 turnLeftFullThrottle();
                 printf("[INFO] TURN LEFT FULL THROTTLE MODE.\n");
@@ -121,7 +154,10 @@ void * overcomeStuckState(void *arg) {
                 printf("[INFO] TURN RIGHT FULL THROTTLE MODE.\n");
             }
             microsleep(100);
+
+            pthread_mutex_lock(&throttle_mutex);
             THROTTLE_MODE = false;
+            pthread_mutex_unlock(&throttle_mutex);
         }
     }
     return nullptr;
