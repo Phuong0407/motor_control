@@ -118,6 +118,7 @@ void * overcomeStuckState(void *arg) {
 void * monitorMotorsSpeed(void *arg) {
     while(true) {
         printf("\n");
+        printf("[INFO] DEVIATION = %.3f\n", static_cast<double>(x - framewidth /2));
         printf("Motor 1 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref1, measured1, computed1);
         printf("Motor 2 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref2, measured2, computed2);
         printf("Motor 3 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref3, measured3, computed3);

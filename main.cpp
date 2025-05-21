@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 	pthread_create(&Control2, NULL, controlMotor2, NULL);
 	pthread_create(&Control3, NULL, controlMotor3, NULL);
 	// pthread_create(&StuckSolver, NULL, overcomeStuckState, NULL);
-	// pthread_create(&SpeedMonitor, NULL, monitorMotorsSpeed, NULL);
+	pthread_create(&SpeedMonitor, NULL, monitorMotorsSpeed, NULL);
 
 	pthread_join(Vision, NULL);
 	pthread_join(Velocity, NULL);
@@ -45,5 +45,5 @@ int main(int argc, char *argv[]) {
 	pthread_join(Control2, NULL);
 	pthread_join(Control3, NULL);
 	// pthread_join(StuckSolver, NULL);
-	// pthread_join(SpeedMonitor, NULL);
+	pthread_join(SpeedMonitor, NULL);
 }
