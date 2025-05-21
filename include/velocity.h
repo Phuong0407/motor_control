@@ -49,7 +49,7 @@ inline double computeDirectionControlSignal(double error) {
 
 void computeRobotVelocity() {
     double deviation = static_cast<double>(x - framewidth / 2);
-    printf("[INFO] DEVIATION = %.3f", deviation);
+    printf("[INFO] DEVIATION = %.3\n", deviation);
     if (deviation > 0.0 && std::abs(deviation) >= TURN_RIGHT_THRES)
         turn_right = true;
     if (deviation < 0.0 && std::abs(deviation) >= TURN_LEFT_THRES)
