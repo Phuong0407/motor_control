@@ -133,7 +133,7 @@ void * overcomeStuckState(void *arg) {
         double prev1 = measured1;
         double prev2 = measured2;
         double prev3 = measured3;
-        microsleep(1000);
+        microsleep(400);
         double curr1 = measured1;
         double curr2 = measured2;
         double curr3 = measured3;
