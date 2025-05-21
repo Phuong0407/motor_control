@@ -128,7 +128,7 @@ void turnRightFullThrottle() {
 }
 
 void * overcomeStuckState(void *arg) {
-    microsleep(600);
+    microsleep(3000);
     while (true) {
         double prev1 = measured1;
         double prev2 = measured2;
