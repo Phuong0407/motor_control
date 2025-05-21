@@ -101,15 +101,32 @@ void turnRightFullThrottle() {
 }
 
 void * overcomeStuckState(void *arg) {
-    microsleep(4000000);
+    delay(4000);
     while (true) {
-        double prev1 = measured1;
-        double prev2 = measured2;
-        double prev3 = measured3;
-        microsleep(400);
-        double curr1 = measured1;
-        double curr2 = measured2;
-        double curr3 = measured3;
+        volatile int64_t prev_ticks1 = counter1;
+        volatile int64_t prev_ticks2 = counter2;
+        volatile int64_t prev_ticks3 = counter3;
+        delay(100);
+        volatile int64_t curr_ticks1 = counter1;
+        volatile int64_t curr_ticks2 = counter2;
+        volatile int64_t curr_ticks3 = counter3;
+        double prev1 = static_cast<double>(curr_ticks1 - prev_ticks1) / 0.1;
+        double prev2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
+        double prev3 = static_cast<double>(curr_ticks3 - prev_ticks3) / 0.1;
+        delay(300);
+
+        prev_ticks1 = counter1;
+        prev_ticks2 = counter2;
+        prev_ticks3 = counter3;
+        delay(100);
+        curr_ticks1 = counter1;
+        curr_ticks2 = counter2;
+        curr_ticks3 = counter3;
+
+        double curr1 = static_cast<double>(curr_ticks1 - prev_ticks1) / 0.1;
+        double curr1 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
+        double curr1 = static_cast<double>(curr_ticks3 - prev_ticks3) / 0.1;
+
 
         if (std::abs(prev1) <= STUCK_THRES && std::abs(curr1) <= STUCK_THRES &&
             std::abs(prev2) <= STUCK_THRES && std::abs(curr2) <= STUCK_THRES &&
