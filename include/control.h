@@ -124,8 +124,8 @@ void * overcomeStuckState(void *arg) {
         curr_ticks3 = counter3;
 
         double curr1 = static_cast<double>(curr_ticks1 - prev_ticks1) / 0.1;
-        double curr1 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
-        double curr1 = static_cast<double>(curr_ticks3 - prev_ticks3) / 0.1;
+        double curr2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
+        double curr3 = static_cast<double>(curr_ticks3 - prev_ticks3) / 0.1;
 
 
         if (std::abs(prev1) <= STUCK_THRES && std::abs(curr1) <= STUCK_THRES &&
