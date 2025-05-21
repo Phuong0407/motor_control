@@ -154,7 +154,7 @@ void * overcomeStuckState(void *arg) {
                 turnRightFullThrottle();
                 printf("[INFO] TURN RIGHT FULL THROTTLE MODE.\n");
             }
-            microsleep(100);
+            microsleep(100000);
 
             pthread_mutex_lock(&throttle_mutex);
             THROTTLE_MODE = false;
