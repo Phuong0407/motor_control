@@ -54,7 +54,7 @@ void computeRobotVelocity() {
     if (deviation < 0.0 && std::abs(deviation) >= TURN_LEFT_THRES)
         turn_left = true;
 
-    omega = computeDirectionControlSignal(avg_dir_offset);
+    omega = computeDirectionControlSignal(deviation);
 }
 
 void computeRefTPSFromVelocity() {
