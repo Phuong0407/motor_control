@@ -74,9 +74,9 @@ void * controlMotor3(void *arg) {
 
 
 void turnLeftFullThrottle() {
-    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0x00ff);
+    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0xffff);
     microsleep(1);
-    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x06);
+    wiringPiI2CWriteReg16(i2c_fd1, 0xaa, 0x09);
     microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd2, 0x82, 0xffff);
     microsleep(1);
@@ -108,10 +108,15 @@ void * overcomeStuckState(void *arg) {
         if (std::abs(prev1) <= STUCK_THRES && std::abs(curr1) <= STUCK_THRES &&
             std::abs(prev2) <= STUCK_THRES && std::abs(curr2) <= STUCK_THRES &&
             std::abs(prev3) <= STUCK_THRES && std::abs(curr3) <= STUCK_THRES) {
-            if (turn_left)  turnLeftFullThrottle();
-            if (turn_right) turnRightFullThrottle();
+            if (turn_left) {
+                turnLeftFullThrottle();
+                printf("[INFO] TURN LEFT FULL THROTTLE MODE.\n");
+            }
+            if (turn_right) {
+                turnRightFullThrottle();
+                printf("[INFO] TURN RIGHT FULL THROTTLE MODE.\n");
+            }
             microsleep(100);
-            printf("[INFO] FULL THROTTLE MODE.\n");
         }
     }
 }
