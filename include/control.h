@@ -110,6 +110,7 @@ void * overcomeStuckState(void *arg) {
             std::abs(prev3) <= STUCK_THRES && std::abs(curr3) <= STUCK_THRES) {
             if (turn_left)  turnLeftFullThrottle();
             if (turn_right) turnRightFullThrottle();
+            microsleep(100);
             printf("[INFO] FULL THROTTLE MODE.\n");
         }
     }
