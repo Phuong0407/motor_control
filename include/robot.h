@@ -128,7 +128,7 @@ double                  omega                       = 0.0;
 bool                    turn_left                   = false;
 bool                    turn_right                  = false;
 
-constexpr double        STUCK_THRES                 = 50.0;
+constexpr double        STUCK_THRES                 = 20.0;
 constexpr double        TURN_RIGHT_THRES            = 173.0;
 constexpr double        TURN_LEFT_THRES             = 173.0;
 
