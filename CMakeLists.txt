@@ -18,10 +18,22 @@ add_executable(
     ${CMAKE_SOURCE_DIR}/main.cpp
 )
 
+add_executable(
+    ball_detection
+    ${CMAKE_SOURCE_DIR}/include/kasilas/ball_detection.cpp
+)
+
 target_link_libraries(
     main
     -llccv
     ${OpenCV_LIBS}
     ${LIBCAMERA_LIBRARIES}
     -lwiringPi
+)
+
+target_link_libraries(
+    ball_detection
+    -llccv
+    ${OpenCV_LIBS}
+    ${LIBCAMERA_LIBRARIES}
 )
