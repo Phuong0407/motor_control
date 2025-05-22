@@ -8,6 +8,25 @@
 #include <limits>
 #include <cmath>
 
+inline bool detectLineFromContours(const Contours_t& contours) {
+    for (const auto& contour : contours) {
+        double area = cv::contourArea(contour);
+        if (area < MIN_CONTOUR_AREA)
+            continue;
+
+        cv::RotatedRect rect = cv::minAreaRect(contour);
+        double width = rect.size.width;
+        double height = rect.size.height;
+        if (w == 0 || h == 0) continue;
+
+        double aspect_ration = std::max(width, height) / std::min(width, height);
+        if (aspect_ration > MIN_ASPECT_RATIO) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void * computeBarycenter(void *arg) {
     cv::Mat img_hsv, red1, red2, blue;
 
@@ -27,6 +46,10 @@ void * computeBarycenter(void *arg) {
         Contours_t                          contours;
         findContours(bin_mask, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
         
+        CONTAIN_LINE = detectLineFromContours(contours);
+        if (!CONTAIN_LINE)
+            continue;
+
         cv::Moments moment  = cv::moments(bin_mask, true);
         if (moment.m00 != 0) {
             x = moment.m10 / moment.m00;

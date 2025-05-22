@@ -13,16 +13,15 @@
 
 pthread_mutex_t throttle_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-
 void * controlMotor1(void *arg) {
     int64_t prev_ticks1 = 0, curr_ticks1 = 0;
     while(true) {
 
         pthread_mutex_lock(&throttle_mutex);
-        bool throttle = THROTTLE_MODE;
+        bool THROTTLE = THROTTLE_MODE;
         pthread_mutex_unlock(&throttle_mutex);
 
-        if (throttle) {
+        if (THROTTLE) {
             delay(100);
             continue;
         }
@@ -51,10 +50,10 @@ void * controlMotor2(void *arg) {
     while(true) {
 
         pthread_mutex_lock(&throttle_mutex);
-        bool throttle = THROTTLE_MODE;
+        bool THROTTLE = THROTTLE_MODE;
         pthread_mutex_unlock(&throttle_mutex);
 
-        if (throttle) {
+        if (THROTTLE) {
             delay(100);
             continue;
         }
@@ -83,10 +82,10 @@ void * controlMotor3(void *arg) {
     while(true) {
 
         pthread_mutex_lock(&throttle_mutex);
-        bool throttle = THROTTLE_MODE;
+        bool THROTTLE = THROTTLE_MODE;
         pthread_mutex_unlock(&throttle_mutex);
 
-        if (throttle) {
+        if (THROTTLE) {
             delay(100);
             continue;
         }
@@ -132,6 +131,11 @@ void turnRightFullThrottle() {
     microsleep(100);
 }
 
+void stopAllMotors () {
+    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0x0000);
+    wiringPiI2CWriteReg16(i2c_fd2, 0x82, 0x0000);
+}
+
 void * overcomeStuckState(void *arg) {
     delay(4000);
     while (true) {
@@ -168,11 +172,11 @@ void * overcomeStuckState(void *arg) {
             THROTTLE_MODE = true;
             pthread_mutex_unlock(&throttle_mutex);
 
-            if (turn_left) {
+            if (TURN_LEFT) {
                 turnLeftFullThrottle();
                 printf("[INFO] TURN LEFT FULL THROTTLE MODE.\n");
             }
-            if (turn_right) {
+            if (TURN_RIGHT) {
                 turnRightFullThrottle();
                 printf("[INFO] TURN RIGHT FULL THROTTLE MODE.\n");
             }
@@ -186,10 +190,31 @@ void * overcomeStuckState(void *arg) {
     return nullptr;
 }
 
+
+void * handleNoLineFound(void *arg) {
+    delay(4000);
+    while (true) {
+        if (!CONTAIN_LINE) {
+            pthread_mutex_lock(&block_mutex);
+            BLOCK_CONTROL = true;
+            INTERACTION_MODE = true;
+            pthread_mutex_unlock(&block_mutex);
+            printf("[INFO] NO LINE FOUND. ENTERING INTERACTION MODE.\n");
+        } else {
+            pthread_mutex_lock(&block_mutex);
+            BLOCK_CONTROL = false;
+            INTERACTION_MODE = false;
+            pthread_mutex_unlock(&block_mutex);
+        }
+        delay(100);
+    }
+    return nullptr;
+}
+
 void * monitorMotorsSpeed(void *arg) {
     while(true) {
         printf("\n");
-        if (THROTTLE_MODE) printf("[INFO] FULL THROTTLE MODE.\n");
+        if (THROTTLE_MODE && TURN_LEFT) printf("[INFO] FULL THROTTLE MODE.\n");
         printf("Motor 1 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref1, measured1, computed1);
         printf("Motor 2 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref2, measured2, computed2);
         printf("Motor 3 Speed (ticks/s):\tref\t=\t%.3f\tmeasured\t=\t%.3f\tcomputed=%.3f\n", ref3, measured3, computed3);

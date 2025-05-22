@@ -86,36 +86,18 @@ static constexpr int    framerate                   = 30;
 static constexpr bool   verbose                     = false;
 
 
-
-// constexpr unsigned int  N_SLICES                    = 5;
-// constexpr double        MIN_CONTOUR_AREA            = 100.0;
-// constexpr double        MAX_EXTENT_RATIO            = 0.7;
-// constexpr int           CONTOUR_OFFSET_THRESHOLD    = 5;
-// const     cv::Scalar    IMAGE_CENTER_COLOR          = cv::Scalar(0, 0, 255);
-// const     cv::Scalar    TEXT_COLOR                  = cv::Scalar(200, 0, 200);
-// constexpr int           MARKER_RADIUS               = 5;
-// constexpr int           TEXT_OFFSET_Y               = 30;
-// constexpr int           FOUND_LINE                  = 1;
-// constexpr int           NO_LINE_FOUND               = 0;
-const     cv::Scalar    CONTOUR_COLOR               = cv::Scalar(0, 255, 0);
-const     cv::Scalar    CONTOUR_CENTER_COLOR        = cv::Scalar(0, 0, 0);
 using                   Contour_t                   = std::vector<cv::Point>;
 using                   Contours_t                  = std::vector<Contour_t>;
+
+constexpr double        MIN_CONTOUR_AREA            = 100.0;
+constexpr double        MIN_ASPECT_RATIO            = 3.0;
+
+const     cv::Scalar    CONTOUR_COLOR               = cv::Scalar(0, 255, 0);
+const     cv::Scalar    CONTOUR_CENTER_COLOR        = cv::Scalar(0, 0, 0);
 
 
 
 cv::Mat                 img;
-// cv::Mat                 output;
-// cv::Mat                 bin_mask;
-
-// bool                    contain_lines[N_SLICES]     = {true};
-// int                     img_center_xs[N_SLICES]     = {0};
-// int                     img_center_ys[N_SLICES]     = {0};
-// int                     center_xs[N_SLICES]         = {0};
-// int                     center_ys[N_SLICES]         = {0};
-// int                     dir_offsets[N_SLICES]       = {0};
-// double                  extents[N_SLICES]           = {0.0};
-
 
 constexpr int           TURN_THRESHOLD              = 10;
 constexpr double        TURN_SPEED_DECREASE         = 0.5;
@@ -123,12 +105,13 @@ constexpr double        TURN_SPEED_INCREASE         = 0.5;
 constexpr double        kp_dir                      = 0.005;
 constexpr double        kd_dir                      = 0.01;
 
-int                     dir_offset_diffs[N_SLICES]  = {0};
 double                  base_speed                  = 0.1;
 double                  omega                       = 0.0;
-bool                    turn_left                   = false;
-bool                    turn_right                  = false;
+bool                    TURN_LEFT                   = false;
+bool                    TURN_RIGHT                  = false;
+bool                    CONTAIN_LINE                = false;
 bool                    THROTTLE_MODE               = false;
+bool                    INTERACTION_MODE            = false;
 
 constexpr double        STUCK_THRES                 = 50.0;
 constexpr double        TURN_RIGHT_THRES            = 165.0;

@@ -15,9 +15,9 @@ inline double computeDirectionControlSignal(double error) {
 void computeRobotVelocity() {
     double deviation = static_cast<double>(x - framewidth / 2);
     if (deviation > 0.0 && std::abs(deviation) >= TURN_RIGHT_THRES)
-        turn_right = true;
+        TURN_RIGHT = true;
     if (deviation < 0.0 && std::abs(deviation) >= TURN_LEFT_THRES)
-        turn_left = true;
+        TURN_LEFT = true;
 
     omega = computeDirectionControlSignal(deviation);
 }
