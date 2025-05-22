@@ -80,7 +80,7 @@ int main() {
         }
     }
 
-    cap.stopVideo();
+    cam.stopVideo();
     cv::destroyAllWindows();
     return 0;
 }
