@@ -98,6 +98,7 @@ const     cv::Scalar    CONTOUR_CENTER_COLOR        = cv::Scalar(0, 0, 0);
 
 
 cv::Mat                 img;
+cv::Mat                 bin_mask;
 
 constexpr int           TURN_THRESHOLD              = 10;
 constexpr double        TURN_SPEED_DECREASE         = 0.5;
