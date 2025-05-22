@@ -8,6 +8,8 @@
 #include <limits>
 #include <cmath>
 
+// extern pthread_mutex_t VISION_MUTEX;
+
 inline bool detectLineFromContours(const Contours_t& contours) {
     for (const auto& contour : contours) {
         double area = cv::contourArea(contour);
