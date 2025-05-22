@@ -19,7 +19,7 @@ inline bool detectLineFromContours(const Contours_t& contours) {
         cv::RotatedRect rect = cv::minAreaRect(contour);
         double width = rect.size.width;
         double height = rect.size.height;
-        if (w == 0 || h == 0) continue;
+        if (width == 0 || height == 0) continue;
 
         double aspect_ration = std::max(width, height) / std::min(width, height);
         if (aspect_ration > MIN_ASPECT_RATIO) {
