@@ -33,7 +33,7 @@ int main() {
 
     while (true) {
         cv::Mat frame;
-        if (!cam.getVideoFrame(img, 1000)) {
+        if (!cam.getVideoFrame(frame, 1000)) {
             std::cerr << "[ERROR] Timeout error while grabbing frame." << std::endl;
             continue;
         }
