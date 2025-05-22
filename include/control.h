@@ -12,18 +12,18 @@
 #include <pthread.h>
 
 pthread_mutex_t THROTTLE_MUTEX      = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t INTERACTION_MUTEX   = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t  CONTROL_COND        = PTHREAD_COND_INITIALIZER;
+// pthread_mutex_t INTERACTION_MUTEX   = PTHREAD_MUTEX_INITIALIZER;
+// pthread_cond_t  CONTROL_COND        = PTHREAD_COND_INITIALIZER;
 
 void * controlMotor1(void *arg) {
     int64_t prev_ticks1 = 0, curr_ticks1 = 0;
     while(true) {
 
-        pthread_mutex_lock(&INTERACTION_MUTEX);
-        while (INTERACTION_MODE) {
-            pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
-        }
-        pthread_mutex_unlock(&INTERACTION_MUTEX);
+        // pthread_mutex_lock(&INTERACTION_MUTEX);
+        // while (INTERACTION_MODE) {
+        //     pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
+        // }
+        // pthread_mutex_unlock(&INTERACTION_MUTEX);
 
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
@@ -57,11 +57,11 @@ void * controlMotor2(void *arg) {
     int64_t prev_ticks2 = 0, curr_ticks2 = 0;
     while(true) {
 
-        pthread_mutex_lock(&INTERACTION_MUTEX);
-        while (INTERACTION_MODE) {
-            pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
-        }
-        pthread_mutex_unlock(&INTERACTION_MUTEX);
+        // pthread_mutex_lock(&INTERACTION_MUTEX);
+        // while (INTERACTION_MODE) {
+        //     pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
+        // }
+        // pthread_mutex_unlock(&INTERACTION_MUTEX);
 
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
@@ -95,11 +95,11 @@ void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
     while(true) {
 
-        pthread_mutex_lock(&INTERACTION_MUTEX);
-        while (INTERACTION_MODE) {
-            pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
-        }
-        pthread_mutex_unlock(&INTERACTION_MUTEX);
+        // pthread_mutex_lock(&INTERACTION_MUTEX);
+        // while (INTERACTION_MODE) {
+        //     pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
+        // }
+        // pthread_mutex_unlock(&INTERACTION_MUTEX);
 
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
