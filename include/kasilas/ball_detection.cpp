@@ -33,8 +33,8 @@ int main() {
 
     while (true) {
         cv::Mat frame;
-        if (!cam.read(frame)) {
-            std::cerr << "Không đọc được khung hình từ PiCamera" << std::endl;
+        if (!cam.getVideoFrame(img, 1000)) {
+            std::cerr << "[ERROR] Timeout error while grabbing frame." << std::endl;
             continue;
         }
 
