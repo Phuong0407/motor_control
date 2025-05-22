@@ -2,7 +2,7 @@
 #define VISION_H
 
 #include "robot.h"
-#include "imageprocessor.h"
+// #include "imageprocessor.h"
 #include <vector>
 #include <stdio.h>
 #include <limits>
