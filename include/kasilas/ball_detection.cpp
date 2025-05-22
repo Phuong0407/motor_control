@@ -33,8 +33,10 @@ int main() {
 
     while (true) {
         cv::Mat frame;
-        cap >> frame;
-        if (frame.empty()) continue;
+        if (!cam.read(frame)) {
+            std::cerr << "Không đọc được khung hình từ PiCamera" << std::endl;
+            continue;
+        }
 
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed = now - lastTime;
