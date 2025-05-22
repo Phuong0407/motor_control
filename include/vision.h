@@ -13,7 +13,7 @@ void * computeBarycenter(void *arg) {
 
     while (true) {
         if (!cam.getVideoFrame(img, 1000)) {
-            printf("Timeout error while grabbing frame.\n");
+            printf("[ERROR] Timeout error while grabbing frame.\n");
             continue;
         }
 
@@ -22,47 +22,25 @@ void * computeBarycenter(void *arg) {
         cv::inRange(img_hsv, cv::Scalar(170, 120, 70),  cv::Scalar(180, 255, 255),  red2);
         cv::inRange(img_hsv, cv::Scalar(100,150,50),    cv::Scalar(140, 255, 255),  blue);
         bin_mask = red1 | red2 | blue;
-        cv::imshow("BINARY MASK", bin_mask);
 
         std::vector<cv::Vec4i>              hierarchy;
-        std::vector<std::vector<cv::Point>> contours;
-        findContours(bin_mask, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_NONE);
-
-        cv::Mat img_cpy1 = img.clone();
-        cv::drawContours(img_cpy1, contours, -1, cv::Scalar(0, 255, 0), 2);
+        Contours_t                          contours;
+        findContours(bin_mask, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
         
-        cv::Mat img_cpy2    = img.clone();
         cv::Moments moment  = cv::moments(bin_mask, true);
-        x                   = moment.m10 / moment.m00;
+        if (moment.m00 != 0) {
+            x = moment.m10 / moment.m00;
+            y = moment.m01 / moment.m00;
+            cv::Point barycent(static_cast<int>(x), static_cast<int>(y));
 
-        cv::Point p(x, moment.m01 / moment.m00);
-        cv::circle(img_cpy2, p, 5, cv::Scalar(128,0,0), -1);
-        cv::imshow("CAMERA", img_cpy2);
-
-        printf("x = %d\n", x);
-
+            cv::drawContours(img, contours, -1, CONTOUR_COLOR, 2);
+            cv::circle(img, barycent, 5, CONTOUR_CENTER_COLOR, -1);
+            cv::imshow("IMAGE", img);
+        }
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
     }
     return NULL;
 }
-
-
-// void * computeNavigation(void *arg) {
-//     while (true) {
-//         if (!cam.getVideoFrame(img, 1000)) {
-//             printf("Timeout error while grabbing frame.\n");
-//         continue;
-//         }
-        
-//         processImage();
-//         cv::imshow("OUTPUT", output);
-
-//         char key = static_cast<char>(cv::waitKey(5));
-//         if (key == 27) break;
-//     }
-//     return nullptr;
-// }
-
 
 #endif // VISION_H
