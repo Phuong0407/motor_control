@@ -2,6 +2,7 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
+#include <lccv.hpp>
 
 cv::Mat extractRedMask(const cv::Mat& image) {
     cv::Mat hsvImage, mask1, mask2, binaryMask;
@@ -13,11 +14,12 @@ cv::Mat extractRedMask(const cv::Mat& image) {
 }
 
 int main() {
-    cv::VideoCapture cap(0);
-    if (!cap.isOpened()) {
-        std::cerr << "Camera not detected!" << std::endl;
-        return -1;
-    }
+    lccv::PiCamera cam;
+    cam.options->video_width = 640;
+    cam.options->video_height = 480;
+    cam.options->framerate = 30;
+    cam.options->verbose = true;
+    cam.startVideo();
 
     std::vector<std::pair<double, cv::Point2f>> ballTrajectory;
     const double interval = 0.1; // seconds
