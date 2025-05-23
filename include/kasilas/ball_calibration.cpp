@@ -4,7 +4,7 @@
 
 // Constants
 const float BALL_DIAMETER_CM = 4.6f;            // Real-world ball diameter
-const float CAMERA_CONSTANT = 311.3292f;        // Based on your calibration
+const float CAMERA_CONSTANT = 490.606f;        // Based on your calibration
 
 // Depth estimation using known diameter and pixel size
 float estimateBallDepth(float pixelDiameter, float realDiameterCm = BALL_DIAMETER_CM) {
