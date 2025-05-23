@@ -61,6 +61,7 @@ void extractBallCenter() {
         cv::putText(frame, "Z = " + std::to_string(z).substr(0, 5) + " cm",
                     center + cv::Point2f(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
                     cv::Scalar(0, 255, 255), 1);
+        cv::imshow("IMAGE", frame);
     }
 }
 
