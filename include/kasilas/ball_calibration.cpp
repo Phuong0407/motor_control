@@ -62,8 +62,6 @@ int main() {
             float x_cm = center.x / pixelsPerCm;
             float y_cm = center.y / pixelsPerCm;
 
-            float pixelsPerCm = diameter_px / BALL_DIAMETER_CM;
-
             // === Compute X deviation from image center (camera center) ===
             float pixelCenterX = 320.0;
             float pixelDeviationX = center.x - pixelCenterX;
