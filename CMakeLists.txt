@@ -40,7 +40,7 @@ add_executable(
 
 add_executable(
     casillas_2
-    ${CMAKE_SOURCE_DIR}/include/kasilas/casillas_2.cpp
+    ${CMAKE_SOURCE_DIR}/casillas_2.cpp
 )
 
 target_link_libraries(
