@@ -72,7 +72,7 @@ int main() {
             std::cout << "Ball 3D Position: (X = " << x_cm
                       << " cm, Y = " << y_cm
                       << " cm, Z = " << depth_cm << " cm)" << std::endl;
-            std::cout << "pixel_dia" << diameter_px;
+            std::cout << "pixel_dia" << diameter_px << std::endl;
         }
 
         // Show result
