@@ -21,7 +21,11 @@ int main() {
     cv::Mat frame, hsv, mask;
 
     while (true) {
-        if (!cam.read(frame)) continue; // Grab frame
+        if (!cam.getVideoFrame(frame, 1000)) {
+            std::cerr << "[ERROR] Timeout error while grabbing frame." << std::endl;
+            continue;
+        }
+
         if (frame.empty()) continue;
 
         // Convert to HSV
