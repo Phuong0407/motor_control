@@ -1,6 +1,6 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
-#include <lccv.hpp>  // Make sure lccv.hpp is available
+#include <lccv.hpp>
 
 // Constants
 const float BALL_DIAMETER_CM = 4.6f;            // Real-world ball diameter
@@ -62,6 +62,13 @@ int main() {
             float x_cm = center.x / pixelsPerCm;
             float y_cm = center.y / pixelsPerCm;
 
+            float pixelsPerCm = diameter_px / BALL_DIAMETER_CM;
+
+            // === Compute X deviation from image center (camera center) ===
+            float pixelCenterX = 320.0;
+            float pixelDeviationX = center.x - pixelCenterX;
+            float xDeviation_cm = pixelDeviationX / pixelsPerCm;
+
             // Draw circle and depth text
             cv::circle(frame, center, (int)radius, cv::Scalar(0, 255, 0), 2);
             cv::putText(frame, "Z = " + std::to_string(depth_cm) + " cm",
@@ -73,6 +80,8 @@ int main() {
                       << " cm, Y = " << y_cm
                       << " cm, Z = " << depth_cm << " cm)" << std::endl;
             std::cout << "pixel_dia" << diameter_px << std::endl;
+            std::cout << "x deviation" << xDeviation_cm << std::endl;
+
         }
 
         // Show result
