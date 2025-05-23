@@ -10,6 +10,7 @@
 #include <wiringPiI2C.h>
 
 #include <stdio.h>
+#include <pthread.h>
 
 double  L1              = 0.115;
 double  L2              = 0.230;
@@ -120,5 +121,10 @@ constexpr double        STUCK_THRES                 = 50.0;
 constexpr double        TURN_RIGHT_THRES            = 165.0;
 constexpr double        TURN_LEFT_THRES             = 165.0;
 
+
+pthread_mutex_t THROTTLE_MUTEX      = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t INTERACTION_MUTEX   = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t  CONTROL_COND        = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t VISION_MUTEX;
 
 #endif // ROBOT_H

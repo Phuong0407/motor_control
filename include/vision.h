@@ -2,13 +2,10 @@
 #define VISION_H
 
 #include "robot.h"
-// #include "imageprocessor.h"
 #include <vector>
 #include <stdio.h>
 #include <limits>
 #include <cmath>
-
-// extern pthread_mutex_t VISION_MUTEX;
 
 inline bool detectLineFromContours(const Contours_t& contours) {
     for (const auto& contour : contours) {
@@ -48,7 +45,9 @@ void * computeBarycenter(void *arg) {
         Contours_t                          contours;
         findContours(bin_mask, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
         
+        pthread_mutex_lock(&VISION_MUTEX);
         CONTAIN_LINE = detectLineFromContours(contours);
+        pthread_mutex_unlock(&VISION_MUTEX);
         if (!CONTAIN_LINE)
             continue;
 

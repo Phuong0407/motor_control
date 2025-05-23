@@ -12,11 +12,19 @@ void onMouse(int event, int x, int y, int, void*) {
 }
 
 int main() {
-    cv::VideoCapture cap(0);
-    if (!cap.isOpened()) {
-        std::cerr << "Camera not detected!" << std::endl;
-        return -1;
-    }
+
+    lccv::PiCamera cam;
+    cam.options->video_width = 640;
+    cam.options->video_height = 480;
+    cam.options->framerate = 30;
+    cam.options->verbose = true;
+    cam.startVideo();
+
+    // cv::VideoCapture cap(0);
+    // if (!cap.isOpened()) {
+    //     std::cerr << "Camera not detected!" << std::endl;
+    //     return -1;
+    // }
 
     std::cout << "== Dual-Axis Calibration ==\n";
     std::cout << "Click 2 points horizontally (e.g. ruler along the ground).\n";

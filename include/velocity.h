@@ -12,26 +12,19 @@ inline double computeDirectionControlSignal(double error) {
     return kp_dir * error + kd_dir * derivative / 0.1;
 }
 
-void computeRobotVelocity() {
-    double deviation = static_cast<double>(x - framewidth / 2);
-    if (deviation > 0.0 && std::abs(deviation) >= TURN_RIGHT_THRES)
-        TURN_RIGHT = true;
-    if (deviation < 0.0 && std::abs(deviation) >= TURN_LEFT_THRES)
-        TURN_LEFT = true;
-
-    omega = computeDirectionControlSignal(deviation);
-}
-
-void computeRefTPSFromVelocity() {
-    ref1 = (1.0 / r) * (base_speed - L1 * omega) * 144.0;
-    ref2 = (1.0 / r) * (base_speed + L1 * omega) * 144.0;
-    ref3 = (1.0 / r) * omega * L2 * 144.0;
-}
-
 void * computeRefTPSFromVision(void * arg) {
     while(true) {
-        computeRobotVelocity();
-        computeRefTPSFromVelocity();
+        double deviation = static_cast<double>(x - framewidth / 2);
+        if (deviation > 0.0 && std::abs(deviation) >= TURN_RIGHT_THRES)
+            TURN_RIGHT = true;
+        if (deviation < 0.0 && std::abs(deviation) >= TURN_LEFT_THRES)
+            TURN_LEFT = true;
+
+        omega = computeDirectionControlSignal(deviation);
+
+        ref1 = (1.0 / r) * (base_speed - L1 * omega) * 144.0;
+        ref2 = (1.0 / r) * (base_speed + L1 * omega) * 144.0;
+        ref3 = (1.0 / r) * omega * L2 * 144.0;
     }
     return nullptr;
 }
