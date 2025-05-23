@@ -117,7 +117,7 @@ int main() {
         printf("x = %.3f\tz = %.3f\t\n", curr_x, curr_z);
 
         double urgency = std::clamp((100.0 - curr_z) / 100.0, 0.3, 1.0);
-        speed = kp_x * curr_x * urgency;
+        speed = - kp_x * curr_x * urgency;
 
         setMotors();
         char key = static_cast<char>(cv::waitKey(5));
