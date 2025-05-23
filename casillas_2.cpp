@@ -97,7 +97,7 @@ int main() {
     wiringPiSetup();
     i2c_fd = wiringPiI2CSetup(0x0f);
 
-    double kp_x = 2.0, kp_z = 0.01;
+    double kp_x = 2.0, kp_z = 2.0;
 
     while (true) {
         if (!cam.getVideoFrame(frame, 1000)) {
@@ -108,7 +108,7 @@ int main() {
 
         printf("x = %.3f\tz = %.3f\t\n", x, z);
 
-        speed = kp_x * x + kp_z * z;     
+        speed = kp_x * x + kp_z * z;
         setMotors();
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
