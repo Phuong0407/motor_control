@@ -1,9 +1,11 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
+#include <lccv.hpp>  // Include LCCV PiCamera library
 
 std::vector<cv::Point2f> clickedPoints;
 
+// Mouse callback to capture clicked points
 void onMouse(int event, int x, int y, int, void*) {
     if (event == cv::EVENT_LBUTTONDOWN && clickedPoints.size() < 4) {
         clickedPoints.emplace_back(x, y);
@@ -20,12 +22,6 @@ int main() {
     cam.options->verbose = true;
     cam.startVideo();
 
-    // cv::VideoCapture cap(0);
-    // if (!cap.isOpened()) {
-    //     std::cerr << "Camera not detected!" << std::endl;
-    //     return -1;
-    // }
-
     std::cout << "== Dual-Axis Calibration ==\n";
     std::cout << "Click 2 points horizontally (e.g. ruler along the ground).\n";
     std::cout << "Then click 2 points vertically (e.g. on a vertical stick or edge).\n";
@@ -35,7 +31,7 @@ int main() {
 
     cv::Mat frame;
     while (clickedPoints.size() < 4) {
-        cap >> frame;
+        if (!cam.read(frame)) continue; // Use PiCamera to read frame
         if (frame.empty()) continue;
 
         for (const auto& pt : clickedPoints) {
@@ -46,7 +42,7 @@ int main() {
         if (cv::waitKey(10) == 27) break;  // ESC to exit early
     }
 
-    cap.release();
+    cam.stopVideo();  // Stop camera
     cv::destroyAllWindows();
 
     if (clickedPoints.size() == 4) {
