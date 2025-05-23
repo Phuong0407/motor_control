@@ -34,7 +34,7 @@ double curr_x = 0.0;
 double curr_z = 0.0;
 double speed = 0.0;
 
-void extractBallCenter() {
+void extractBallCenter(double &deviation, double &depth) {
     cv::Mat hsv, mask1, mask2, bin_mask;
     cv::cvtColor(frame, hsv, cv::COLOR_BGR2HSV);
     cv::inRange(hsv, cv::Scalar(0, 120, 70),    cv::Scalar(10, 255, 255),   mask1);
@@ -56,11 +56,11 @@ void extractBallCenter() {
         cv::minEnclosingCircle(contour, center, radius);
 
         double ball_diam = static_cast<double>(radius) * 2.0;
-        curr_z = DEPTH_MULTIPLIER / ball_diam;
-        curr_x = ((static_cast<double>(center.x - FRAME_WIDTH / 2)) / ball_diam) * BALL_DIAMETER_CM;
+        depth = DEPTH_MULTIPLIER / ball_diam;
+        deviation = ((static_cast<double>(center.x - FRAME_WIDTH / 2)) / ball_diam) * BALL_DIAMETER_CM;
 
         cv::circle(frame, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
-        cv::putText(frame, "Z = " + std::to_string(curr_z).substr(0, 5) + " cm " + "X =" + std::to_string(curr_x).substr(0, 5) + " cm",
+        cv::putText(frame, "Z = " + std::to_string(depth).substr(0, 5) + " cm " + "X =" + std::to_string(deviation).substr(0, 5) + " cm",
                     center + cv::Point2f(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
                     cv::Scalar(0, 255, 255), 1);
     }
@@ -106,13 +106,16 @@ int main() {
             printf("[ERROR] Timeout error while grabbing frame.\n");
             continue;
         }
-        extractBallCenter();
-
+        extractBallCenter(prev_x, prev_z);
+        delay(100);
+        if (!cam.getVideoFrame(frame, 1000)) {
+            printf("[ERROR] Timeout error while grabbing frame.\n");
+            continue;
+        }
+        extractBallCenter(curr_x, curr_z);
         printf("x = %.3f\tz = %.3f\t\n", curr_x, curr_z);
 
         speed = kp_x * (curr_x - prev_x) + kp_z * (curr_z - prev_z);
-        prev_x = curr_x;
-        prev_z = curr_z;
         setMotors();
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
