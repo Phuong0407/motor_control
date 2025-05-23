@@ -28,8 +28,10 @@ Contours_t  contours;
 int i2c_fd = -1;
 
 int pwm = 0;
-double x = 0.0;
-double z = 0.0;
+double prev_x = 0.0;
+double prev_z = 0.0;
+double curr_x = 0.0;
+double curr_z = 0.0;
 double speed = 0.0;
 
 void extractBallCenter() {
@@ -54,8 +56,8 @@ void extractBallCenter() {
         cv::minEnclosingCircle(contour, center, radius);
 
         double ball_diam = static_cast<double>(radius) * 2.0;
-        z = DEPTH_MULTIPLIER / ball_diam;
-        x = ((static_cast<double>(center.x - FRAME_WIDTH / 2)) / ball_diam) * BALL_DIAMETER_CM;
+        curr_z = DEPTH_MULTIPLIER / ball_diam;
+        curr_x = ((static_cast<double>(center.x - FRAME_WIDTH / 2)) / ball_diam) * BALL_DIAMETER_CM;
 
         cv::circle(frame, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
         cv::putText(frame, "Z = " + std::to_string(z).substr(0, 5) + " cm " + "X =" + std::to_string(z).substr(0, 5) + " cm",
@@ -108,7 +110,9 @@ int main() {
 
         printf("x = %.3f\tz = %.3f\t\n", x, z);
 
-        speed = - kp_x * x - kp_z * z;
+        speed = kp_x * (curr_x - prev_x) + kp_z * (curr_z - prev_z);
+        prev_x = curr_x;
+        prev_z = curr_z;
         setMotors();
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
