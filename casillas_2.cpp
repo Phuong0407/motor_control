@@ -85,6 +85,7 @@ void setMotors() {
     pwm = computePWMFromUnsignedRPS(std::abs(speed));
 
     wiringPiI2CWriteReg16(i2c_fd, 0xaa, dir);
+    delay(1);
     wiringPiI2CWriteReg16(i2c_fd, 0x82, (pwm << 8) | pwm);
 }
 
