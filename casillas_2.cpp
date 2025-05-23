@@ -53,7 +53,7 @@ void extractBallCenter() {
         float radius;
         cv::minEnclosingCircle(contour, center, radius);
 
-        double ball_diam = static_cast<double>(radius) * 0.5;
+        double ball_diam = static_cast<double>(radius) * 2.0;
         z = DEPTH_MULTIPLIER / ball_diam;
         x = ((static_cast<double>(center.x - FRAME_WIDTH / 2)) / ball_diam) * BALL_DIAMETER_CM;
 
