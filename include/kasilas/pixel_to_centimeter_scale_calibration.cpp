@@ -31,7 +31,11 @@ int main() {
 
     cv::Mat frame;
     while (clickedPoints.size() < 4) {
-        if (!cam.read(frame)) continue; // Use PiCamera to read frame
+        if (!cam.getVideoFrame(frame, 1000)) {
+            std::cerr << "[ERROR] Timeout error while grabbing frame." << std::endl;
+            continue;
+        }
+
         if (frame.empty()) continue;
 
         for (const auto& pt : clickedPoints) {
