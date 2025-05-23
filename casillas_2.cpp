@@ -63,8 +63,8 @@ void extractBallCenter() {
     }
 }
 
-inline int computePWMFromUnsignedRPS(double utps) {
-    int pwm_value = static_cast<int>(utps);
+inline int computePWMFromUnsignedRPS(double uspeed) {
+    int pwm_value = std::clamp(static_cast<int>(utps), 0, MAX_PWM);
     if (pwm_value < DEAD_PWM) return 0;
     return static_cast<int>((pwm_value - DEAD_PWM) / DEADZONE_SCALEUP);
 }
@@ -74,7 +74,7 @@ inline int computeDirection(int dir) {
 }
 
 void setMotors() {
-    printf("[Motor] L\t=\t%.3f\tR\t=\t%.3f", leftSpeed, rightSpeed);
+    printf("[Motor] SPEED\t=\t%.3f", speed);
     int dir = (speed > 0) ? +1 : -1;
     dir = computeDirection(dir);
     pwm = computePWMFromUnsignedRPS(std::abs(speed));
