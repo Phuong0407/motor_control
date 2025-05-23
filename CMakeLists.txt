@@ -24,8 +24,8 @@ add_executable(
 )
 
 add_executable(
-    ball_detection
-    ${CMAKE_SOURCE_DIR}/include/kasilas/ball_detection.cpp
+    pixel_to_centimeter
+    ${CMAKE_SOURCE_DIR}/include/kasilas/pixel_to_centimeter_scale_calibration.cpp
 )
 
 target_link_libraries(
@@ -38,6 +38,13 @@ target_link_libraries(
 
 target_link_libraries(
     ball_detection
+    -llccv
+    ${OpenCV_LIBS}
+    ${LIBCAMERA_LIBRARIES}
+)
+
+target_link_libraries(
+    pixel_to_centimeter
     -llccv
     ${OpenCV_LIBS}
     ${LIBCAMERA_LIBRARIES}
