@@ -93,6 +93,9 @@ int main() {
     cam.options->verbose        = VERBOSE;
     cam.startVideo();
 
+    wiringPiSetup();
+    i2c_fd = wiringPiI2CSetup(0x0f);
+
     double kp_x = 10.0, kp_z = 10.0;
 
     while (true) {
