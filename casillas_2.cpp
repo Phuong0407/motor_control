@@ -63,8 +63,7 @@ void extractBallCenter() {
 }
 
 inline int computePWMFromUnsignedRPS(double utps) {
-    double norm_rps = std::clamp(utps / MAX_TPS, 0.0, 1.0);
-    int pwm_value = static_cast<int>(MAX_PWM * norm_rps * SAFETY_OFFSET);
+    int pwm_value = static_cast<int>(utps * SAFETY_OFFSET);
     if (pwm_value < DEAD_PWM) return 0;
     return static_cast<int>((pwm_value - DEAD_PWM) / DEADZONE_SCALEUP);
 }
