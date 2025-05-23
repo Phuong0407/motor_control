@@ -97,7 +97,7 @@ int main() {
     const float Kp = 10.0f;
     const int maxSpeed = 250;
     const float movementThreshold = 2.0f;
-    
+
     int fd1, fd2;
     initMotorDriver(fd1, fd2);
     
@@ -168,7 +168,8 @@ int main() {
 
                     if (std::abs(error) > movementThreshold) {
                         int direction = (error > 0) ? 1 : -1;
-                        int speed = std::min(maxSpeed, static_cast<int>(std::abs(error) * Kp));
+                        int speed = 250;
+			// std::min(maxSpeed, static_cast<int>(std::abs(error) * Kp));
                         speed *= direction;
 
                         setMotors(fd1, fd2, speed, speed, 0);
