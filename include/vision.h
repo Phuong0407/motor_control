@@ -67,4 +67,50 @@ void * computeBarycenter(void *arg) {
     return nullptr;
 }
 
+void * extractBallCenter(void * arg) {
+    double radius;
+    cv::Point2d center;
+    while (!TERMINATE_PROGRAM) {
+        if (!cam.getVideoFrame(img, 1000)) {
+            printf("[ERROR] Timeout error while grabbing frame.\n");
+            continue;
+        }
+
+        cv::Mat hsv, mask1, mask2, bin_mask;
+        cv::cvtColor(frame, hsv, cv::COLOR_BGR2HSV);
+        cv::inRange(hsv, cv::Scalar(0, 120, 70),    cv::Scalar(10, 255, 255),   mask1);
+        cv::inRange(hsv, cv::Scalar(170, 120, 70),  cv::Scalar(180, 255, 255),  mask2);
+        bin_mask = mask1 | mask2;
+
+        cv::erode(bin_mask, bin_mask, cv::Mat(), cv::Point(-1, -1), 2);
+        cv::dilate(bin_mask, bin_mask, cv::Mat(), cv::Point(-1, -1), 2);
+
+        contours.clear();
+        cv::findContours(bin_mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+        for (const auto& contour : contours) {
+            double area = cv::contourArea(contour);
+            if (area < MIN_CONTOUR_AREA)
+                continue;
+            else {
+                cv::minEnclosingCircle(contour, center, radius);
+                break;
+            }
+        }
+  
+        double diameter = static_cast<double>(radius) * 2.0;
+        y = DEPTH_MULTIPLIER / ball_diam;
+        x = static_cast<double>(center.x - FRAME_WIDTH / 2) / ball_diam * BALL_DIAMETER_CM;
+
+        cv::circle(frame, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
+        cv::putText(frame,
+                    "Z = " + std::to_string(depth).substr(0, 5) + " cm "
+                    + "X =" + std::to_string(deviation).substr(0, 5) + " cm",
+                    center + cv::Point2d(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
+                    cv::Scalar(0, 255, 255), 1);
+        cv::imshow("IMAGE", frame);
+    }
+    return nullptr;
+}
+
 #endif // VISION_H

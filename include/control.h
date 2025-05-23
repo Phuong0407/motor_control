@@ -189,6 +189,13 @@ void * handleNoLineFound(void *arg) {
     return nullptr;
 }
 
+void * controlRobotGoalKeeper(void *arg) {
+    double urgency = std::clamp((100.0 - y) / 100.0, 0.3, 1.0);
+    base_speed = - kp_x * x * urgency;
+    double TPS = (1.0 / r) * base_speed * COUNTER_PER_REV;
+    setMotor12(TPS);
+}
+
 void * monitorMotorsSpeed(void *arg) {
     while(!TERMINATE_PROGRAM) {
         printf("\n");

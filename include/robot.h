@@ -123,8 +123,14 @@ constexpr double        TURN_RIGHT_THRES            = 165.0;
 constexpr double        TURN_LEFT_THRES             = 165.0;
 
 
-pthread_mutex_t         THROTTLE_MUTEX      = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t         VISION_MUTEX        = PTHREAD_MUTEX_INITIALIZER;
-bool                    TERMINATE_PROGRAM   = false;
+pthread_mutex_t         THROTTLE_MUTEX              = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t         VISION_MUTEX                = PTHREAD_MUTEX_INITIALIZER;
+bool                    TERMINATE_PROGRAM           = false;
+
+constexpr double        BALL_DIAMETER_CM            = 4.6;
+constexpr double        DEPTH_MULTIPLIER            = 1592.06;
+
+static constexpr double kp_x                        = 100.0;
+static constexpr double kp_z                        = 100.0;
 
 #endif // ROBOT_H
