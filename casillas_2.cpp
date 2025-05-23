@@ -75,7 +75,7 @@ inline int computeDirection(int dir) {
 }
 
 void setMotors() {
-    printf("[Motor] SPEED\t=\t%.3f", speed);
+    printf("[Motor] SPEED\t=\t%.3f\n", speed);
     int dir = (speed > 0) ? +1 : -1;
     dir = computeDirection(dir);
     pwm = computePWMFromUnsignedRPS(std::abs(speed));
