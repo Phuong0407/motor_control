@@ -64,7 +64,7 @@ void extractBallCenter() {
 }
 
 inline int computePWMFromUnsignedRPS(double utps) {
-    int pwm_value = static_cast<int>(utps * SAFETY_OFFSET);
+    int pwm_value = static_cast<int>(utps);
     if (pwm_value < DEAD_PWM) return 0;
     return static_cast<int>((pwm_value - DEAD_PWM) / DEADZONE_SCALEUP);
 }
