@@ -24,7 +24,10 @@ int main() {
 
     while (true) {
         // Capture frame
-        if (!cam.read(frame)) continue;
+        if (!cam.getVideoFrame(frame, 1000)) {
+            std::cerr << "[ERROR] Timeout error while grabbing frame." << std::endl;
+            continue;
+        }
         if (frame.empty()) continue;
 
         // Convert to HSV color space
