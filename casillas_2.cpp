@@ -53,8 +53,9 @@ void extractBallCenter() {
         float radius;
         cv::minEnclosingCircle(contour, center, radius);
 
-        z = DEPTH_MULTIPLIER / static_cast<double>(radius) * 0.5;
-        x = ((static_cast<double>(center.x - FRAME_WIDTH / 2)) / diameter_px) * BALL_DIAMETER_CM;
+        double ball_diam = static_cast<double>(radius) * 0.5;
+        z = DEPTH_MULTIPLIER / ball_diam;
+        x = ((static_cast<double>(center.x - FRAME_WIDTH / 2)) / ball_diam) * BALL_DIAMETER_CM;
 
         cv::circle(frame, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
         cv::putText(frame, "Z = " + std::to_string(z).substr(0, 5) + " cm",
@@ -64,7 +65,7 @@ void extractBallCenter() {
 }
 
 inline int computePWMFromUnsignedRPS(double uspeed) {
-    int pwm_value = std::clamp(static_cast<int>(utps), 0, MAX_PWM);
+    int pwm_value = std::clamp(static_cast<int>(uspeed), 0, MAX_PWM);
     if (pwm_value < DEAD_PWM) return 0;
     return static_cast<int>((pwm_value - DEAD_PWM) / DEADZONE_SCALEUP);
 }
