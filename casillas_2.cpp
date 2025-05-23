@@ -7,6 +7,7 @@
 #include <vector>
 #include <cmath>
 #include <stdio.h>
+#include <algorithm>
 
 constexpr double    BALL_DIAMETER_CM    = 4.6;
 constexpr double    DEPTH_MULTIPLIER    = 1592.06;
@@ -115,7 +116,9 @@ int main() {
         extractBallCenter(curr_x, curr_z);
         printf("x = %.3f\tz = %.3f\t\n", curr_x, curr_z);
 
-        speed = kp_x * (curr_x - prev_x) + kp_z * (curr_z - prev_z);
+        double urgency = std::clamp((100.0 - curr_z) / 100.0, 0.3, 1.0);
+        speed = kp_x * curr_x * urgency;
+
         setMotors();
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
