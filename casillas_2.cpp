@@ -11,7 +11,7 @@
 constexpr double    BALL_DIAMETER_CM    = 4.6;
 constexpr double    DEPTH_MULTIPLIER    = 1592.06;
 constexpr int       MAX_PWM             = 255;
-
+constexpr int       DEAD_PWM            = 40;
 constexpr int       FRAME_WIDTH         = 640;
 constexpr int       FRAME_HEIGHT        = 480;
 constexpr int       FRAME_RATE          = 30;
