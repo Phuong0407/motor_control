@@ -7,63 +7,55 @@
 #include <vector>
 #include <cmath>
 
-const double BALL_DIAMETER_CM   = 4.6f;
-const double DEPTH_CONSTANT     = 346.1f;
-const double WIDTH_CONSTANT     = 346.1f;
+constexpr double BALL_DIAMETER_CM   = 4.6;
+constexpr double DEPTH_MULTIPLIER   = 1592.06;
 
-using Contour_t                 = std::vector<cv::Point>;
-using Contours_t                = std::vector<Contour_t>;
+constexpr int    FRAME_WIDTH        = 640;
+constexpr int    FRAME_HEIGHT       = 480;
+constexpr int    FRAME_RATE         = 30;
+constexpr bool   VERBOSE            = false;
+
+using Contour_t  = std::vector<cv::Point>;
+using Contours_t = std::vector<Contour_t>;
 
 cv::Mat     frame;
-cv::Mat     bin_mask;
 Contours_t  contours;
 
-inline double computeBallDepth(double diam_px) {
-    return (CAMERA_CONSTANT * BALL_DIAMETER_CM) / diam_px;
-}
+double x = 0.0;
+double z = 0.0;
 
 void extractBallCenter() {
-    cv::Mat hsv, mask1, mask2;
-    cv::Mat frame, hsv, mask1, mask2;
-    cv::inRange(hsv, cv::Scalar(0, 120, 70), cv::Scalar(10, 255, 255), mask1);
+    cv::Mat hsv, mask1, mask2, mask;
+    cv::cvtColor(frame, hsv, cv::COLOR_BGR2HSV);
+
+    cv::inRange(hsv, cv::Scalar(0, 120, 70),  cv::Scalar(10, 255, 255), mask1);
     cv::inRange(hsv, cv::Scalar(170, 120, 70), cv::Scalar(180, 255, 255), mask2);
     cv::bitwise_or(mask1, mask2, mask);
-    cv::erode(bin_mask, bin_mask, cv::Mat(), cv::Point(-1, -1), 2);
-    cv::dilate(bin_mask, bin_mask, cv::Mat(), cv::Point(-1, -1), 2);
-    
+
+    cv::erode(mask, mask, cv::Mat(), cv::Point(-1, -1), 2);
+    cv::dilate(mask, mask, cv::Mat(), cv::Point(-1, -1), 2);
+
     contours.clear();
     cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
     for (const auto& contour : contours) {
-            double area = cv::contourArea(contour);
-            if (area < 200.0)
-                continue;
+        double area = cv::contourArea(contour);
+        if (area < 200.0) continue;
 
-            double radius;
-            cv::Point2f center;
-            cv::minEnclosingCircle(contour, center, radius);
+        cv::Point2f center;
+        float radius;
+        cv::minEnclosingCircle(contour, center, radius);
 
-            double diameter_px = radius * 2.0f;
-            double depth_cm = computeBallDepth(diameter_px);
+        double diameter_px = static_cast<double>(radius) * 2.0;
+        z = DEPTH_MULTIPLIER / diameter_px;
+        x = ((static_cast<double>(center.x) - (FRAME_WIDTH / 2.0)) / diameter_px) * BALL_DIAMETER_CM;
 
-            double pixelsPerCm = diameter_px / BALL_DIAMETER_CM;
-            double x_cm = center.x / pixelsPerCm;
-            double y_cm = center.y / pixelsPerCm;
-
-            cv::circle(frame, center, (int)radius, cv::Scalar(0, 255, 0), 2);
-            cv::putText(frame, "Z = " + std::to_string(depth_cm) + " cm",
-                        center + cv::Point2f(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
-                        cv::Scalar(0, 255, 255), 1);
-
-            // Print 3D position
-            std::cout << "Ball 3D Position: (X = " << x_cm
-                      << " cm, Y = " << y_cm
-                      << " cm, Z = " << depth_cm << " cm)" << std::endl;
-            std::cout << "pixel_dia" << diameter_px << std::endl;
-        }
+        cv::circle(frame, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
+        cv::putText(frame, "Z = " + std::to_string(z).substr(0, 5) + " cm",
+                    center + cv::Point2f(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
+                    cv::Scalar(0, 255, 255), 1);
+    }
 }
-
-
 
 void initMotorDriver(int &fd1, int &fd2) {
     wiringPiSetup();
