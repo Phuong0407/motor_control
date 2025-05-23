@@ -257,7 +257,6 @@ void * handleNoLineFound(void *arg) {
     while (true) {
         if (!CONTAIN_LINE) {
             pthread_mutex_lock(&INTERACTION_MUTEX);
-            BLOCK_CONTROL = true;
 
             printf("[INFO] NO LINE FOUND.\n");
             printf("[INFO] USER HAVE TO NAVIGATE MANUALLY IN INTERACTION MODE. ENTER INTERACTION MODE? (y/n): \n");
