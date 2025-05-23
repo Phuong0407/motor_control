@@ -78,7 +78,7 @@ int main() {
                       << " cm, Y = " << y_cm
                       << " cm, Z = " << depth_cm << " cm)" << std::endl;
             std::cout << "pixel_dia" << diameter_px << std::endl;
-            std::cout << "x deviation" << xDeviation_cm << std::endl;
+            std::cout << "x deviation = " << xDeviation_cm << std::endl;
 
         }
 
