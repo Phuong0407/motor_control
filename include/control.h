@@ -14,11 +14,11 @@ void * controlMotor1(void *arg) {
     int64_t prev_ticks1 = 0, curr_ticks1 = 0;
     while(true) {
 
-        pthread_mutex_lock(&INTERACTION_MUTEX);
-        while (INTERACTION_MODE) {
-            pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
-        }
-        pthread_mutex_unlock(&INTERACTION_MUTEX);
+        // pthread_mutex_lock(&INTERACTION_MUTEX);
+        // while (INTERACTION_MODE) {
+        //     pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
+        // }
+        // pthread_mutex_unlock(&INTERACTION_MUTEX);
 
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
@@ -52,11 +52,11 @@ void * controlMotor2(void *arg) {
     int64_t prev_ticks2 = 0, curr_ticks2 = 0;
     while(true) {
 
-        pthread_mutex_lock(&INTERACTION_MUTEX);
-        while (INTERACTION_MODE) {
-            pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
-        }
-        pthread_mutex_unlock(&INTERACTION_MUTEX);
+        // pthread_mutex_lock(&INTERACTION_MUTEX);
+        // while (INTERACTION_MODE) {
+        //     pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
+        // }
+        // pthread_mutex_unlock(&INTERACTION_MUTEX);
 
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
@@ -90,11 +90,11 @@ void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
     while(true) {
 
-        pthread_mutex_lock(&INTERACTION_MUTEX);
-        while (INTERACTION_MODE) {
-            pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
-        }
-        pthread_mutex_unlock(&INTERACTION_MUTEX);
+        // pthread_mutex_lock(&INTERACTION_MUTEX);
+        // while (INTERACTION_MODE) {
+        //     pthread_cond_wait(&CONTROL_COND, &INTERACTION_MUTEX);
+        // }
+        // pthread_mutex_unlock(&INTERACTION_MUTEX);
 
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
@@ -205,79 +205,79 @@ void * overcomeStuckState(void *arg) {
     return nullptr;
 }
 
-void * processInteractionMode(void *arg) {
-    double curr_angle = 0.0, prev_angle = 0.0;
-    while (true) {
-        pthread_mutex_lock(&INTERACTION_MUTEX);
-        bool INTERACTION_MODE_ACTIVE = INTERACTION_MODE;
-        pthread_mutex_unlock(&INTERACTION_MUTEX);
+// void * processInteractionMode(void *arg) {
+//     double curr_angle = 0.0, prev_angle = 0.0;
+//     while (true) {
+//         pthread_mutex_lock(&INTERACTION_MUTEX);
+//         bool INTERACTION_MODE_ACTIVE = INTERACTION_MODE;
+//         pthread_mutex_unlock(&INTERACTION_MUTEX);
 
-        if (INTERACTION_MODE_ACTIVE) {
-            printf("[INPUT] ENTER ANGLE: ");
-            scanf("%lf", &curr_angle);
+//         if (INTERACTION_MODE_ACTIVE) {
+//             printf("[INPUT] ENTER ANGLE: ");
+//             scanf("%lf", &curr_angle);
 
-            double dev_angle = curr_angle - prev_angle;
-            double signal = kp_angle * curr_angle + kd_angle * dev_angle;
-            prev_angle = curr_angle;
+//             double dev_angle = curr_angle - prev_angle;
+//             double signal = kp_angle * curr_angle + kd_angle * dev_angle;
+//             prev_angle = curr_angle;
 
-            int lin_speed   = 200;
-            int left_speed  = lin_speed + signal;
-            int right_speed = lin_speed - signal;
-            setAllMotors(left_speed, right_speed, lin_speed);
-            delay(1000);
-            if (CONTAIN_LINE) {
-                pthread_mutex_lock(&INTERACTION_MUTEX);
-                INTERACTION_MODE = false;
-                pthread_cond_broadcast(&CONTROL_COND);
-                pthread_mutex_unlock(&INTERACTION_MUTEX);
-                printf("[INFO] LINE FOUND. RETURNING TO AUTONOMOUS MODE.\n");
-            } else {
-                char ch;
-                printf("[INFO] LINE STILL NOT FOUND. CONTINUE INTERACTION MODE? (y/n): ");
-                scanf(" %c", &ch);
+//             int lin_speed   = 200;
+//             int left_speed  = lin_speed + signal;
+//             int right_speed = lin_speed - signal;
+//             setAllMotors(left_speed, right_speed, lin_speed);
+//             delay(1000);
+//             if (CONTAIN_LINE) {
+//                 pthread_mutex_lock(&INTERACTION_MUTEX);
+//                 INTERACTION_MODE = false;
+//                 pthread_cond_broadcast(&CONTROL_COND);
+//                 pthread_mutex_unlock(&INTERACTION_MUTEX);
+//                 printf("[INFO] LINE FOUND. RETURNING TO AUTONOMOUS MODE.\n");
+//             } else {
+//                 char ch;
+//                 printf("[INFO] LINE STILL NOT FOUND. CONTINUE INTERACTION MODE? (y/n): ");
+//                 scanf(" %c", &ch);
 
-                if (ch == 'y' || ch == 'Y') {
-                    printf("[INFO] CONTINUING INTERACTION MODE.\n");
-                } else {
-                    pthread_mutex_lock(&INTERACTION_MUTEX);
-                    INTERACTION_MODE = false;
-                    pthread_cond_broadcast(&CONTROL_COND);
-                    pthread_mutex_unlock(&INTERACTION_MUTEX);
-                    stopAllMotors();
-                    printf("[INFO] EXITING INTERACTION MODE. MOTORS STOPPED.\n");
-                }
-            }
-        }
-    }
-    return nullptr;
-}
+//                 if (ch == 'y' || ch == 'Y') {
+//                     printf("[INFO] CONTINUING INTERACTION MODE.\n");
+//                 } else {
+//                     pthread_mutex_lock(&INTERACTION_MUTEX);
+//                     INTERACTION_MODE = false;
+//                     pthread_cond_broadcast(&CONTROL_COND);
+//                     pthread_mutex_unlock(&INTERACTION_MUTEX);
+//                     stopAllMotors();
+//                     printf("[INFO] EXITING INTERACTION MODE. MOTORS STOPPED.\n");
+//                 }
+//             }
+//         }
+//     }
+//     return nullptr;
+// }
 
-void * handleNoLineFound(void *arg) {
-    delay(4000);
-    while (true) {
-        if (!CONTAIN_LINE) {
-            pthread_mutex_lock(&INTERACTION_MUTEX);
+// void * handleNoLineFound(void *arg) {
+//     delay(4000);
+//     while (true) {
+//         if (!CONTAIN_LINE) {
+//             pthread_mutex_lock(&INTERACTION_MUTEX);
 
-            printf("[INFO] NO LINE FOUND.\n");
-            printf("[INFO] USER HAVE TO NAVIGATE MANUALLY IN INTERACTION MODE. ENTER INTERACTION MODE? (y/n): \n");
+//             printf("[INFO] NO LINE FOUND.\n");
+//             printf("[INFO] USER HAVE TO NAVIGATE MANUALLY IN INTERACTION MODE. ENTER INTERACTION MODE? (y/n): \n");
 
-            char ch = 0;
-            scanf(" %c", &ch);
-            if (ch == 'y' || ch == 'Y') {
-                INTERACTION_MODE = true;
-                printf("[INFO] INTERACTION MODE ACTIVATED.\n");
-            }
-        } else {
-            pthread_mutex_lock(&INTERACTION_MUTEX);
-            INTERACTION_MODE = false;
-            printf("[INFO] INTERACTION MODE NOT ACTIVATED. MOTORS STOPPED.\n");
-            pthread_cond_broadcast(&CONTROL_COND);
-            pthread_mutex_unlock(&INTERACTION_MUTEX);
-        }
-        delay(100);
-    }
-    return nullptr;
-}
+//             char ch = 0;
+//             scanf(" %c", &ch);
+//             if (ch == 'y' || ch == 'Y') {
+//                 INTERACTION_MODE = true;
+//                 printf("[INFO] INTERACTION MODE ACTIVATED.\n");
+//             }
+//         } else {
+//             pthread_mutex_lock(&INTERACTION_MUTEX);
+//             INTERACTION_MODE = false;
+//             printf("[INFO] INTERACTION MODE NOT ACTIVATED. MOTORS STOPPED.\n");
+//             pthread_cond_broadcast(&CONTROL_COND);
+//             pthread_mutex_unlock(&INTERACTION_MUTEX);
+//         }
+//         delay(100);
+//     }
+//     return nullptr;
+// }
 
 void * monitorMotorsSpeed(void *arg) {
     while(true) {

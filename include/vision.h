@@ -45,9 +45,11 @@ void * computeBarycenter(void *arg) {
         Contours_t                          contours;
         findContours(bin_mask, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
         
-        pthread_mutex_lock(&VISION_MUTEX);
+        // pthread_mutex_lock(&VISION_MUTEX);
+        // CONTAIN_LINE = detectLineFromContours(contours);
+        // pthread_mutex_unlock(&VISION_MUTEX);
+        
         CONTAIN_LINE = detectLineFromContours(contours);
-        pthread_mutex_unlock(&VISION_MUTEX);
         if (!CONTAIN_LINE)
             continue;
 
