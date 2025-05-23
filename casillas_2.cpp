@@ -108,7 +108,7 @@ int main() {
 
         printf("x = %.3f\tz = %.3f\t\n", x, z);
 
-        speed = kp_x * x + kp_z * z;
+        speed = - kp_x * x - kp_z * z;
         setMotors();
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
