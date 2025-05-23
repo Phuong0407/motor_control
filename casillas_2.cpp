@@ -32,10 +32,6 @@ double x = 0.0;
 double z = 0.0;
 double speed = 0.0;
 
-void stopAllMotors () {
-    wiringPiI2CWriteReg16(i2c_fd, 0x82, 0x0000);
-}
-
 void extractBallCenter() {
     cv::Mat hsv, mask1, mask2, bin_mask;
     cv::cvtColor(frame, hsv, cv::COLOR_BGR2HSV);
@@ -62,7 +58,7 @@ void extractBallCenter() {
         x = ((static_cast<double>(center.x - FRAME_WIDTH / 2)) / ball_diam) * BALL_DIAMETER_CM;
 
         cv::circle(frame, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
-        cv::putText(frame, "Z = " + std::to_string(z).substr(0, 5) + " cm",
+        cv::putText(frame, "Z = " + std::to_string(z).substr(0, 5) + " cm " + "X =" + std::to_string(z).substr(0, 5) + " cm",
                     center + cv::Point2f(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
                     cv::Scalar(0, 255, 255), 1);
     }
@@ -110,7 +106,7 @@ int main() {
         }
         extractBallCenter();
 
-        printf("x = %.3f\tz = %.3f\t", x, z);
+        printf("x = %.3f\tz = %.3f\t\n", x, z);
 
         // speed = kp_x * x + kp_z * z;     
         // setMotors();
@@ -119,6 +115,6 @@ int main() {
     }
     cam.stopVideo();
     cv::destroyAllWindows();
-    stopAllMotors();
+    wiringPiI2CWriteReg16(i2c_fd, 0x82, 0x0000);
     return 0;
 }
