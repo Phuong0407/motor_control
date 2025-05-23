@@ -14,23 +14,8 @@ include_directories(
 )
 
 add_executable(
-    main
-    ${CMAKE_SOURCE_DIR}/main.cpp
-)
-
-add_executable(
-    ball_detection
-    ${CMAKE_SOURCE_DIR}/include/kasilas/ball_detection.cpp
-)
-
-add_executable(
-    pixel_to_centimeter
-    ${CMAKE_SOURCE_DIR}/include/kasilas/pixel_to_centimeter_scale_calibration.cpp
-)
-
-add_executable(
-    ball_calibration
-    ${CMAKE_SOURCE_DIR}/include/kasilas/ball_calibration.cpp
+    line_follower
+    ${CMAKE_SOURCE_DIR}/line_follower.cpp
 )
 
 add_executable(
@@ -39,37 +24,16 @@ add_executable(
 )
 
 add_executable(
-    casillas_2
-    ${CMAKE_SOURCE_DIR}/casillas_2.cpp
+    goal_keeper
+    ${CMAKE_SOURCE_DIR}/goal_keeper.cpp
 )
 
 target_link_libraries(
-    main
+    line_follower
     -llccv
     ${OpenCV_LIBS}
     ${LIBCAMERA_LIBRARIES}
     -lwiringPi
-)
-
-target_link_libraries(
-    ball_detection
-    -llccv
-    ${OpenCV_LIBS}
-    ${LIBCAMERA_LIBRARIES}
-)
-
-target_link_libraries(
-    pixel_to_centimeter
-    -llccv
-    ${OpenCV_LIBS}
-    ${LIBCAMERA_LIBRARIES}
-)
-
-target_link_libraries(
-    ball_calibration
-    -llccv
-    ${OpenCV_LIBS}
-    ${LIBCAMERA_LIBRARIES}
 )
 
 target_link_libraries(
@@ -81,7 +45,7 @@ target_link_libraries(
 )
 
 target_link_libraries(
-    casillas_2
+    goal_keeper
     -llccv
     ${OpenCV_LIBS}
     ${LIBCAMERA_LIBRARIES}
