@@ -28,6 +28,11 @@ add_executable(
     ${CMAKE_SOURCE_DIR}/include/kasilas/pixel_to_centimeter_scale_calibration.cpp
 )
 
+add_executable(
+    ball_calibration
+    ${CMAKE_SOURCE_DIR}/include/kasilas/ball_calibration.cpp
+)
+
 target_link_libraries(
     main
     -llccv
@@ -45,6 +50,13 @@ target_link_libraries(
 
 target_link_libraries(
     pixel_to_centimeter
+    -llccv
+    ${OpenCV_LIBS}
+    ${LIBCAMERA_LIBRARIES}
+)
+
+target_link_libraries(
+    ball_calibration
     -llccv
     ${OpenCV_LIBS}
     ${LIBCAMERA_LIBRARIES}
