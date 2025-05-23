@@ -33,6 +33,11 @@ add_executable(
     ${CMAKE_SOURCE_DIR}/include/kasilas/ball_calibration.cpp
 )
 
+add_executable(
+    casillas
+    ${CMAKE_SOURCE_DIR}/casillas.cpp
+)
+
 target_link_libraries(
     main
     -llccv
@@ -60,4 +65,12 @@ target_link_libraries(
     -llccv
     ${OpenCV_LIBS}
     ${LIBCAMERA_LIBRARIES}
+)
+
+target_link_libraries(
+    casillas
+    -llccv
+    ${OpenCV_LIBS}
+    ${LIBCAMERA_LIBRARIES}
+    -lwiringPi
 )

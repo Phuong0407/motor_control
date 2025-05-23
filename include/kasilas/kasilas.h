@@ -101,9 +101,9 @@ cv::Mat extractRedMask(const cv::Mat& image) {
     return binaryMask;
 }
 
-double predictGoalLineX(const std::vector<std::pair<double, cv::Point2f>>& trajectory) {
+double predictGoalPosition(const std::vector<std::pair<double, cv::Point2f>>& trajectory) {
     if (trajectory.size() < 3) {
-        std::cerr << "[predictGoalLineX] Not enough points for prediction.\n";
+        std::cerr << "[INFO] NOT ENOUGH POINTS FOR PREDICTION.\n";
         return -1;
     }
 
