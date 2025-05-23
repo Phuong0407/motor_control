@@ -99,7 +99,6 @@ int main() {
     double kp_x = 10.0, kp_z = 10.0;
 
     while (true) {
-        cv::Mat frame;
         if (!cam.getVideoFrame(frame, 1000)) {
             printf("[ERROR] Timeout error while grabbing frame.\n");
             continue;
