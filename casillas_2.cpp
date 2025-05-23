@@ -108,7 +108,7 @@ int main() {
         }
         extractBallCenter();
 
-        printf("x = %.3f\tz = %.3f\t\n", x, z);
+        printf("x = %.3f\tz = %.3f\t\n", curr_x, curr_z);
 
         speed = kp_x * (curr_x - prev_x) + kp_z * (curr_z - prev_z);
         prev_x = curr_x;
