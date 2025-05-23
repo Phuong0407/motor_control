@@ -1,8 +1,6 @@
 // #define NOLOADED_RUN
 #define LOADED_RUN
 
-// #include "camera.h"
-// #include "imageprocessor.h"
 #include "vision.h"
 #include "velocity.h"
 #include "encoder.h"
@@ -10,7 +8,6 @@
 #include "motor.h"
 
 #include <string>
-#include <pthread.h>
 #include <stdio.h>
 
 int main(int argc, char *argv[]) {
