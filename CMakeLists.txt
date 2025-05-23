@@ -38,6 +38,11 @@ add_executable(
     ${CMAKE_SOURCE_DIR}/casillas.cpp
 )
 
+add_executable(
+    casillas_2
+    ${CMAKE_SOURCE_DIR}/include/kasilas/casillas_2.cpp
+)
+
 target_link_libraries(
     main
     -llccv
@@ -69,6 +74,14 @@ target_link_libraries(
 
 target_link_libraries(
     casillas
+    -llccv
+    ${OpenCV_LIBS}
+    ${LIBCAMERA_LIBRARIES}
+    -lwiringPi
+)
+
+target_link_libraries(
+    casillas_2
     -llccv
     ${OpenCV_LIBS}
     ${LIBCAMERA_LIBRARIES}
