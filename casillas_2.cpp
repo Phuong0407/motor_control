@@ -101,7 +101,7 @@ int main() {
             continue;
         }
         extractBallCenter();
-        speed = kp_x * x + kd_z * z;     
+        speed = kp_x * x + kp_z * z;     
         setMotors();   
     }
     cam.stopVideo();
