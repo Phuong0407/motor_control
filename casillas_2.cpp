@@ -75,7 +75,7 @@ inline int computePWMFromUnsignedRPS(double uspeed) {
 }
 
 inline int computeDirection(int dir) {
-    return (dir == +1) ? 0x06 : 0x0a;
+    return (dir == +1) ? 0x06 : 0x09;
 }
 
 void setMotors() {

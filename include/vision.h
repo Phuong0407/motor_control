@@ -29,7 +29,7 @@ inline bool detectLineFromContours(const Contours_t& contours) {
 void * computeBarycenter(void *arg) {
     cv::Mat img_hsv, red1, red2, blue;
 
-    while (true) {
+    while (!TERMINATE_PROGRAM) {
         if (!cam.getVideoFrame(img, 1000)) {
             printf("[ERROR] Timeout error while grabbing frame.\n");
             continue;
@@ -45,13 +45,11 @@ void * computeBarycenter(void *arg) {
         Contours_t                          contours;
         findContours(bin_mask, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
         
-        // pthread_mutex_lock(&VISION_MUTEX);
-        // CONTAIN_LINE = detectLineFromContours(contours);
-        // pthread_mutex_unlock(&VISION_MUTEX);
-        
+        pthread_mutex_lock(&VISION_MUTEX);
         CONTAIN_LINE = detectLineFromContours(contours);
-        if (!CONTAIN_LINE)
-            continue;
+        pthread_mutex_unlock(&VISION_MUTEX);
+        
+        if (!CONTAIN_LINE) continue;
 
         cv::Moments moment  = cv::moments(bin_mask, true);
         if (moment.m00 != 0) {
@@ -66,7 +64,7 @@ void * computeBarycenter(void *arg) {
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
     }
-    return NULL;
+    return nullptr;
 }
 
 #endif // VISION_H

@@ -11,7 +11,7 @@ inline int computePWMFromUnsignedRPS(double utps) {
 }
 
 inline int computeDirection(int dir) {
-    return (dir == +1) ? 0x06 : 0x0a;
+    return (dir == +1) ? 0x06 : 0x09;
 }
 
 inline int computeDirection(int dir1, int dir2) {
@@ -25,46 +25,51 @@ inline int computeDirection(int dir1, int dir2) {
 }
 
 void setAllMotors(int speed1, int speed2, int speed3) {
-    int xdir12 = computeDirection(speed1, speed2);
-    int xdir3 = computeDirection(speed3);
-    int PWM1 = computePWMFromUnsignedRPS(std::abs(speed1));
-    int PWM2 = computePWMFromUnsignedRPS(std::abs(speed2));
-    int PWM3 = computePWMFromUnsignedRPS(std::abs(speed3));
+    int xdir12  = computeDirection(speed1, speed2);
+    int xdir3   = computeDirection(speed3);
+    int PWM1    = computePWMFromUnsignedRPS(std::abs(speed1));
+    int PWM2    = computePWMFromUnsignedRPS(std::abs(speed2));
+    int PWM3    = computePWMFromUnsignedRPS(std::abs(speed3));
 
-    wiringPiI2CWriteReg16(i2c_fd1, 0x82, (PWM1 << 8) | PWM2);
-    microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd1, 0xaa, xdir12);
     microsleep(1);
-    wiringPiI2CWriteReg16(i2c_fd2, 0x82, (PWM3 << 8));
+    wiringPiI2CWriteReg16(i2c_fd1, 0x82, (PWM1 << 8) | PWM2);
     microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd2, 0xaa, xdir3);
+    microsleep(1);
+    wiringPiI2CWriteReg16(i2c_fd2, 0x82, (PWM3 << 8));
 }
 
 void setMotor1() {
     dir1 = (computed1 > 0) ? +1 : -1;
     pwm1 = computePWMFromUnsignedRPS(std::abs(computed1));
     int xdir12 = computeDirection(dir1, dir2);
-    wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
-    microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd1, 0xaa, xdir12);
+    microsleep(1);
+    wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
 }
 
 void setMotor2() {
     dir2 = (computed2 > 0) ? +1 : -1;
     pwm2 = computePWMFromUnsignedRPS(std::abs(computed2));
     int xdir12 = computeDirection(dir1, dir2);
-    wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
-    microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd1, 0xaa, xdir12);
+    microsleep(1);
+    wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm1 << 8) | pwm2);
 }
 
 void setMotor3() {
     dir3 = (computed3 > 0) ? +1 : -1;
     pwm3 = computePWMFromUnsignedRPS(std::abs(computed3));
     int xdir3 = computeDirection(dir3);
-    wiringPiI2CWriteReg16(i2c_fd2, 0x82, (pwm3 << 8));
-    microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd2, 0xaa, xdir3);
+    microsleep(1);
+    wiringPiI2CWriteReg16(i2c_fd2, 0x82, (pwm3 << 8));
+}
+
+void stopAllMotors () {
+    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0x0000);
+    wiringPiI2CWriteReg16(i2c_fd2, 0x82, 0x0000);
 }
 
 #endif // MOTOR_H

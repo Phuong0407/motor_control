@@ -13,7 +13,7 @@ inline double computeDirectionControlSignal(double error) {
 }
 
 void * computeRefTPSFromVision(void * arg) {
-    while(true) {
+    while(!TERMINATE_PROGRAM) {
         double deviation = static_cast<double>(x - framewidth / 2);
         if (deviation > 0.0 && std::abs(deviation) >= TURN_RIGHT_THRES)
             TURN_RIGHT = true;
@@ -22,9 +22,9 @@ void * computeRefTPSFromVision(void * arg) {
 
         omega = computeDirectionControlSignal(deviation);
 
-        ref1 = (1.0 / r) * (base_speed - L1 * omega) * 144.0;
-        ref2 = (1.0 / r) * (base_speed + L1 * omega) * 144.0;
-        ref3 = (1.0 / r) * omega * L2 * 144.0;
+        ref1 = (1.0 / r) * (base_speed - L1 * omega) * COUNTER_PER_REV;
+        ref2 = (1.0 / r) * (base_speed + L1 * omega) * COUNTER_PER_REV;
+        ref3 = (1.0 / r) * omega * L2 * COUNTER_PER_REV;
     }
     return nullptr;
 }

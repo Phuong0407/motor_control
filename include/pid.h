@@ -27,15 +27,15 @@ inline double computeAlphaEMA(double cutoff_freq) {
     return alpha - 1.0 + std::sqrt(alpha * alpha - 4.0 * alpha + 3.0);
 }
 
-void setupPIDParameters() {
+inline void setupPIDParameters() {
     alpha1 = computeAlphaEMA(cutoff1);
     alpha2 = computeAlphaEMA(cutoff2);
     alpha3 = computeAlphaEMA(cutoff3);
 }
 
-void resetPID1() { integral1 = 0.0; old_filter_error1 = 0.0; }
-void resetPID2() { integral2 = 0.0; old_filter_error2 = 0.0; }
-void resetPID3() { integral3 = 0.0; old_filter_error3 = 0.0; }
+inline void resetPID1() { integral1 = 0.0; old_filter_error1 = 0.0; }
+inline void resetPID2() { integral2 = 0.0; old_filter_error2 = 0.0; }
+inline void resetPID3() { integral3 = 0.0; old_filter_error3 = 0.0; }
 
 double computePID1() {
     double error1                           = ref1 - measured1;
