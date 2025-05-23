@@ -60,7 +60,7 @@ void extractBallCenter() {
         curr_x = ((static_cast<double>(center.x - FRAME_WIDTH / 2)) / ball_diam) * BALL_DIAMETER_CM;
 
         cv::circle(frame, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
-        cv::putText(frame, "Z = " + std::to_string(z).substr(0, 5) + " cm " + "X =" + std::to_string(z).substr(0, 5) + " cm",
+        cv::putText(frame, "Z = " + std::to_string(curr_z).substr(0, 5) + " cm " + "X =" + std::to_string(curr_x).substr(0, 5) + " cm",
                     center + cv::Point2f(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
                     cv::Scalar(0, 255, 255), 1);
     }
