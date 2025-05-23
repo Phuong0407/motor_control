@@ -90,7 +90,7 @@ int main() {
     cam.options->video_width    = FRAME_WIDTH;
     cam.options->video_height   = FRAME_HEIGHT;
     cam.options->framerate      = FRAME_RATE;
-    cam.options->verbose        = VERBOSE
+    cam.options->verbose        = VERBOSE;
     cam.startVideo();
 
     double kp_x = 10.0, kp_z = 10.0;
