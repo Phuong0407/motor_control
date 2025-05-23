@@ -92,16 +92,17 @@ int main() {
 
     std::vector<std::pair<double, cv::Point2f>> ballTrajectory;
     const double interval = 0.1;
-    auto lastTime = std::chrono::steady_clock::now();
-
+    
     float botX = 0.0f;
     const float Kp = 10.0f;
     const int maxSpeed = 250;
     const float movementThreshold = 2.0f;
-
+    
     int fd1, fd2;
     initMotorDriver(fd1, fd2);
-
+    
+    auto lastTime = std::chrono::steady_clock::now();
+    
     std::cout << "Goalkeeper running. Press ESC to quit." << std::endl;
 
     while (true) {
