@@ -32,6 +32,11 @@ double x = 0.0;
 double z = 0.0;
 double speed = 0.0;
 
+void stopAllMotors () {
+    wiringPiI2CWriteReg16(i2c_fd1, 0x82, 0x0000);
+    wiringPiI2CWriteReg16(i2c_fd2, 0x82, 0x0000);
+}
+
 void extractBallCenter() {
     cv::Mat hsv, mask1, mask2, bin_mask;
     cv::cvtColor(frame, hsv, cv::COLOR_BGR2HSV);
@@ -112,5 +117,6 @@ int main() {
     }
     cam.stopVideo();
     cv::destroyAllWindows();
+    stopAllMotors();
     return 0;
 }
