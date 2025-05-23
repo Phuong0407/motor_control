@@ -99,7 +99,7 @@ int main() {
     wiringPiSetup();
     i2c_fd = wiringPiI2CSetup(0x0f);
 
-    double kp_x = 1000.0, kp_z = 1000.0;
+    double kp_x = 100.0, kp_z = 100.0;
 
     while (true) {
         if (!cam.getVideoFrame(frame, 1000)) {
