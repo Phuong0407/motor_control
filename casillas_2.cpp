@@ -61,8 +61,8 @@ void extractBallCenter() {
         cv::putText(frame, "Z = " + std::to_string(z).substr(0, 5) + " cm",
                     center + cv::Point2f(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
                     cv::Scalar(0, 255, 255), 1);
-        cv::imshow("IMAGE", frame);
     }
+    cv::imshow("IMAGE", frame);
 }
 
 inline int computePWMFromUnsignedRPS(double uspeed) {
@@ -106,7 +106,9 @@ int main() {
         }
         extractBallCenter();
         speed = kp_x * x + kp_z * z;     
-        setMotors();   
+        setMotors();
+        char key = static_cast<char>(cv::waitKey(5));
+        if (key == 27) break;
     }
     cam.stopVideo();
     cv::destroyAllWindows();
