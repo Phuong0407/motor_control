@@ -201,6 +201,7 @@ void * handleNoBallFound(void *arg) {
             TERMINATE_PROGRAM = true;
             return nullptr;
         }
+        delay(50000);
     }
     return nullptr;
 }
