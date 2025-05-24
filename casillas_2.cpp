@@ -80,7 +80,7 @@ inline int computeDirection(int dir) {
 
 void setMotors() {
     printf("[Motor] SPEED\t=\t%.3f\n", speed);
-    int dir = (speed > 0) ? 0x06 : 0x06;
+    int dir = (speed > 0) ? 0x09 : 0x06;
     pwm = computePWMFromUnsignedRPS(std::abs(speed));
 
     wiringPiI2CWriteReg16(i2c_fd, 0xaa, dir);
