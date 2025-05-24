@@ -77,7 +77,7 @@ void * extractBallCenter(void * arg) {
         }
 
         cv::Mat hsv, mask1, mask2, bin_mask;
-        cv::cvtColor(frame, hsv, cv::COLOR_BGR2HSV);
+        cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
         cv::inRange(hsv, cv::Scalar(0, 120, 70),    cv::Scalar(10, 255, 255),   mask1);
         cv::inRange(hsv, cv::Scalar(170, 120, 70),  cv::Scalar(180, 255, 255),  mask2);
         bin_mask = mask1 | mask2;
@@ -98,17 +98,17 @@ void * extractBallCenter(void * arg) {
             }
         }
   
-        double diameter = static_cast<double>(radius) * 2.0;
+        double ball_diam = static_cast<double>(radius) * 2.0;
         y = DEPTH_MULTIPLIER / ball_diam;
-        x = static_cast<double>(center.x - FRAME_WIDTH / 2) / ball_diam * BALL_DIAMETER_CM;
+        x = static_cast<double>(center.x - FRAMEWIDTH / 2) / ball_diam * BALL_DIAMETER_CM;
 
-        cv::circle(frame, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
-        cv::putText(frame,
-                    "Z = " + std::to_string(depth).substr(0, 5) + " cm "
-                    + "X =" + std::to_string(deviation).substr(0, 5) + " cm",
+        cv::circle(img, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
+        cv::putText(img,
+                    "Z = " + std::to_string(y).substr(0, 5) + " cm "
+                    + "X =" + std::to_string(x).substr(0, 5) + " cm",
                     center + cv::Point2d(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
                     cv::Scalar(0, 255, 255), 1);
-        cv::imshow("IMAGE", frame);
+        cv::imshow("IMAGE", img);
     }
     return nullptr;
 }
