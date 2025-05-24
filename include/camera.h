@@ -4,10 +4,10 @@
 #include "robot.h"
 
 void startCamera() {
-    cam.options->video_width    = framewidth;
-    cam.options->video_height   = frameheight;
-    cam.options->framerate      = framerate;
-    cam.options->verbose        = verbose;
+    cam.options->video_width    = FRAMEWIDTH;
+    cam.options->video_height   = FRAMEHEIGHT;
+    cam.options->framerate      = FRAMERATE;
+    cam.options->verbose        = VERBOSE;
     cam.startVideo();
 }
 
