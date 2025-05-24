@@ -117,8 +117,8 @@ void * extractBallCenter(void * arg) {
                         + "X =" + std::to_string(x).substr(0, 5) + " cm",
                         center + cv::Point2f(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
                         cv::Scalar(0, 255, 255), 1);
-            cv::imshow("IMAGE", img);
         }
+        cv::imshow("IMAGE", img);
     }
     return nullptr;
 }
