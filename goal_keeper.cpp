@@ -17,11 +17,11 @@ int main() {
 	pthread_join(Control, 		    NULL);
 	pthread_join(NoBallHandler, 	NULL);
 
-    if (TERMINATE_PROGRAM) {
-        printf("\nPROGRAM STOP NOW.\n");
-		stopAllMotors();
-		cv::destroyAllWindows();
-		exit(0);
-    }
+    // if (TERMINATE_PROGRAM) {
+    //     printf("\nPROGRAM STOP NOW.\n");
+	// 	stopAllMotors();
+	// 	cv::destroyAllWindows();
+	// 	exit(0);
+    // }
     return 0;
 }
