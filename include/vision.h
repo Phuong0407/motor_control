@@ -92,16 +92,16 @@ void * extractBallCenter(void * arg) {
         for (const auto& contour : contours) {
             double area = cv::contourArea(contour);
             if (area < MIN_CONTOUR_AREA) {
-                pthread_mutex_lock(&TERMINATE_MUTEX);
+                pthread_mutex_lock(&VISION_MUTEX);
                 CONTAIN_BALL = false;
-                pthread_mutex_unlock(&TERMINATE_MUTEX);
+                pthread_mutex_unlock(&VISION_MUTEX);
                 continue;
             }
             else {
                 cv::minEnclosingCircle(contour, center, radius);
-                pthread_mutex_lock(&TERMINATE_MUTEX);
+                pthread_mutex_lock(&VISION_MUTEX);
                 CONTAIN_BALL = true;
-                pthread_mutex_unlock(&TERMINATE_MUTEX);
+                pthread_mutex_unlock(&VISION_MUTEX);
                 break;
             }
         }
