@@ -174,7 +174,7 @@ void * overcomeStuckState(void *arg) {
 }
 
 void * handleNoLineFound(void *arg) {
-    delay(4000);
+    delay(50000);
     while (!TERMINATE_PROGRAM) {
         pthread_mutex_lock(&VISION_MUTEX);
         bool NO_LINE = !CONTAIN_LINE;
@@ -190,7 +190,7 @@ void * handleNoLineFound(void *arg) {
 }
 
 void * handleNoBallFound(void *arg) {
-    delay(4000);
+    delay(50000);
     while (!TERMINATE_PROGRAM) {
         pthread_mutex_lock(&VISION_MUTEX);
         bool NO_BALL = !CONTAIN_BALL;
