@@ -92,17 +92,20 @@ void * extractBallCenter(void * arg) {
         for (const auto& contour : contours) {
             double area = cv::contourArea(contour);
             if (area < MIN_CONTOUR_AREA) {
+                pthread_mutex_lock(&TERMINATE_MUTEX);
                 CONTAIN_BALL = false;
+                pthread_mutex_unlock(&TERMINATE_MUTEX);
                 continue;
             }
             else {
                 cv::minEnclosingCircle(contour, center, radius);
+                pthread_mutex_lock(&TERMINATE_MUTEX);
                 CONTAIN_BALL = true;
+                pthread_mutex_unlock(&TERMINATE_MUTEX);
                 break;
             }
         }
-  
-        pthread_mutex_lock(&VISION_MUTEX);
+
         if (CONTAIN_BALL) {
             double ball_diam = static_cast<double>(radius) * 2.0;
             y = DEPTH_MULTIPLIER / ball_diam;
@@ -115,10 +118,6 @@ void * extractBallCenter(void * arg) {
                         center + cv::Point2f(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
                         cv::Scalar(0, 255, 255), 1);
             cv::imshow("IMAGE", img);
-        }
-        else {
-            TERMINATE_PROGRAM = true;
-            break;
         }
     }
     return nullptr;

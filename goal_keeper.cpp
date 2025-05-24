@@ -7,12 +7,15 @@ int main() {
 
     pthread_t Vision;
     pthread_t Control;
+    pthread_t NoBallHandler;
 
     pthread_create(&Vision, 		NULL, extractBallCenter, 		NULL);
 	pthread_create(&Control, 		NULL, controlRobotGoalKeeper, 	NULL);
+    pthread_create(&NoBallHandler, 	NULL, handleNoBallFound, 		NULL);
 
-    pthread_join(Vision, 		NULL);
-	pthread_join(Control, 		NULL);
+    pthread_join(Vision,            NULL);
+	pthread_join(Control, 		    NULL);
+	pthread_join(NoBallHandler, 	);
 
     if (TERMINATE_PROGRAM) {
         printf("\nPROGRAM STOP NOW.\n");
