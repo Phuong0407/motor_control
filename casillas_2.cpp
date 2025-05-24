@@ -28,6 +28,8 @@ Contours_t  contours;
 
 int i2c_fd = -1;
 
+bool CONTAINS_BALL = false;
+
 int pwm = 0;
 double prev_x = 0.0;
 double prev_z = 0.0;
@@ -50,7 +52,12 @@ void extractBallCenter(double &deviation, double &depth) {
 
     for (const auto& contour : contours) {
         double area = cv::contourArea(contour);
-        if (area < 200.0) continue;
+        if (area < 50.0) {
+            CONTAINS_BALL |= false;
+            continue;
+        } else {
+            CONTAINS_BALL |= true;
+        }
 
         cv::Point2f center;
         float radius;
@@ -107,27 +114,12 @@ int main() {
             printf("[ERROR] Timeout error while grabbing frame.\n");
             continue;
         }
-        extractBallCenter(prev_x, prev_z);
-        delay(100);
-        if (!cam.getVideoFrame(frame, 1000)) {
-            printf("[ERROR] Timeout error while grabbing frame.\n");
-            continue;
-        }
         extractBallCenter(curr_x, curr_z);
-        printf("x = %.3f\tz = %.3f\t\n", curr_x, curr_z);
 
         double urgency = std::clamp((100.0 - curr_z) / 100.0, 0.3, 1.0);
         speed = - kp_x * curr_x * urgency;
 
-        // setMotors();
-
-        printf("[Motor] SPEED\t=\t%.3f\n", speed);
-        int dir = (speed > 0.0) ? 0x06 : 0x09;
-        pwm = computePWMFromUnsignedRPS(std::abs(speed));
-
-        wiringPiI2CWriteReg16(i2c_fd, 0x82, (pwm << 8) | pwm);
-        delay(1);
-        wiringPiI2CWriteReg16(i2c_fd, 0xaa, dir);
+        setMotors();
 
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
