@@ -15,7 +15,7 @@ int main() {
 
     pthread_join(Vision,            NULL);
 	pthread_join(Control, 		    NULL);
-	pthread_join(NoBallHandler, 	);
+	pthread_join(NoBallHandler, 	NULL);
 
     if (TERMINATE_PROGRAM) {
         printf("\nPROGRAM STOP NOW.\n");
