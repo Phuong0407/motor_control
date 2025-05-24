@@ -125,6 +125,7 @@ int main() {
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
     }
+    printf("[INFO] NO BALL FOUND. STOP.\n");
     cam.stopVideo();
     cv::destroyAllWindows();
     wiringPiI2CWriteReg16(i2c_fd, 0x82, 0x0000);
