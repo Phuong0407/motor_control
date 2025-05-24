@@ -52,7 +52,7 @@ void extractBallCenter(double &deviation, double &depth) {
 
     for (const auto& contour : contours) {
         double area = cv::contourArea(contour);
-        if (area < 50.0) {
+        if (area > 100.0) {
             CONTAINS_BALL |= false;
             continue;
         } else {
