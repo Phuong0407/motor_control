@@ -119,7 +119,16 @@ int main() {
         double urgency = std::clamp((100.0 - curr_z) / 100.0, 0.3, 1.0);
         speed = - kp_x * curr_x * urgency;
 
-        setMotors();
+        // setMotors();
+
+        printf("[Motor] SPEED\t=\t%.3f\n", speed);
+        int dir = (speed > 0.0) ? 0x06 : 0x09;
+        pwm = computePWMFromUnsignedRPS(std::abs(speed));
+
+        wiringPiI2CWriteReg16(i2c_fd, 0x82, (pwm << 8) | pwm);
+        delay(1);
+        wiringPiI2CWriteReg16(i2c_fd, 0xaa, dir);
+
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
     }
