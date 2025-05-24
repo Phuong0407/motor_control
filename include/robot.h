@@ -132,5 +132,6 @@ constexpr double        DEPTH_MULTIPLIER            = 1592.06;
 
 static constexpr double kp_x                        = 100.0;
 static constexpr double kp_z                        = 100.0;
+bool                    CONTAIN_BALL                = false;
 
 #endif // ROBOT_H

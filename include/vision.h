@@ -68,8 +68,8 @@ void * computeBarycenter(void *arg) {
 }
 
 void * extractBallCenter(void * arg) {
-    double radius;
-    cv::Point2d center;
+    float radius;
+    cv::Point2f center;
     while (!TERMINATE_PROGRAM) {
         if (!cam.getVideoFrame(img, 1000)) {
             printf("[ERROR] Timeout error while grabbing frame.\n");
@@ -91,25 +91,35 @@ void * extractBallCenter(void * arg) {
 
         for (const auto& contour : contours) {
             double area = cv::contourArea(contour);
-            if (area < MIN_CONTOUR_AREA)
+            if (area < MIN_CONTOUR_AREA) {
+                CONTAIN_BALL = false;
                 continue;
+            }
             else {
                 cv::minEnclosingCircle(contour, center, radius);
+                CONTAIN_BALL = true;
                 break;
             }
         }
   
-        double ball_diam = static_cast<double>(radius) * 2.0;
-        y = DEPTH_MULTIPLIER / ball_diam;
-        x = static_cast<double>(center.x - FRAMEWIDTH / 2) / ball_diam * BALL_DIAMETER_CM;
+        pthread_mutex_lock(&VISION_MUTEX);
+        if (CONTAIN_BALL) {
+            double ball_diam = static_cast<double>(radius) * 2.0;
+            y = DEPTH_MULTIPLIER / ball_diam;
+            x = static_cast<double>(center.x - FRAMEWIDTH / 2) / ball_diam * BALL_DIAMETER_CM;
 
-        cv::circle(img, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
-        cv::putText(img,
-                    "Z = " + std::to_string(y).substr(0, 5) + " cm "
-                    + "X =" + std::to_string(x).substr(0, 5) + " cm",
-                    center + cv::Point2d(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
-                    cv::Scalar(0, 255, 255), 1);
-        cv::imshow("IMAGE", img);
+            cv::circle(img, center, static_cast<int>(radius), cv::Scalar(0, 255, 0), 2);
+            cv::putText(img,
+                        "Z = " + std::to_string(y).substr(0, 5) + " cm "
+                        + "X =" + std::to_string(x).substr(0, 5) + " cm",
+                        center + cv::Point2f(10, -20), cv::FONT_HERSHEY_SIMPLEX, 0.5,
+                        cv::Scalar(0, 255, 255), 1);
+            cv::imshow("IMAGE", img);
+        }
+        else {
+            TERMINATE_PROGRAM = true;
+            break;
+        }
     }
     return nullptr;
 }

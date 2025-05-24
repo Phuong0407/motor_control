@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
 		printf("\nPROGRAM STOP NOW.\n");
 		stopAllMotors();
 		cv::destroyAllWindows();
+		exit(0);
 	}
 	return 0;
 }

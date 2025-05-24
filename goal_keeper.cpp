@@ -14,4 +14,11 @@ int main() {
     pthread_join(Vision, 		NULL);
 	pthread_join(Control, 		NULL);
 
+    if (TERMINATE_PROGRAM) {
+        printf("\nPROGRAM STOP NOW.\n");
+		stopAllMotors();
+		cv::destroyAllWindows();
+		exit(0);
+    }
+    return 0;
 }
