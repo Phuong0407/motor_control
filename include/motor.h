@@ -72,7 +72,7 @@ void setMotor12(double TPS) {
     double NORMED_TPS = std::clamp(TPS / MAX_TPS, 0.0, 1.0);
     int pwm = static_cast<int>(MAX_PWM * NORMED_TPS);
     if (pwm < DEAD_PWM) pwm = 0;
-    else pwm = static_cast<int>((pwm_value - DEAD_PWM) / DEADZONE_SCALEUP);
+    else pwm = static_cast<int>((pwm - DEAD_PWM) / DEADZONE_SCALEUP);
     wiringPiI2CWriteReg16(i2c_fd1, 0xaa, dir12);
     microsleep(1);
     wiringPiI2CWriteReg16(i2c_fd1, 0x82, (pwm << 8) | pwm);
