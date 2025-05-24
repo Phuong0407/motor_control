@@ -85,8 +85,9 @@ void * extractBallCenter(void * arg) {
         cv::erode(bin_mask, bin_mask, cv::Mat(), cv::Point(-1, -1), 2);
         cv::dilate(bin_mask, bin_mask, cv::Mat(), cv::Point(-1, -1), 2);
 
-        contours.clear();
-        cv::findContours(bin_mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+        std::vector<cv::Vec4i>              hierarchy;
+        Contours_t                          contours;
+        findContours(bin_mask, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 
         for (const auto& contour : contours) {
             double area = cv::contourArea(contour);
