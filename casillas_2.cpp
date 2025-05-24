@@ -115,7 +115,8 @@ int main() {
             continue;
         }
         extractBallCenter(curr_x, curr_z);
-
+        if (!CONTAINS_BALL)
+            break;
         double urgency = std::clamp((100.0 - curr_z) / 100.0, 0.3, 1.0);
         speed = - kp_x * curr_x * urgency;
 
