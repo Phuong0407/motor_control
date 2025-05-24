@@ -47,9 +47,8 @@ void extractBallCenter(double &deviation, double &depth) {
     cv::dilate(bin_mask, bin_mask, cv::Mat(), cv::Point(-1, -1), 2);
 
     contours.clear();
-
     cv::findContours(bin_mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-
+    CONTAINS_BALL = false;
     for (const auto& contour : contours) {
         double area = cv::contourArea(contour);
         if (area < 200.0) {
