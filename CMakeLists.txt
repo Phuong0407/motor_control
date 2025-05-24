@@ -28,11 +28,10 @@ add_executable(
     ${CMAKE_SOURCE_DIR}/casillas_2.cpp
 )
 
-
-# add_executable(
-#     goal_keeper
-#     ${CMAKE_SOURCE_DIR}/goal_keeper.cpp
-# )
+add_executable(
+    goal_keeper
+    ${CMAKE_SOURCE_DIR}/goal_keeper.cpp
+)
 
 # target_link_libraries(
 #     line_follower
@@ -59,10 +58,10 @@ target_link_libraries(
 )
 
 
-# target_link_libraries(
-#     goal_keeper
-#     -llccv
-#     ${OpenCV_LIBS}
-#     ${LIBCAMERA_LIBRARIES}
-#     -lwiringPi
-# )
+target_link_libraries(
+    goal_keeper
+    -llccv
+    ${OpenCV_LIBS}
+    ${LIBCAMERA_LIBRARIES}
+    -lwiringPi
+)
