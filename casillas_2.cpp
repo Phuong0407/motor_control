@@ -75,13 +75,12 @@ inline int computePWMFromUnsignedRPS(double uspeed) {
 }
 
 inline int computeDirection(int dir) {
-    return (dir == +1) ? 0x06 : 0x05;
+    return (dir == +1) ? 0x06 : 0x0a;
 }
 
 void setMotors() {
     printf("[Motor] SPEED\t=\t%.3f\n", speed);
-    int dir = (speed > 0) ? +1 : -1;
-    dir = computeDirection(dir);
+    int dir = (speed > 0) ? 0x06 : 0x0a;
     pwm = computePWMFromUnsignedRPS(std::abs(speed));
 
     wiringPiI2CWriteReg16(i2c_fd, 0xaa, dir);
