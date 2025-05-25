@@ -120,7 +120,7 @@ int main() {
             break;
         double urgency = std::clamp((70.0- curr_z) / 70.0, 0.3, 1.0);
         if (std::abs(curr_x) <= 5.0)
-            speed = 0.0
+            speed = 0.0;
         else
             speed = - kp_x * curr_x * urgency / 0.028;
 
