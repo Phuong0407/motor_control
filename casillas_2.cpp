@@ -16,7 +16,7 @@ constexpr int       DEAD_PWM            = 40;
 constexpr double    DEADZONE_SCALEUP    = 0.843137254901961;
 constexpr int       FRAME_WIDTH         = 640;
 constexpr int       FRAME_HEIGHT        = 480;
-constexpr int       FRAME_RATE          = 30;
+constexpr int       FRAME_RATE          = 90;
 constexpr bool      VERBOSE             = false;
 
 using Contour_t  = std::vector<cv::Point>;
