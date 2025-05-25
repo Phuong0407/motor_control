@@ -109,18 +109,23 @@ int main() {
     double kp_x = 100.0, kp_z = 100.0;
 
     while (true) {
+        auto t0 = std::chrono::high_resolution_clock::now();
         if (!cam.getVideoFrame(frame, 1000)) {
             printf("[ERROR] Timeout error while grabbing frame.\n");
             continue;
         }
         extractBallCenter(curr_x, curr_z);
+        auto t1 = std::chrono::high_resolution_clock::now();
         if (!CONTAINS_BALL)
             break;
         double urgency = std::clamp((100.0 - curr_z) / 100.0, 0.3, 1.0);
-        speed = - kp_x * curr_x * urgency;
+        speed = - kp_x * curr_x * urgency / 0.028;
 
         setMotors();
-
+        auto t2 = std::chrono::high_resolution_clock::now();
+        double detect_time = std::chrono::duration<double, std::milli>(t1 - t0).count();
+        double act_time    = std::chrono::duration<double, std::milli>(t2 - t0).count();
+        printf("[TIMING] Detection: %.3f ms | Full response: %32f ms\n", detect_time, act_time);
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
     }
