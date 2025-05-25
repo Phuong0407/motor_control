@@ -118,8 +118,11 @@ int main() {
         auto t1 = std::chrono::high_resolution_clock::now();
         if (!CONTAINS_BALL)
             break;
-        double urgency = std::clamp((100.0 - curr_z) / 100.0, 0.3, 1.0);
-        speed = - kp_x * curr_x * urgency;
+        double urgency = std::clamp((70.0- curr_z) / 70.0, 0.3, 1.0);
+        if (std::abs(curr_x) <= 5.0)
+            speed = 0.0
+        else
+            speed = - kp_x * curr_x * urgency / 0.028;
 
         setMotors();
         auto t2 = std::chrono::high_resolution_clock::now();
