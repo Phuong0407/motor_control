@@ -12,7 +12,7 @@
 
 void * controlMotor1(void *arg) {
     int64_t prev_ticks1 = 0, curr_ticks1 = 0;
-    while(!TERMINATE_PROGRAM) {
+    while(true) {
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
         pthread_mutex_unlock(&THROTTLE_MUTEX);
@@ -43,7 +43,7 @@ void * controlMotor1(void *arg) {
 
 void * controlMotor2(void *arg) {
     int64_t prev_ticks2 = 0, curr_ticks2 = 0;
-    while(!TERMINATE_PROGRAM) {
+    while(true) {
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
         pthread_mutex_unlock(&THROTTLE_MUTEX);
@@ -74,7 +74,7 @@ void * controlMotor2(void *arg) {
 
 void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
-    while(!TERMINATE_PROGRAM) {
+    while(true) {
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
         pthread_mutex_unlock(&THROTTLE_MUTEX);
@@ -125,7 +125,7 @@ void turnRightFullThrottle() {
 
 void * overcomeStuckState(void *arg) {
     delay(4000);
-    while (!TERMINATE_PROGRAM) {
+    while (true) {
         volatile int64_t prev_ticks1 = counter1;
         volatile int64_t prev_ticks2 = counter2;
         volatile int64_t prev_ticks3 = counter3;
@@ -173,25 +173,25 @@ void * overcomeStuckState(void *arg) {
     return nullptr;
 }
 
-void * handleNoLineFound(void *arg) {
-    delay(50000);
-    while (!TERMINATE_PROGRAM) {
-        pthread_mutex_lock(&VISION_MUTEX);
-        bool NO_LINE = !CONTAIN_LINE;
-        pthread_mutex_unlock(&VISION_MUTEX);
+// void * handleNoLineFound(void *arg) {
+//     delay(50000);
+//     while (true) {
+//         pthread_mutex_lock(&VISION_MUTEX);
+//         bool NO_LINE = !CONTAIN_LINE;
+//         pthread_mutex_unlock(&VISION_MUTEX);
 
-        if (NO_LINE) {
-            printf("[INFO] NO LINE FOUND. MOTORS STOPPED.\n");
-            TERMINATE_PROGRAM = true;
-            return nullptr;
-        }
-    }
-    return nullptr;
-}
+//         if (NO_LINE) {
+//             printf("[INFO] NO LINE FOUND. MOTORS STOPPED.\n");
+//             TERMINATE_PROGRAM = true;
+//             return nullptr;
+//         }
+//     }
+//     return nullptr;
+// }
 
 void * handleNoBallFound(void *arg) {
     delay(50000);
-    while (!TERMINATE_PROGRAM) {
+    while (true) {
         pthread_mutex_lock(&VISION_MUTEX);
         bool NO_BALL = !CONTAIN_BALL;
         pthread_mutex_unlock(&VISION_MUTEX);
@@ -207,7 +207,7 @@ void * handleNoBallFound(void *arg) {
 }
 
 void * controlRobotGoalKeeper(void *arg) {
-    while (!TERMINATE_PROGRAM) {
+    while (true) {
         double urgency = std::clamp((100.0 - y) / 100.0, 0.3, 1.0);
         base_speed = - kp_x * x * urgency;
         double TPS = (1.0 / r) * base_speed * COUNTER_PER_REV;
@@ -217,7 +217,7 @@ void * controlRobotGoalKeeper(void *arg) {
 }
 
 void * monitorMotorsSpeed(void *arg) {
-    while(!TERMINATE_PROGRAM) {
+    while(true) {
         printf("\n");
         if (THROTTLE_MODE && TURN_LEFT)
             printf("[INFO] TURN LEFT FULL THROTTLE MODE.\n");
