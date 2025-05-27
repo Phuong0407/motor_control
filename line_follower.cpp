@@ -22,7 +22,6 @@ int main(int argc, char *argv[]) {
     pthread_t Control3;
     pthread_t StuckSolver;
     pthread_t NoLineHandler;
-    pthread_t InteractionMode;
     pthread_t SpeedMonitor;
 
 	pthread_create(&Vision, 		NULL, computeBarycenter, 		NULL);
