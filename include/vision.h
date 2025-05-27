@@ -29,7 +29,7 @@ inline bool detectLineFromContours(const Contours_t& contours) {
 void * computeBarycenter(void *arg) {
     cv::Mat img_hsv, red1, red2, blue;
 
-    while (!TERMINATE_PROGRAM) {
+    while (true) {
         if (!cam.getVideoFrame(img, 1000)) {
             printf("[ERROR] Timeout error while grabbing frame.\n");
             continue;

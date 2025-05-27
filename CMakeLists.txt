@@ -33,8 +33,21 @@ add_executable(
     ${CMAKE_SOURCE_DIR}/goal_keeper.cpp
 )
 
+add_executable(
+    red_line_bot
+    ${CMAKE_SOURCE_DIR}/motor_control_v1/red_line_bot.cpp
+)
+
 target_link_libraries(
     line_follower
+    -llccv
+    ${OpenCV_LIBS}
+    ${LIBCAMERA_LIBRARIES}
+    -lwiringPi
+)
+
+target_link_libraries(
+    red_line_bot
     -llccv
     ${OpenCV_LIBS}
     ${LIBCAMERA_LIBRARIES}
