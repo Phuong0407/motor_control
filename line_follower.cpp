@@ -21,7 +21,6 @@ int main(int argc, char *argv[]) {
     pthread_t Control2;
     pthread_t Control3;
     pthread_t StuckSolver;
-    // pthread_t NoLineHandler;
     pthread_t SpeedMonitor;
 
 	pthread_create(&Vision, 		NULL, computeBarycenter, 		NULL);
@@ -31,7 +30,6 @@ int main(int argc, char *argv[]) {
 	pthread_create(&Control3, 		NULL, controlMotor3, 			NULL);
 	pthread_create(&StuckSolver, 	NULL, overcomeStuckState, 		NULL);
 	pthread_create(&SpeedMonitor, 	NULL, monitorMotorsSpeed, 		NULL);
-	// pthread_create(&NoLineHandler, 	NULL, handleNoLineFound, 		NULL);
 
 	pthread_join(Vision, 		NULL);
 	pthread_join(Velocity, 		NULL);
@@ -39,14 +37,7 @@ int main(int argc, char *argv[]) {
 	pthread_join(Control2, 		NULL);
 	pthread_join(Control3, 		NULL);
 	pthread_join(StuckSolver, 	NULL);
-	// pthread_join(NoLineHandler, NULL);
 	pthread_join(SpeedMonitor, 	NULL);
 
-	if (TERMINATE_PROGRAM) {
-		printf("\nPROGRAM STOP NOW.\n");
-		stopAllMotors();
-		cv::destroyAllWindows();
-		exit(0);
-	}
 	return 0;
 }

@@ -2,6 +2,8 @@
 #define VISION_H
 
 #include "robot.h"
+#include "motor.h"
+
 #include <vector>
 #include <stdio.h>
 #include <limits>
@@ -29,7 +31,7 @@ inline bool detectLineFromContours(const Contours_t& contours) {
 void * computeBarycenter(void *arg) {
     cv::Mat img_hsv, red1, red2, blue;
 
-    while (true) {
+    while (!TERMINATE_PROGRAM) {
         if (!cam.getVideoFrame(img, 1000)) {
             printf("[ERROR] Timeout error while grabbing frame.\n");
             continue;
@@ -43,26 +45,27 @@ void * computeBarycenter(void *arg) {
 
         std::vector<cv::Vec4i>              hierarchy;
         Contours_t                          contours;
-        findContours(bin_mask, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
         
-        pthread_mutex_lock(&VISION_MUTEX);
-        CONTAIN_LINE = detectLineFromContours(contours);
-        pthread_mutex_unlock(&VISION_MUTEX);
-        
-        if (!CONTAIN_LINE) continue;
-
-        cv::Moments moment  = cv::moments(bin_mask, true);
+        cv::Moments moment = cv::moments(bin_mask, true);
         if (moment.m00 != 0) {
-            x = moment.m10 / moment.m00;
-            y = moment.m01 / moment.m00;
-            cv::Point barycent(static_cast<int>(x), static_cast<int>(y));
+            int x = static_cast<int>(moment.m10 / moment.m00);
+            int y = static_cast<int>(moment.m01 / moment.m00);
+            cv::Point barycenter(x, y);
 
+            // Draw contours and barycenter
             cv::drawContours(img, contours, -1, CONTOUR_COLOR, 2);
-            cv::circle(img, barycent, 5, CONTOUR_CENTER_COLOR, -1);
+            cv::circle(img, barycenter, 5, CONTOUR_CENTER_COLOR, -1);
             cv::imshow("IMAGE", img);
         }
+
         char key = static_cast<char>(cv::waitKey(5));
-        if (key == 27) break;
+        if (key == 27) {
+            printf("[INFO] Programme terminates now!");
+            cam.stopVideo();
+            cv::destroyAllWindows();
+            stopAllMotors();
+            break;
+        }
     }
     return nullptr;
 }
