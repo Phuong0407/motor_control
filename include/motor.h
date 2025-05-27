@@ -2,6 +2,7 @@
 #define MOTOR_H
 
 #include "robot.h"
+#include "timing.h"
 
 inline int computePWMFromUnsignedRPS(double utps) {
     double NORMED_TPS = std::clamp(utps / MAX_TPS, 0.0, 1.0);
