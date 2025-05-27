@@ -173,39 +173,6 @@ void * overcomeStuckState(void *arg) {
     return nullptr;
 }
 
-// void * handleNoLineFound(void *arg) {
-//     delay(50000);
-//     while (true) {
-//         pthread_mutex_lock(&VISION_MUTEX);
-//         bool NO_LINE = !CONTAIN_LINE;
-//         pthread_mutex_unlock(&VISION_MUTEX);
-
-//         if (NO_LINE) {
-//             printf("[INFO] NO LINE FOUND. MOTORS STOPPED.\n");
-//             TERMINATE_PROGRAM = true;
-//             return nullptr;
-//         }
-//     }
-//     return nullptr;
-// }
-
-void * handleNoBallFound(void *arg) {
-    delay(50000);
-    while (true) {
-        pthread_mutex_lock(&VISION_MUTEX);
-        bool NO_BALL = !CONTAIN_BALL;
-        pthread_mutex_unlock(&VISION_MUTEX);
-
-        if (NO_BALL) {
-            printf("[INFO] NO BALL FOUND. MOTORS STOPPED.\n");
-            TERMINATE_PROGRAM = true;
-            return nullptr;
-        }
-        delay(50000);
-    }
-    return nullptr;
-}
-
 void * controlRobotGoalKeeper(void *arg) {
     while (true) {
         double urgency = std::clamp((100.0 - y) / 100.0, 0.3, 1.0);
