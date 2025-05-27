@@ -42,6 +42,7 @@ int main(int argc, char *argv[]) {
 	if (TERMINATE_PROGRAM) {
 		printf("\n[INFO] PROGRAM STOP NOW.\n");
 		cv::destroyAllWindows();
+		cam.stopVideo();
 		stopAllMotors();
 	}
 
