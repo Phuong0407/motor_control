@@ -12,7 +12,7 @@ inline int computePWMFromUnsignedRPS(double utps) {
 }
 
 inline int computeDirection(int dir) {
-    return (dir == +1) ? 0x06 : 0x0;
+    return (dir == +1) ? 0x06 : 0x09;
 }
 
 inline int computeDirection(int dir1, int dir2) {
