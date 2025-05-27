@@ -39,7 +39,12 @@ void * computeBarycenter(void *arg) {
             cv::imshow("IMAGE", img);
         }
         char key = static_cast<char>(cv::waitKey(5));
-        if (key == 27) break;
+        if (key == 27) {
+            printf("\n[INFO] PROGRAM STOP NOW.\n");
+        	stopAllMotors();
+        	cv::destroyAllWindows();
+        	exit(0);
+        }
     }
     return NULL;
 }
