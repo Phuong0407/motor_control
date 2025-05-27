@@ -12,7 +12,7 @@
 void * computeBarycenter(void *arg) {
     cv::Mat img_hsv, red1, red2, blue;
 
-    while (true) {
+    while (!TERMINATE_PROGRAM) {
         if (!cam.getVideoFrame(img, 1000)) {
             printf("[ERROR] Timeout error while grabbing frame.\n");
             continue;
@@ -40,10 +40,7 @@ void * computeBarycenter(void *arg) {
         }
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) {
-            printf("\n[INFO] PROGRAM STOP NOW.\n");
-        	stopAllMotors();
-        	cv::destroyAllWindows();
-        	exit(0);
+            TERMINATE_PROGRAM = true;
         }
     }
     return NULL;

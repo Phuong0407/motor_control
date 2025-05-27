@@ -39,5 +39,11 @@ int main(int argc, char *argv[]) {
 	pthread_join(StuckSolver, 	NULL);
 	pthread_join(SpeedMonitor, 	NULL);
 
+	if (TERMINATE_PROGRAM) {
+		printf("\n[INFO] PROGRAM STOP NOW.\n");
+		cv::destroyAllWindows();
+		stopAllMotors();
+	}
+
 	return 0;
 }

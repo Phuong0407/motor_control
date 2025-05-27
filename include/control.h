@@ -12,7 +12,7 @@
 
 void * controlMotor1(void *arg) {
     int64_t prev_ticks1 = 0, curr_ticks1 = 0;
-    while(true) {
+    while(!TERMINATE_PROGRAM) {
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
         pthread_mutex_unlock(&THROTTLE_MUTEX);
@@ -43,7 +43,7 @@ void * controlMotor1(void *arg) {
 
 void * controlMotor2(void *arg) {
     int64_t prev_ticks2 = 0, curr_ticks2 = 0;
-    while(true) {
+    while(!TERMINATE_PROGRAM) {
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
         pthread_mutex_unlock(&THROTTLE_MUTEX);
@@ -74,7 +74,7 @@ void * controlMotor2(void *arg) {
 
 void * controlMotor3(void *arg) {
     int64_t prev_ticks3 = 0, curr_ticks3 = 0;
-    while(true) {
+    while(!TERMINATE_PROGRAM) {
         pthread_mutex_lock(&THROTTLE_MUTEX);
         bool THROTTLE = THROTTLE_MODE;
         pthread_mutex_unlock(&THROTTLE_MUTEX);
@@ -125,7 +125,7 @@ void turnRightFullThrottle() {
 
 void * overcomeStuckState(void *arg) {
     delay(4000);
-    while (true) {
+    while (!TERMINATE_PROGRAM) {
         volatile int64_t prev_ticks1 = counter1;
         volatile int64_t prev_ticks2 = counter2;
         volatile int64_t prev_ticks3 = counter3;
@@ -136,7 +136,7 @@ void * overcomeStuckState(void *arg) {
         double prev1 = static_cast<double>(curr_ticks1 - prev_ticks1) / 0.1;
         double prev2 = static_cast<double>(curr_ticks2 - prev_ticks2) / 0.1;
         double prev3 = static_cast<double>(curr_ticks3 - prev_ticks3) / 0.1;
-        delay(500);
+        delay(200);
 
         prev_ticks1 = counter1;
         prev_ticks2 = counter2;
@@ -174,7 +174,7 @@ void * overcomeStuckState(void *arg) {
 }
 
 void * controlRobotGoalKeeper(void *arg) {
-    while (true) {
+    while (!TERMINATE_PROGRAM) {
         double urgency = std::clamp((100.0 - y) / 100.0, 0.3, 1.0);
         base_speed = - kp_x * x * urgency;
         double TPS = (1.0 / r) * base_speed * COUNTER_PER_REV;
@@ -184,7 +184,7 @@ void * controlRobotGoalKeeper(void *arg) {
 }
 
 void * monitorMotorsSpeed(void *arg) {
-    while(true) {
+    while(!TERMINATE_PROGRAM) {
         printf("\n");
         if (THROTTLE_MODE && TURN_LEFT)
             printf("[INFO] TURN LEFT FULL THROTTLE MODE.\n");
