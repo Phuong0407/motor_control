@@ -59,13 +59,7 @@ void * computeBarycenter(void *arg) {
         }
 
         char key = static_cast<char>(cv::waitKey(5));
-        if (key == 27) {
-            printf("[INFO] Programme terminates now!");
-            cam.stopVideo();
-            cv::destroyAllWindows();
-            stopAllMotors();
-            break;
-        }
+        if (key == 27) break;
     }
     return nullptr;
 }
