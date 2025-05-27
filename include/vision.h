@@ -9,29 +9,10 @@
 #include <limits>
 #include <cmath>
 
-inline bool detectLineFromContours(const Contours_t& contours) {
-    for (const auto& contour : contours) {
-        double area = cv::contourArea(contour);
-        if (area < MIN_CONTOUR_AREA)
-            continue;
-
-        cv::RotatedRect rect = cv::minAreaRect(contour);
-        double width = rect.size.width;
-        double height = rect.size.height;
-        if (width == 0 || height == 0) continue;
-
-        double aspect_ration = std::max(width, height) / std::min(width, height);
-        if (aspect_ration > MIN_ASPECT_RATIO) {
-            return true;
-        }
-    }
-    return false;
-}
-
 void * computeBarycenter(void *arg) {
     cv::Mat img_hsv, red1, red2, blue;
 
-    while (!TERMINATE_PROGRAM) {
+    while (true) {
         if (!cam.getVideoFrame(img, 1000)) {
             printf("[ERROR] Timeout error while grabbing frame.\n");
             continue;
@@ -42,27 +23,27 @@ void * computeBarycenter(void *arg) {
         cv::inRange(img_hsv, cv::Scalar(170, 120, 70),  cv::Scalar(180, 255, 255),  red2);
         cv::inRange(img_hsv, cv::Scalar(100,150,50),    cv::Scalar(140, 255, 255),  blue);
         bin_mask = red1 | red2 | blue;
-        cv::imshow("BINARY MASK", bin_mask);
 
         std::vector<cv::Vec4i>              hierarchy;
         Contours_t                          contours;
+        findContours(bin_mask, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
         
-        cv::Moments moment = cv::moments(bin_mask, true);
+        cv::Moments moment  = cv::moments(bin_mask, true);
         if (moment.m00 != 0) {
-            int x = static_cast<int>(moment.m10 / moment.m00);
-            int y = static_cast<int>(moment.m01 / moment.m00);
-            cv::Point barycenter(x, y);
+            x = moment.m10 / moment.m00;
+            y = moment.m01 / moment.m00;
+            cv::Point barycent(static_cast<int>(x), static_cast<int>(y));
 
             cv::drawContours(img, contours, -1, CONTOUR_COLOR, 2);
-            cv::circle(img, barycenter, 5, CONTOUR_CENTER_COLOR, -1);
+            cv::circle(img, barycent, 5, CONTOUR_CENTER_COLOR, -1);
             cv::imshow("IMAGE", img);
         }
-
         char key = static_cast<char>(cv::waitKey(5));
         if (key == 27) break;
     }
-    return nullptr;
+    return NULL;
 }
+
 
 void * extractBallCenter(void * arg) {
     float radius;
