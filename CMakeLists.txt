@@ -13,10 +13,10 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/include/
 )
 
-# add_executable(
-#     line_follower
-#     ${CMAKE_SOURCE_DIR}/line_follower.cpp
-# )
+add_executable(
+    line_follower
+    ${CMAKE_SOURCE_DIR}/line_follower.cpp
+)
 
 add_executable(
     casillas
@@ -33,13 +33,13 @@ add_executable(
     ${CMAKE_SOURCE_DIR}/goal_keeper.cpp
 )
 
-# target_link_libraries(
-#     line_follower
-#     -llccv
-#     ${OpenCV_LIBS}
-#     ${LIBCAMERA_LIBRARIES}
-#     -lwiringPi
-# )
+target_link_libraries(
+    line_follower
+    -llccv
+    ${OpenCV_LIBS}
+    ${LIBCAMERA_LIBRARIES}
+    -lwiringPi
+)
 
 target_link_libraries(
     casillas
