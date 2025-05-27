@@ -42,6 +42,7 @@ void * computeBarycenter(void *arg) {
         cv::inRange(img_hsv, cv::Scalar(170, 120, 70),  cv::Scalar(180, 255, 255),  red2);
         cv::inRange(img_hsv, cv::Scalar(100,150,50),    cv::Scalar(140, 255, 255),  blue);
         bin_mask = red1 | red2 | blue;
+        cv::imshow("BINARY MASK", bin_mask);
 
         std::vector<cv::Vec4i>              hierarchy;
         Contours_t                          contours;
@@ -52,7 +53,6 @@ void * computeBarycenter(void *arg) {
             int y = static_cast<int>(moment.m01 / moment.m00);
             cv::Point barycenter(x, y);
 
-            // Draw contours and barycenter
             cv::drawContours(img, contours, -1, CONTOUR_COLOR, 2);
             cv::circle(img, barycenter, 5, CONTOUR_CENTER_COLOR, -1);
             cv::imshow("IMAGE", img);
