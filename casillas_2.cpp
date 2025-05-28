@@ -42,7 +42,7 @@ void extractBallCenter(double &deviation, double &depth) {
     cv::cvtColor(frame, hsv, cv::COLOR_BGR2HSV);
     cv::inRange(hsv, cv::Scalar(0, 120, 70),    cv::Scalar(10, 255, 255),   mask1);
     cv::inRange(hsv, cv::Scalar(170, 120, 70),  cv::Scalar(180, 255, 255),  mask2);
-    cv::inRange(img_hsv, cv::Scalar(100,150,50),    cv::Scalar(140, 255, 255),  mask3);
+    cv::inRange(hsv, cv::Scalar(100,150,50),    cv::Scalar(140, 255, 255),  mask3);
     bin_mask = mask1 | mask2 | mask3;
     cv::erode(bin_mask, bin_mask, cv::Mat(), cv::Point(-1, -1), 2);
     cv::dilate(bin_mask, bin_mask, cv::Mat(), cv::Point(-1, -1), 2);
